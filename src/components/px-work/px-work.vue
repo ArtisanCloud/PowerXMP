@@ -1,12 +1,16 @@
 <template>
   <view class="content">
-    <uni-search-bar class="search-input" placeholder="关键词" clearButton="auto" cancelButton="none"
-                    @confirm="search"/>
-    <px-scroll-view>
+    <view>
+
+      <uni-search-bar class="search-input" placeholder="关键词" clearButton="auto" cancelButton="none"
+                      @confirm="search"/>
+    </view>
+    <px-scroll-view style="overflow: hidden;height: 100%">
       <view v-for="item in 100">
-        {{ item }}
+        作品 - {{ item }}
       </view>
     </px-scroll-view>
+
   </view>
 </template>
 
@@ -26,10 +30,15 @@ export default {
 $debug: false;
 //$debug: true;
 
-.content{
-  //height: 100%;
+.content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+  height: 100%;
+
   @if $debug or $globalDebug {
-    border: 5rpx red solid;
+    border: 5rpx pink solid;
   }
 
   .search-input {

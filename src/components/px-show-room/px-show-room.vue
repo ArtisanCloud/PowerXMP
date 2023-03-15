@@ -13,7 +13,7 @@
         <uni-icons style="margin-right: 2rpx;" type="settings" size="26" color="#666"></uni-icons>
       </view>
     </view>
-    <view class="tab-view-content">
+    <view class="tab-view-container">
       <px-work :style="currentTab!=0 ? 'display:none' : '' "></px-work>
       <px-case :style="currentTab!=1 ? 'display:none' : '' "></px-case>
       <px-brand-info :style="currentTab!=2 ? 'display:none' : '' "></px-brand-info>
@@ -47,14 +47,14 @@ export default {
 <style lang="scss">
 
 $debug: false;
-$debug: true;
+//$debug: true;
 
 .content {
   display: flex;
   flex-direction: column;
   flex: 1;
   overflow: hidden;
-
+  height: 100%;
   @if $debug or $globalDebug {
     border: 1rpx green solid;
   }
@@ -104,6 +104,7 @@ $debug: true;
         font-weight: bold;
         color: #303537;
       }
+
       .active:after {
         position: absolute;
         left: calc(50% - 8px);
@@ -139,15 +140,10 @@ $debug: true;
     }
   }
 
-  .tab-view-content{
-    display: flex;
-    flex-direction: column;
-    flex: 1;
+  .tab-view-container {
     overflow: hidden;
     height: 100%;
-    @if $debug or $globalDebug {
-      border: 5rpx red solid;
-    }
+
   }
 
 }

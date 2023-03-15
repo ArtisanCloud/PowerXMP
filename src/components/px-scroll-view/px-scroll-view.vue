@@ -22,7 +22,11 @@ $debug: false;
 //$debug: true;
 
 .content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
   height: 100%;
+  overflow: hidden;
   @if $debug or $globalDebug {
     border: 1rpx red solid;
   }
@@ -31,9 +35,7 @@ $debug: false;
     flex: 1;
     overflow: hidden;
     box-sizing: border-box;
-    height: calc(100vh);
-    //height: calc(100vh - 20rpx);
-    //height: calc(100vh - 800rpx); // 它上面如果有其他内容则这样使用，如果没有直接写 100%
+    height: 100%;
 
     @if $debug or $globalDebug {
       border: 5rpx yellow solid;
