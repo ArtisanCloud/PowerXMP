@@ -18,27 +18,6 @@
 				"navigationBarTitleText": "赚零钱",
 				"enablePullDownRefresh": false
 			}
-		}, {
-			"path": "pages/index/work/work",
-			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
-			}
-
-		}, {
-			"path": "pages/index/case/case",
-			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
-			}
-
-		}, {
-			"path": "pages/index/brandInfo/brandInfo",
-			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
-			}
-
 		}
 	],
 	"globalStyle": {
@@ -52,8 +31,8 @@
 		"autoscan": true, //是否自动扫描组件
 		"custom": { //自定义扫描规则
 			"^uni-(.*)": "@dcloudio/uni-ui/lib/uni-$1/uni-$1.vue",
+//			"^u-(.*)": "uview-plus/components/u-$1/u-$1.vue"//匹配uView-ui
 			//			"^uni-(.*)": "@/components/uni-$1.vue" // 匹配components目录内的vue文件
-			// "^u-(.*)": "uview-plus/components/u-$1/u-$1.vue"//匹配uView-ui
 		}
 	},
 	"uniIdRouter": {},

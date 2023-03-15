@@ -29,6 +29,7 @@ export function createApp() {
 		// // uViewPlus如此配置即可
 		uni.$u.config.unit = 'rpx'
 
+
 	}
 
 	return {

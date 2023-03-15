@@ -1,6 +1,6 @@
 <template>
 	<view>
-		
+		case
 	</view>
 </template>
 

@@ -1,6 +1,6 @@
 <template>
 	<view>
-		
+		品牌信息
 	</view>
 </template>
 
