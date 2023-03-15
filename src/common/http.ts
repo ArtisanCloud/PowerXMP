@@ -2,13 +2,14 @@ export default function $http(options: any) {
 
 	const {
 		url,
+		method,
 		data
 	} = options
 
 	return new Promise((resolve, reject) => {
 			uni.request({
 				url: url,
-				method: "GET",
+				method: method,
 				data: data,
 				success(res: any) {
 					console.log(res)

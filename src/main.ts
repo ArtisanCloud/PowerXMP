@@ -5,7 +5,7 @@ import mock from "./common/mock/index";
 import api from "./common/api/index";
 
 // 引入第三方UI组件
-import uViewPlus from "uview-plus";
+// import uViewPlus from "uview-plus";
 
 console.log('meta env', import.meta.env);
 
@@ -24,10 +24,10 @@ export function createApp() {
 			app.config.globalProperties.$api = api
 		}
 		//
-		// 在Vue3配置uViewPlus
-		app.use(uViewPlus)
-		// // uViewPlus如此配置即可
-		uni.$u.config.unit = 'rpx'
+		// // 在Vue3配置uViewPlus
+		// app.use(uViewPlus)
+		// // // uViewPlus如此配置即可
+		// uni.$u.config.unit = 'rpx'
 
 
 	}

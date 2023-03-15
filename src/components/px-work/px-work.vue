@@ -3,7 +3,7 @@
     <view>
 
       <uni-search-bar class="search-input" placeholder="关键词" clearButton="auto" cancelButton="none"
-                      @confirm="search"/>
+                      radius="20"  @confirm="search"/>
     </view>
     <px-scroll-view style="overflow: hidden;height: 100%">
       <view v-for="item in 100">
@@ -14,10 +14,15 @@
   </view>
 </template>
 
-<script>
+<script lang="ts">
+
+import type {Work} from "@/common/model/media";
 
 export default {
   name: "px-work",
+  props:{
+    workList:Array<Work>
+  },
   data() {
     return {}
   },
@@ -44,12 +49,12 @@ $debug: false;
   .search-input {
     :deep(.uni-searchbar__box-search-input) {
       flex: 1;
-      font-size: 8px;
+      font-size: 14px;
       color: #333;
     }
 
     :deep(.uni-searchbar__text-placeholder) {
-      font-size: 8px;
+      font-size: 14px;
       color: #B3B3B3;
       margin-left: 5px;
     }

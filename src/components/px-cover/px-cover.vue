@@ -11,7 +11,7 @@
       <text> 喜欢：{{ likesCount }}</text>
     </view>
 
-    <u-line length="78%" dashed margin="24rpx"></u-line>
+    <px-separate-line class="px-separate-line" width="500rpx" title="123"></px-separate-line>
 
   </view>
 </template>
@@ -96,6 +96,10 @@ $debug: false;
       margin-left: 8rpx;
       margin-right: 8rpx;
     }
+  }
+
+  .px-separate-line{
+    margin-left: 24rpx;
   }
 
 

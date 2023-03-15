@@ -24,7 +24,7 @@
 
 </template>
 
-<script>
+<script lang="ts">
 
 export default {
   components: {},
@@ -35,7 +35,11 @@ export default {
       currentTab: 0
     };
   },
+  // onLoad() {
+  //   this.loadWorkList();
+  // },
   methods: {
+
     clickTab(e) {
       this.currentTab = e.target.id;
       // console.log(e, this.currentTab)

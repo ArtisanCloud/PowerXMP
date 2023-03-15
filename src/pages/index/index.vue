@@ -16,17 +16,14 @@ export default {
     }
   },
   onLoad() {
-    this.loadWorkList()
+    this.LoadWorkList()
   },
   methods: {
-    loadWorkList() {
+    LoadWorkList() {
 
-      // console.log(this.$api)
-      this.$api.user.getUserInfo({}).then((res) => {
-        console.log(res)
-        this.title = JSON.stringify(res)
-      })
-    }
+      const res = this.$api.media.getWorkList({page: 1, pageSize: 10})
+      console.log(res)
+    },
   }
 }
 </script>
