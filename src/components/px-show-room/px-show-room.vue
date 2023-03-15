@@ -32,7 +32,7 @@ export default {
   data() {
     return {
       tabList: ['作品', '案例', '品牌介绍'],
-      currentTab: 1
+      currentTab: 0
     };
   },
   methods: {
@@ -47,13 +47,13 @@ export default {
 <style lang="scss">
 
 $debug: false;
-//$debug: true;
+$debug: true;
 
 .content {
   display: flex;
   flex-direction: column;
   flex: 1;
-
+  overflow: hidden;
 
   @if $debug or $globalDebug {
     border: 1rpx green solid;
@@ -140,9 +140,13 @@ $debug: false;
   }
 
   .tab-view-content{
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: hidden;
     height: 100%;
     @if $debug or $globalDebug {
-      border: 1rpx red solid;
+      border: 5rpx red solid;
     }
   }
 

@@ -27,9 +27,9 @@ $debug: false;
 //$debug: true;
 
 .content{
-  height: 100%;
+  //height: 100%;
   @if $debug or $globalDebug {
-    border: 1rpx red solid;
+    border: 5rpx red solid;
   }
 
   .search-input {
