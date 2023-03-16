@@ -1,7 +1,9 @@
 import * as user from './user'
-import * as media from './media'
+import * as work from './work'
+import * as showcase from './showcase'
 
 export default {
 	user,
-	media
+	work,
+	showcase,
 }

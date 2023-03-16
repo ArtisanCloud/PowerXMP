@@ -14,8 +14,8 @@
       </view>
     </view>
     <view class="tab-view-container">
-      <px-work :style="currentTab!=0 ? 'display:none' : '' "></px-work>
-      <px-case :style="currentTab!=1 ? 'display:none' : '' "></px-case>
+      <px-work :workList="this.workList" :style="currentTab!=0 ? 'display:none' : '' "></px-work>
+      <px-showcase :showcaseList="this.showcaseList" :style="currentTab!=1 ? 'display:none' : '' "></px-showcase>
       <px-brand-info :style="currentTab!=2 ? 'display:none' : '' "></px-brand-info>
     </view>
 
@@ -26,19 +26,32 @@
 
 <script lang="ts">
 
+
 export default {
   components: {},
   name: "px-show-room",
   data() {
     return {
       tabList: ['作品', '案例', '品牌介绍'],
-      currentTab: 0
+      currentTab: 0,
+      workList: [],
+      showcaseList: []
     };
   },
-  // onLoad() {
-  //   this.loadWorkList();
-  // },
+  mounted() {
+    this.LoadWorkList();
+    this.LoadShowcaseList();
+  },
   methods: {
+    async LoadWorkList() {
+      this.workList = await this.$api.work.getWorkList({page: 1, pageSize: 10})
+      // console.log(this.workList)
+    },
+    async LoadShowcaseList() {
+      this.showcaseList = await this.$api.showcase.getShowcaseList({page: 1, pageSize: 10})
+      // console.log(this.showcaseList)
+    },
+
 
     clickTab(e) {
       this.currentTab = e.target.id;

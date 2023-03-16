@@ -9,7 +9,7 @@
 
       <view class="list-wrapper">
         <view class="list">
-          <view class="list-item" v-for="item in this.workList">
+          <view class="list-item" v-for="item in this.showcaseList">
             <view>
               <image class="list-item-cover" :src="item.coverURL"></image>
             </view>
@@ -36,9 +36,9 @@
 
 
 export default {
-  name: "px-work",
+  name: "px-showcase",
   props: {
-    workList: Array<API.Work>
+    showcaseList: Array<API.Showcase>
   },
   data() {
     return {}

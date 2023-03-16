@@ -7,23 +7,19 @@
   </view>
 </template>
 
-<script>
+<script lang="ts">
+
+
 export default {
   data() {
 
     return {
-      title: '小裂匠'
+      title: '小裂匠',
     }
   },
-  onLoad() {
-    this.LoadWorkList()
-  },
-  methods: {
-    LoadWorkList() {
 
-      const res = this.$api.media.getWorkList({page: 1, pageSize: 10})
-      console.log(res)
-    },
+  methods: {
+
   }
 }
 </script>
