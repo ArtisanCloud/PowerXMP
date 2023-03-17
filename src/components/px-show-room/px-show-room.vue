@@ -120,11 +120,12 @@ $debug: false;
       .active {
         font-weight: bold;
         color: #303537;
+        //border: 1px solid red;
       }
 
       .active:after {
         position: absolute;
-        left: calc(50% - 8px);
+        left: calc(40%);
         z-index: 3;
         width: 48rpx;
         height: 2px;
@@ -132,6 +133,7 @@ $debug: false;
         bottom: 0;
         content: " ";
         margin-bottom: -24rpx;
+
       }
     }
 
