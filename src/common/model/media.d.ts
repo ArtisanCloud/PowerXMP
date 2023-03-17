@@ -1,13 +1,5 @@
 declare namespace API {
 
-// Models
-	export enum MediaType {
-		news,
-		work,
-		showcase,
-	}
-
-
 	export interface Media extends Model {
 		title: string
 		subTitle: string

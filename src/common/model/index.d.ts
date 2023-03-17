@@ -2,10 +2,10 @@ declare namespace API {
 
 // --- Models ---
 	export interface Model {
-		ID: number,
-		createdAt: Date,
-		updatedAt: Date,
-		deletedAt: Date,
+		id?: number,
+		createdAt?: Date,
+		updatedAt?: Date,
+		deletedAt?: Date,
 	}
 
 
@@ -16,7 +16,7 @@ declare namespace API {
 	}
 
 	export interface RequestGetDetailByID {
-		id: number
+		id?: number
 	}
 
 

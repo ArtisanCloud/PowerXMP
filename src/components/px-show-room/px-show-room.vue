@@ -16,7 +16,7 @@
     <view class="tab-view-container">
       <px-work :workList="this.workList" :style="currentTab!=0 ? 'display:none' : '' "></px-work>
       <px-showcase :showcaseList="this.showcaseList" :style="currentTab!=1 ? 'display:none' : '' "></px-showcase>
-      <px-brand-info :style="currentTab!=2 ? 'display:none' : '' "></px-brand-info>
+      <px-brand-info :brandInfo="this.brandInfo" :style="currentTab!=2 ? 'display:none' : '' "></px-brand-info>
     </view>
 
 
@@ -33,14 +33,16 @@ export default {
   data() {
     return {
       tabList: ['作品', '案例', '品牌介绍'],
-      currentTab: 0,
+      currentTab: 2,
       workList: [],
-      showcaseList: []
+      showcaseList: [],
+      brandInfo:{}
     };
   },
   mounted() {
     this.LoadWorkList();
     this.LoadShowcaseList();
+    this.LoadBrandInfo();
   },
   methods: {
     async LoadWorkList() {
@@ -49,6 +51,10 @@ export default {
     },
     async LoadShowcaseList() {
       this.showcaseList = await this.$api.showcase.getShowcaseList({page: 1, pageSize: 10})
+      // console.log(this.showcaseList)
+    },
+    async LoadBrandInfo() {
+      this.brandInfo = await this.$api.brandInfo.getBrandInfo()
       // console.log(this.showcaseList)
     },
 
