@@ -22,13 +22,23 @@ for (let i = 0; i < 50; i++) {
 
 
 function createPanoWork(id: number) {
+
+	let awesomeLink = "https://m-1307679408.cos-website.ap-shanghai.myqcloud.com/demo/vtour/index.html?a=111";
+	let coverURL = "https://m-1307679408.file.myqcloud.com/pano-demo-o/test-1/at.jpg";
+
+	if (Math.random() < 0.7) {
+		awesomeLink = "https://m-1307679408.cos-website.ap-shanghai.myqcloud.com/pano-demo-o/test-4s/index.html?v=2";
+		coverURL = "https://m-1307679408.cos-website.ap-shanghai.myqcloud.com/pano-demo-o/test-4s/preview.jpg";
+	}
+
 	return {
 		"id": id,
 		"title": Mock.Random.ctitle(1, 5),
 		"subTitle": Mock.Random.ctitle(10, 20),
 		"content": Mock.Random.cparagraph(20),
-		"awesomeLink": "https://m-1307679408.cos-website.ap-shanghai.myqcloud.com/demo/vtour/index.html?a=111",
-		"coverURL": "https://m-1307679408.file.myqcloud.com/pano-demo-o/test-1/at.jpg",
+
+		"awesomeLink":awesomeLink,
+		"coverURL":coverURL,
 		"type": MediaType.panoWork,
 		"viewedCount": Mock.Random.integer(20, 100),
 		"created_time": Mock.Random.datetime()
@@ -36,14 +46,27 @@ function createPanoWork(id: number) {
 }
 
 function create3DWork(id: number) {
+
+	// let awesomeLink = "https://threejs.org/examples/webgl_animation_keyframes.html";
+	// let awesomeLink = "http://localhost:5173";
+	let awesomeLink = "https://m-1307679408.cos-website.ap-shanghai.myqcloud.com/threeD-demo/littlest-tokyo/index.html?a=222";
+	let coverURL = "https://m-1307679408.cos-website.ap-shanghai.myqcloud.com/threeD-demo/littlest-tokyo/preview-tokyo.jpg";
+	let title = "仅限demo展示";
+
+	if (Math.random() < 0.5) {
+		awesomeLink = "https://m-1307679408.cos-website.ap-shanghai.myqcloud.com/threeD-demo/sphere/index.html?a=111";
+		coverURL = "https://m-1307679408.cos-website.ap-shanghai.myqcloud.com/threeD-demo/sphere/preview.jpg";
+		title = Mock.Random.ctitle(1, 5)
+	}
+
 	return {
 		"id": id,
-		"title": Mock.Random.ctitle(1, 5),
+		"title": title,
 		"subTitle": Mock.Random.ctitle(10, 20),
 		"content": Mock.Random.cparagraph(20),
-		"awesomeLink": "https://m-1307679408.cos-website.ap-shanghai.myqcloud.com/pano-demo-o/test-4s/index.html?v=2",
-		"coverURL": "https://m-1307679408.cos-website.ap-shanghai.myqcloud.com/pano-demo-o/test-4s/preview.jpg",
-		"type": MediaType.d3Work,
+		"awesomeLink": awesomeLink,
+		"coverURL": coverURL,
+		"type": MediaType.threeDWork,
 		"viewedCount": Mock.Random.integer(20, 100),
 		"created_time": Mock.Random.datetime()
 	}

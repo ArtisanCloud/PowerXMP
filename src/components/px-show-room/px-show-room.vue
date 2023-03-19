@@ -33,7 +33,7 @@ export default {
   data() {
     return {
       tabList: ['作品', '案例', '品牌介绍'],
-      currentTab: 2,
+      currentTab: 0,
       workList: [],
       showcaseList: [],
       brandInfo:{}

@@ -1,7 +1,7 @@
 <template>
 	<view class="content">
 		<text>{{title}}</text>
-    <text>使用屏幕的长度大小，然后减去固定的布局长度，计算scroll view的fix height</text>
+
 	</view>
 </template>
 
@@ -9,7 +9,7 @@
 	export default {
 		data() {
 			return {
-				title: "商店"
+				title: "店铺"
 			}
 		},
 		methods: {

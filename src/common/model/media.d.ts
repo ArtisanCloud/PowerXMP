@@ -4,6 +4,7 @@ declare namespace API {
 		title: string
 		subTitle: string
 		coverURL: string
+		awesomeLink: string
 		content: string
 		type: MediaType
 		viewedCount: number
@@ -14,8 +15,12 @@ declare namespace API {
 		type: MediaType.news
 	}
 
-	export interface Work extends Media {
-		type: MediaType.work
+	export interface VRWork extends Media {
+		type: MediaType.panoWork
+	}
+
+	export interface ThreeDWork extends Media {
+		type: MediaType.threeDWork
 	}
 
 	export interface Showcase extends Media {

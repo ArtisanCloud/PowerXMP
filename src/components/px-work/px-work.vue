@@ -9,7 +9,8 @@
 
       <view class="list-wrapper">
         <view class="list">
-          <view class="list-item" v-for="item in this.workList">
+          <view class="list-item" v-for="item in this.workList" @click="showDetail(item)">
+
             <view>
               <image class="list-item-cover" :src="item.coverURL"></image>
             </view>
@@ -21,6 +22,7 @@
               </view>
 
             </view>
+
 
           </view>
         </view>
@@ -35,15 +37,33 @@
 <script lang="ts">
 
 
+import {MediaType} from "@/common/model/constant";
+
 export default {
   name: "px-work",
   props: {
-    workList: Array<API.Work>
+    workList: Array<API.Media>
   },
   data() {
     return {}
   },
   methods: {
+
+    showDetail(item: API.Media) {
+
+      // console.log(item.title)
+      if (item.type == MediaType.threeDWork) {
+        uni.navigateTo({
+          url: "/pages/pano-webview/pano-webview?q=" + item.awesomeLink
+        });
+
+      } else {
+        uni.navigateTo({
+          url: "/pages/pano-webview/pano-webview?q=" + item.awesomeLink
+        });
+      }
+    },
+
     async Search(e) {
       console.log(e.value)
     },
