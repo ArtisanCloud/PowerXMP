@@ -3,7 +3,7 @@
     <px-scroll-view class="px-scroll-view">
 
       <uni-section class="brand-container">
-        <uni-card class="brand-card" :title="brandInfo.name" :extra="this.brandInfo.extra">
+        <uni-card class="brand-card" :title="this.brandInfo.name" :extra="this.brandInfo.extra">
           <text>
             {{ this.brandInfo.description }}
           </text>
@@ -41,7 +41,11 @@
 
 export default {
   props: {
-    brandInfo: {}
+    brandInfo: {
+      name:"",
+      extra:""
+
+    }
   },
   data() {
     return {}

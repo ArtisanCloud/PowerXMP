@@ -3,7 +3,7 @@ import * as work from './work'
 import * as showcase from './showcase'
 import * as brandInfo from './brandInfo'
 
-export default {
+export default  {
 	user,
 	work,
 	showcase,

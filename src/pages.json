@@ -8,6 +8,12 @@
       }
     },
     {
+      "path": "pages/login/login",
+      "style": {
+        "navigationBarTitleText": "用户登录"
+      }
+    },
+    {
       "path": "pages/shop/shop",
       "style": {
         "navigationBarTitleText": "商店",
@@ -48,6 +54,13 @@
         "navigationBarTitleText": "赚零钱",
         "enablePullDownRefresh": false
       }
+    },
+    {
+      "path": "pages/me/me",
+      "style": {
+        "navigationBarTitleText": "我的",
+        "enablePullDownRefresh": false
+      }
     }
   ],
   "globalStyle": {
@@ -84,18 +97,18 @@
         "selectedIconPath": "static/images/icon-home.png",
         "text": "首页"
       },
-//      {
-//        "pagePath": "pages/shop/shop",
-//        "iconPath": "static/images/icon-shop.png",
-//        "selectedIconPath": "static/images/icon-shop.png",
-//        "text": "商店"
-//      },
       {
-        "pagePath": "pages/chat/chat",
-        "text": "对话",
-        "iconPath": "static/images/icon-chat.png",
-        "selectedIconPath": "static/images/icon-chat.png"
+        "pagePath": "pages/shop/shop",
+        "iconPath": "static/images/icon-shop.png",
+        "selectedIconPath": "static/images/icon-shop.png",
+        "text": "商店"
       },
+//      {
+//        "pagePath": "pages/chat/chat",
+//        "text": "对话",
+//        "iconPath": "static/images/icon-chat.png",
+//        "selectedIconPath": "static/images/icon-chat.png"
+//      },
 //      {
 //        "pagePath": "pages/opportunity/opportunity",
 //        "iconPath": "static/images/icon-opportunity.png",
@@ -107,8 +120,14 @@
         "iconPath": "static/images/icon-earn.png",
         "selectedIconPath": "static/images/icon-earn.png",
         "text": "赚零钱"
+      },
+      {
+        "pagePath": "pages/me/me",
+        "iconPath": "static/images/icon-me.png",
+        "selectedIconPath": "static/images/icon-me.png",
+        "text": "我的"
       }
-    ],
+    ]
 //    "midButton": {
 //      "text": "对话",
 //      "iconPath": "static/images/icon-chat.png",

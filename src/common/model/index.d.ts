@@ -21,10 +21,6 @@ declare namespace API {
 
 
 // --- Response Models ---
-	export interface APIResponse {
-		meta: Meta;
-		data: any;
-	}
 
 	export interface Meta {
 		locale?: string;
@@ -35,22 +31,16 @@ declare namespace API {
 		timezone?: string;
 	}
 
-	export interface ResponsePagination {
-		limit?: number;
-		page?: number;
-		sort?: string;
-		totalRows?: number;
-		totalPages?: number;
+	export interface ResponsePagination<T> {
+		List: T[];
+		PageIndex: number;
+		PageSize: number;
+		Total: number;
 	}
 
-	export interface ResponseMeta {
-		statusCode: number,
-		message: string
-		data: any
-	}
-
-	export interface ResponseToken extends APIResponse {
-		data: Token | null;
+	export interface ResponseErr {
+		Reason: string,
+		Msg: string
 	}
 
 	export interface Token {

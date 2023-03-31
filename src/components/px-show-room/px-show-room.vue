@@ -30,6 +30,7 @@
 export default {
   components: {},
   name: "px-show-room",
+  inject: ['$api'],
   data() {
     return {
       tabList: ['作品', '案例', '品牌介绍'],

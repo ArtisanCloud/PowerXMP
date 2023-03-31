@@ -2,18 +2,9 @@
   <view class="content">
     <view class="head-container">
       <image class="logo" src="/static/images/logo.png"></image>
-      <view class="earn-summary-box">
-        <text> 当月：{{ currentMonthEarned }}</text>
-        <text> 总共：{{ totalEarned }}</text>
-      </view>
-      <view class="separate-line"></view>
-      <button class="btn-share">去赚佣金</button>
 
     </view>
-    <view class="filter-view">
-      <button class="btn-filter">当月</button>
-      <button class="btn-filter">全部</button>
-    </view>
+
     <view class="scroll-container">
       <scroll-view class="list-scroll" scroll-y>
         <text>123</text>
