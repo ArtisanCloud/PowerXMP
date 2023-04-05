@@ -13,7 +13,7 @@ function mockEmployee(id: number): API.Employee {
 	}
 }
 
-function mockBrandInfo(): API.Brand {
+function mockBrandStory(): API.Brand {
 
 	let team: API.Employee[] = []
 
@@ -32,8 +32,8 @@ function mockBrandInfo(): API.Brand {
 }
 
 
-export const getBrandInfo = async () => {
-	return mockBrandInfo()
+export const getBrandStory = async () => {
+	return mockBrandStory()
 }
 
 

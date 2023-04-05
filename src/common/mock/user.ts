@@ -11,20 +11,24 @@ export const wxLogin = (): any => {
 }
 
 
-export const userPhoneLogin = (data: any)  => {
+export const userLogin = (data: any)  => {
 
-	// return $http({
-	// 	data: {
-	// 		Reason: "ERR_CODE",
-	// 		Msg: "错误Code登录",
-	// 	},
-	// })
+	return $http({
+		data: {
+			Reason: "ERR_CODE",
+			Msg: "用户手机未授权",
+		},
+	})
+}
+
+
+export const authByPhone = (data: any)  => {
 
 	return $http({
 		data: {
 			openID: "o1IFX5A8sfi5nbkXwOzNLLLiL0OA",
 			unionID: "",
-			phoneNumber: "",
+			phoneNumber: "13564674262",
 			nickName: "",
 			avatarURL: "",
 			gender: "",
@@ -37,6 +41,7 @@ export const userPhoneLogin = (data: any)  => {
 		},
 	})
 }
+
 
 
 export const getUserInfo = (data: any) => {

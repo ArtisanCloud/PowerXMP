@@ -3,16 +3,16 @@
     <px-scroll-view class="px-scroll-view">
 
       <uni-section class="brand-container">
-        <uni-card class="brand-card" :title="this.brandInfo.name" :extra="this.brandInfo.extra">
+        <uni-card class="brand-card" :title="this.brandStory.name" :extra="this.brandStory.extra">
           <text>
-            {{ this.brandInfo.description }}
+            {{ this.brandStory.description }}
           </text>
         </uni-card>
 
         <uni-card class="team-card" title="团队介绍" extra="明星点将">
           <scroll-view class="px-scroll-view-h" scroll-x="true" @scroll="scroll" scroll-left="120">
 
-            <view v-for="item in this.brandInfo.team" class="scroll-view-item_h ">
+            <view v-for="item in this.brandStory.team" class="scroll-view-item_h ">
 
               <view class="employee-avatar-container">
                 <image class="employee-avatar" :src="item.avatar"></image>
@@ -41,7 +41,7 @@
 
 export default {
   props: {
-    brandInfo: {
+    brandStory: {
       name:"",
       extra:""
 

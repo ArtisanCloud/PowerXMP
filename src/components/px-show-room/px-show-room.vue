@@ -16,7 +16,7 @@
     <view class="tab-view-container">
       <px-work :workList="this.workList" :style="currentTab!=0 ? 'display:none' : '' "></px-work>
       <px-showcase :showcaseList="this.showcaseList" :style="currentTab!=1 ? 'display:none' : '' "></px-showcase>
-      <px-brand-info :brandInfo="this.brandInfo" :style="currentTab!=2 ? 'display:none' : '' "></px-brand-info>
+      <px-brand-info :brandStory="this.brandStory" :style="currentTab!=2 ? 'display:none' : '' "></px-brand-info>
     </view>
 
 
@@ -37,13 +37,13 @@ export default {
       currentTab: 0,
       workList: [],
       showcaseList: [],
-      brandInfo:{}
+      brandStory:{}
     };
   },
   mounted() {
     this.LoadWorkList();
     this.LoadShowcaseList();
-    this.LoadBrandInfo();
+    this.LoadBrandStory();
   },
   methods: {
     async LoadWorkList() {
@@ -54,8 +54,8 @@ export default {
       this.showcaseList = await this.$api.showcase.getShowcaseList({page: 1, pageSize: 10})
       // console.log(this.showcaseList)
     },
-    async LoadBrandInfo() {
-      this.brandInfo = await this.$api.brandInfo.getBrandInfo()
+    async LoadBrandStory() {
+      this.brandStory = await this.$api.brandStory.getBrandStory()
       // console.log(this.showcaseList)
     },
 

@@ -21,6 +21,13 @@
       }
     },
     {
+      "path": "pages/product-category/product-category",
+      "style": {
+        "navigationBarTitleText": "商店",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
       "path": "pages/chat/chat",
       "style": {
         "navigationBarTitleText": "对话",
@@ -34,13 +41,13 @@
         "enablePullDownRefresh": false
       }
     },
-//    {
-//      "path": "pages/webview/threeD-webview",
-//      "style": {
-//        "navigationBarTitleText": "3D展示厅",
-//        "enablePullDownRefresh": false
-//      }
-//    },
+    //    {
+    //      "path": "pages/webview/threeD-webview",
+    //      "style": {
+    //        "navigationBarTitleText": "3D展示厅",
+    //        "enablePullDownRefresh": false
+    //      }
+    //    },
     {
       "path": "pages/opportunity/opportunity",
       "style": {
@@ -97,24 +104,30 @@
         "selectedIconPath": "static/images/icon-home.png",
         "text": "首页"
       },
+      //      {
+      //        "pagePath": "pages/shop/shop",
+      //        "iconPath": "static/images/icon-shop.png",
+      //        "selectedIconPath": "static/images/icon-shop.png",
+      //        "text": "商店"
+      //      },
       {
-        "pagePath": "pages/shop/shop",
+        "pagePath": "pages/product-category/product-category",
         "iconPath": "static/images/icon-shop.png",
         "selectedIconPath": "static/images/icon-shop.png",
         "text": "商店"
       },
-//      {
-//        "pagePath": "pages/chat/chat",
-//        "text": "对话",
-//        "iconPath": "static/images/icon-chat.png",
-//        "selectedIconPath": "static/images/icon-chat.png"
-//      },
-//      {
-//        "pagePath": "pages/opportunity/opportunity",
-//        "iconPath": "static/images/icon-opportunity.png",
-//        "selectedIconPath": "static/images/icon-opportunity.png",
-//        "text": "预约"
-//      },
+      //      {
+      //        "pagePath": "pages/chat/chat",
+      //        "text": "对话",
+      //        "iconPath": "static/images/icon-chat.png",
+      //        "selectedIconPath": "static/images/icon-chat.png"
+      //      },
+      //      {
+      //        "pagePath": "pages/opportunity/opportunity",
+      //        "iconPath": "static/images/icon-opportunity.png",
+      //        "selectedIconPath": "static/images/icon-opportunity.png",
+      //        "text": "预约"
+      //      },
       {
         "pagePath": "pages/earn/earn",
         "iconPath": "static/images/icon-earn.png",
@@ -128,10 +141,10 @@
         "text": "我的"
       }
     ]
-//    "midButton": {
-//      "text": "对话",
-//      "iconPath": "static/images/icon-chat.png",
-//      "selectedIconPath": "static/images/icon-chat.png"
-//    }
+    //    "midButton": {
+    //      "text": "对话",
+    //      "iconPath": "static/images/icon-chat.png",
+    //      "selectedIconPath": "static/images/icon-chat.png"
+    //    }
   }
 }

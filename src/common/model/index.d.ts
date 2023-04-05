@@ -32,15 +32,15 @@ declare namespace API {
 	}
 
 	export interface ResponsePagination<T> {
-		List: T[];
-		PageIndex: number;
-		PageSize: number;
-		Total: number;
+		list: T[];
+		pageIndex: number;
+		pageSize: number;
+		total: number;
 	}
 
 	export interface ResponseErr {
-		Reason: string,
-		Msg: string
+		reason: string,
+		msg: string
 	}
 
 	export interface Token {

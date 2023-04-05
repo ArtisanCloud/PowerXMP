@@ -1,7 +1,9 @@
-import $http from '../http'
-import {restURL} from "@/common/api/index";
+import {$http} from "@/common/api/http";
+import {API_METHOD_POST, restURL} from "@/common/api/index";
 
-export const wxLogin = () : any => {
+const URI_MP_CUSTOMER = 'mp/customer/'
+
+export const wxLogin = (): any => {
 	// console.log("wxLogin")
 	return new Promise((resolve, reject) => {
 		uni.login({
@@ -17,14 +19,15 @@ export const wxLogin = () : any => {
 }
 
 
-export const userPhoneLogin = (obj: {
+export const userLogin = (obj: {
 	code: string,
 	iv: string,
 	encryptedData: string,
 }): any => {
 	// console.log("wxLogin")
 	return $http({
-		url: restURL('customer/auth'),
+		url: restURL(URI_MP_CUSTOMER + 'login'),
+		method: API_METHOD_POST,
 		data: obj,
 	}).then(res => {
 		return res;
@@ -32,10 +35,11 @@ export const userPhoneLogin = (obj: {
 }
 
 
-export const getUserInfo = async (data: any) => {
+export const authByPhone = async (data: any) => {
 	return $http({
-		url: restURL('customer/auth'),
-		data: {},
+		url: restURL(URI_MP_CUSTOMER + 'authByPhone'),
+		method: API_METHOD_POST,
+		data: data,
 	}).then(res => {
 		return res;
 	})

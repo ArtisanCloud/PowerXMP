@@ -7,7 +7,7 @@ import api from "./common/api/index";
 // 引入第三方UI组件
 // import uViewPlus from "uview-plus";
 
-console.log('meta env', import.meta.env);
+// console.log('meta env', import.meta.env);
 
 export function createApp() {
 	const app = createSSRApp(App);
@@ -17,11 +17,12 @@ export function createApp() {
 		// Vue3的global变量初始化
 		// https://zh.uniapp.dcloud.io/tutorial/vue3-api.html#全局-api
 		// https://cn.vuejs.org/api/application.html#app-config-globalproperties
+
 		if (import.meta.env.VITE_MOCK_MODE == "true") {
 			console.log("mock mode");
 			app.provide("$api", mock)
 		} else {
-			console.log("api mode");
+			console.log("api mode",api);
 			app.provide("$api", api)
 		}
 

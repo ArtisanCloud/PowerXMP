@@ -14,6 +14,8 @@
 </template>
 
 <script lang="ts">
+import {setToken} from "@/utils/auth";
+
 export default {
 
   name: "用户授权登录",
@@ -42,7 +44,6 @@ export default {
       }
 
       // 小程序登录，获取code
-
       this.$api.user.wxLogin().then((wxRes) => {
         wxRes.code
         console.log(wxRes.code)
@@ -54,24 +55,42 @@ export default {
         }
 
         // 小程序客户登录，code换取token
-        this.$api.user.userPhoneLogin(obj).then((res) => {
-          if (!!res.phoneNumber) {
-            console.log(res)
-
+        this.$api.user.authByPhone(obj).then((res) => {
+          // console.log(res)
+          if (!!res.data.phoneNumber) {
+            if (!!res.data.token) {
+              // 只需保存token
+              setToken(res.data.token)
+              uni.switchTab({
+                url: '/pages/index/index',
+              })
+            } else {
+              // 授权手机为空
+              uni.showModal({
+                title: '警示',
+                content: "授权登录凭证为空",
+              });
+            }
           } else {
-            uni.showToast({
-              title: '获取手机号失败，请重试',
-              icon: 'none'
-            })
+            // 授权手机为空
+            uni.showModal({
+              title: '警示',
+              content: "授权手机为空",
+            });
           }
         }).catch((err) => {
-          uni.showToast({
-            title: '获取手机号失败，请重试',
-            icon: 'none'
-          })
+
+          // 手机用户授权登录失败
+          console.error(err)
+          uni.showModal({
+            title: '警示',
+            content: err.Msg,
+          });
         })
 
       }).catch((err) => {
+        // 获取微信登录code失败
+        console.error(err)
         uni.showModal({
           title: '警示',
           content: err.errMsg,

@@ -1,7 +1,7 @@
 import Mock from "mockjs";
 import {$getList} from "@/common/mock/mock";
-import type {RequestGetWorkList} from "@/common/model/media";
 import {MediaType} from "@/common/model/constant";
+
 
 let List: API.Media[] = []
 
@@ -9,11 +9,11 @@ for (let i = 0; i < 50; i++) {
 	let newObject: any = {}
 	switch (i % 2) {
 		case 1: {
-			newObject = create3DWork(i + 1)
+			newObject = mockCreate3DWork(i + 1)
 			break;
 		}
 		default: {
-			newObject = createPanoWork(i + 1)
+			newObject = mockCreatePanoWork(i + 1)
 			break;
 		}
 	}
@@ -21,7 +21,7 @@ for (let i = 0; i < 50; i++) {
 }
 
 
-function createPanoWork(id: number) {
+function mockCreatePanoWork(id: number) {
 
 	let awesomeLink = "https://m-1307679408.cos-website.ap-shanghai.myqcloud.com/demo/vtour/index.html?a=111";
 	let coverURL = "https://m-1307679408.file.myqcloud.com/pano-demo-o/test-1/at.jpg";
@@ -45,7 +45,7 @@ function createPanoWork(id: number) {
 	}
 }
 
-function create3DWork(id: number) {
+function mockCreate3DWork(id: number) {
 
 	// let awesomeLink = "https://threejs.org/examples/webgl_animation_keyframes.html";
 	// let awesomeLink = "http://localhost:5173";
@@ -73,7 +73,7 @@ function create3DWork(id: number) {
 }
 
 
-export const getWorkList = async (data: RequestGetWorkList) => {
+export const getWorkList = async (data: API.RequestGetWorkList) => {
 	return $getList(data, List)
 }
 
