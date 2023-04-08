@@ -1,20 +1,20 @@
 <template>
   <view>
-    <view :class="(is_single_page == 1 ? 'margin-top-xxxl single-page-top' : '')">
+    <view :class="(isSinglePage == true ? 'margin-top-xxxl single-page-top' : '')">
       <!-- 搜索框 -->
-      <block v-if="is_single_page == 0">
-        <view class="nav-search padding-horizontal-main bg-white" :style="'padding-top:'+(status_bar_height+8)+'px;'">
-          <shop-search @onsearch="search_button_event" :propIsOnEvent="true" :propIsRequired="false"
-                       propPlaceholder="输入商品名称搜索"></shop-search>
+      <block v-if="isSinglePage == false">
+        <view class="nav-search padding-horizontal-main bg-white" :style="'padding-top:'+(statusBarHeight+8)+'px;'">
+          <product-search @onsearch="searchButtonEvent" :propIsOnEvent="true" :propIsRequired="false"
+                          propPlaceholder="输入商品名称搜索"></product-search>
         </view>
       </block>
 
       <!--            &lt;!&ndash; 分类内容 &ndash;&gt;-->
-      <!--            <view v-if="category_list.length > 0" :class="'category-content pr bs-bb '+(category_show_level == 0 ? 'goods-model' : '')" :style="'height:calc(100vh - '+(status_bar_height+48)+'px);'">-->
-      <!--                <block v-if="category_show_level == 1">-->
+      <!--            <view v-if="categoryList.length > 0" :class="'category-content pr bs-bb '+(categoryShowLevel == 0 ? 'goods-model' : '')" :style="'height:calc(100vh - '+(statusBarHeight+48)+'px);'">-->
+      <!--                <block v-if="categoryShowLevel == 1">-->
       <!--                    &lt;!&ndash; 一级模式 &ndash;&gt;-->
       <!--                    <view class="model-one padding-sm oh">-->
-      <!--                        <block v-for="(item, index) in category_list" :key="index">-->
+      <!--                        <block v-for="(item, index) in categoryList" :key="index">-->
       <!--                            <view class="content-item padding-sm tc cp" :data-value="item.id" @tap="category_event">-->
       <!--                                <view class="content auto bg-white wh-auto border-radius-main">-->
       <!--                                    <image v-if="(item.icon || null) != null" :src="item.icon" mode="aspectFit" class="icon radius"></image>-->
@@ -26,11 +26,11 @@
       <!--                </block>-->
       <!--                <block v-else>-->
       <!--                    &lt;!&ndash; 商品列表模式 &ndash;&gt;-->
-      <!--                    <block v-if="category_show_level == 0">-->
+      <!--                    <block v-if="categoryShowLevel == 0">-->
       <!--                        &lt;!&ndash; 一级导航 &ndash;&gt;-->
       <!--                        <view class="top-nav bg-white wh-auto pa br-b scroll-view-horizontal">-->
       <!--                            <scroll-view :scroll-x="true" class="ht-auto">-->
-      <!--                                <block v-for="(item, index) in category_list" :key="index">-->
+      <!--                                <block v-for="(item, index) in categoryList" :key="index">-->
       <!--                                    <view :class="'text-size-sm item tc cr-base cp dis-inline-block ' + (nav_active_index == index ? 'cr-main border-color-main fw-b' : '')" :data-index="index" :data-itemtwoindex="-1" :data-itemthreeindex="-1" @tap="nav_event">-->
       <!--                                        <view :class="'icon-content circle br auto ' + (nav_active_index == index ? 'border-color-main' : '')">-->
       <!--                                            <image :src="((item[category_goods_model_icon_field] || null) == null) ? common_static_url+'images.png' : item[category_goods_model_icon_field]" mode="aspectFit" class="icon dis-block auto wh-auto ht-auto circle"></image>-->
@@ -102,7 +102,7 @@
       <!--                                        </view>-->
       <!--                                    </view>-->
       <!--                                    <block v-else>-->
-      <!--                                        <component-no-data :propStatus="data_list_loding_status" :propMsg="data_list_loding_msg"></component-no-data>-->
+      <!--                                        <component-no-data :propStatus="dataListLoadingStatus" :propMsg="dataListLoadingMsg"></component-no-data>-->
       <!--                                    </block>-->
       <!--                                </view>-->
       <!--                            </scroll-view>-->
@@ -112,7 +112,7 @@
       <!--                        &lt;!&ndash; 一级导航 &ndash;&gt;-->
       <!--                        <view class="left-nav bg-white ht-auto">-->
       <!--                            <scroll-view :scroll-y="true" class="ht-auto">-->
-      <!--                                <block v-for="(item, index) in category_list" :key="index">-->
+      <!--                                <block v-for="(item, index) in categoryList" :key="index">-->
       <!--                                    <view :class="'text-size-sm item tc cr-base cp oh ' + (nav_active_index == index ? 'nav-active cr-main border-color-main' : '')" :data-index="index" :data-itemindex="-1" @tap="nav_event">-->
       <!--                                        <text>{{item.name}}</text>-->
       <!--                                    </view>-->
@@ -131,7 +131,7 @@
       <!--                                    &lt;!&ndash; 一二级数据渲染 &ndash;&gt;-->
       <!--                                    <block v-if="(data_content.items || null) != null && data_content.items.length > 0">-->
       <!--                                        &lt;!&ndash; 二级模式 &ndash;&gt;-->
-      <!--                                        <block v-if="category_show_level == 2">-->
+      <!--                                        <block v-if="categoryShowLevel == 2">-->
       <!--                                            <view class="two-content bg-white oh padding-main border-radius-main spacing-mb">-->
       <!--                                                <block v-for="(v, index) in data_content.items" :key="index">-->
       <!--                                                    <view class="content-item padding-sm tc cp" :data-value="v.id" @tap="category_event">-->
@@ -144,7 +144,7 @@
       <!--                                            </view>-->
       <!--                                        </block>-->
       <!--                                        &lt;!&ndash; 三级模式 &ndash;&gt;-->
-      <!--                                        <block v-if="category_show_level == 3">-->
+      <!--                                        <block v-if="categoryShowLevel == 3">-->
       <!--                                            <block v-for="(v, index) in data_content.items" :key="index">-->
       <!--                                                <view class="spacing-nav-title">-->
       <!--                                                    <text class="text-wrapper text-size-md">{{v.name}}</text>-->
@@ -179,13 +179,13 @@
       <!--                </block>-->
       <!--            </view>-->
 
-      <!--            <view v-if="category_list.length == 0 && data_list_loding_status != 0">-->
+      <!--            <view v-if="categoryList.length == 0 && dataListLoadingStatus != 0">-->
       <!--                &lt;!&ndash; 提示信息 &ndash;&gt;-->
-      <!--                <component-no-data :propStatus="data_list_loding_status"></component-no-data>-->
+      <!--                <component-no-data :propStatus="dataListLoadingStatus"></component-no-data>-->
       <!--            </view>-->
 
       <!--            &lt;!&ndash; 仅商品模式展示购物车和规格选择 &ndash;&gt;-->
-      <!--            <block v-if="category_show_level == 0">-->
+      <!--            <block v-if="categoryShowLevel == 0">-->
       <!--                &lt;!&ndash; 购物车列表 &ndash;&gt;-->
       <!--                <block v-if="cart_status">-->
       <!--                    <view class="cart-mask wh-auto ht-auto pf" @tap="cart_event"></view>-->
@@ -308,24 +308,31 @@
 
 <script>
 
+import {IsCurrentSinglePage} from "../../utils/cachedData";
+import {GetDeviceSystemInfo} from "../../utils/device";
+import {LOADING_STATUS} from "../../utils";
+
 const app = getApp();
 
 // var common_static_url = app.globalData.get_static_url('common');
-// // 状态栏高度
-// var bar_height = parseInt(app.globalData.get_system_info('statusBarHeight', 0));
-// // #ifdef MP-TOUTIAO
-// bar_height = 0;
-// // #endif
+// 状态栏高度
+var barHeight = parseInt(GetDeviceSystemInfo('statusBarHeight', 0));
+// #ifdef MP-TOUTIAO
+barHeight = 0;
+// #endif
+
+
 
 export default {
+
   data() {
     return {
       // common_static_url: common_static_url,
-      // status_bar_height: bar_height,
+      statusBarHeight: barHeight,
       // data_bottom_line_status: false,
-      // data_list_loding_status: 1,
-      // data_list_loding_msg: '',
-      // category_list: [],
+      dataListLoadingStatus: LOADING_STATUS.DEFAULT,
+      dataListLoadingMsg: '',
+      categoryList: [],
       // data_content: null,
       // data_three_content: null,
       // cart: null,
@@ -334,7 +341,7 @@ export default {
       // data_page_total: 0,
       // data_page: 1,
       // currency_symbol: app.globalData.data.currency_symbol,
-      // is_first: 1,
+      isFirst: true,
       // search_keywords_value: '',
       // nav_active_index: 0,
       // nav_active_item_two_index: -1,
@@ -350,11 +357,11 @@ export default {
       // goods_choose_data: {},
       // goods_specifications_choose: [],
       // // 基础配置
-      // category_show_level: 0,
+      categoryShowLevel: 0,
       // // 自定义分享信息
       // share_info: {},
       // // 是否单页预览
-      is_single_page: app.globalData.is_current_single_page() || 0,
+      isSinglePage: IsCurrentSinglePage() || 0,
       // // 商品列表模式一级分类图标类型
       // category_goods_model_icon_field: app.globalData.data.category_goods_model_icon_type == 0 ? 'big_images' : 'icon'
     };
@@ -364,974 +371,975 @@ export default {
   props: {},
 
   onShow() {
-    // // 数据加载
-    // this.init();
-    //
+    // 数据加载
+    this.init();
+
     // // 初始化配置
-    // this.init_config();
+    // this.initConfig();
   },
 
   // 下拉刷新
   onPullDownRefresh() {
     this.init();
   },
-  //
-  // methods: {
-  //     // 初始化配置
-  //     init_config(status) {
-  //         if ((status || false) == true) {
-  //             this.setData({
-  //                 currency_symbol: app.globalData.get_config('currency_symbol'),
-  //                 category_show_level: app.globalData.get_config('config.category_show_level')
-  //             });
-  //         } else {
-  //             app.globalData.is_config(this, 'init_config');
-  //         }
-  //     },
-  //
-  //     // 获取数据
-  //     init() {
-  //         if(this.is_first == 1) {
-  //             this.setData({
-  //                 data_list_loding_status: 1
-  //             });
-  //         }
-  //
-  //         uni.request({
-  //             url: app.globalData.get_request_url("category", "goods"),
-  //             method: 'POST',
-  //             data: {},
-  //             dataType: 'json',
-  //             success: res => {
-  //                 uni.stopPullDownRefresh();
-  //                 if (res.data.code == 0) {
-  //                     var temp_category = res.data.data.category || [];
-  //                     var upd_data = {
-  //                         category_list: temp_category,
-  //                         data_content: temp_category[this.nav_active_index] || null
-  //                     }
-  //                     // 非商品列表模式
-  //                     if(this.category_show_level != 0) {
-  //                         upd_data['data_list_loding_status'] = temp_category.length == 0 ? 0 : 3;
-  //                         upd_data['data_bottom_line_status'] = true;
-  //                     }
-  //                     this.setData(upd_data);
-  //
-  //                     // 商品列表模式
-  //                     if(this.category_show_level == 0) {
-  //                         // 商品列表模式获取购物车数据
-  //                         this.get_cart_data();
-  //                         // 获取商品列表、仅首次请求商品列表
-  //                         if(this.is_first == 1) {
-  //                             this.get_goods_list(1);
-  //                         }
-  //                     } else {
-  //                         // 分类模式下、仅首次请求购物车接口和商品模式下
-  //                         if(this.is_first == 1 && this.category_show_level == 0) {
-  //                             this.get_cart_data();
-  //                         }
-  //                     }
-  //                     // 是否首次记录
-  //                     this.setData({is_first: 0});
-  //                 } else {
-  //                     this.setData({
-  //                         data_list_loding_status: 2,
-  //                         data_list_loding_msg: res.data.msg
-  //                     });
-  //                 }
-  //
-  //                 // 基础自定义分享
-  //                 this.setData({
-  //                     share_info: {
-  //                         path: '/pages/product-category/product-category'
-  //                     }
-  //                 });
-  //
-  //                 // 分享菜单处理、延时执行，确保基础数据已加载完成
-  //                 setTimeout(function() {
-  //                     app.globalData.page_share_handle(this.share_info);
-  //                 }, 3000);
-  //             },
-  //             fail: () => {
-  //                 uni.stopPullDownRefresh();
-  //                 this.setData({
-  //                     data_list_loding_status: 2,
-  //                     data_list_loding_msg: '服务器请求出错'
-  //                 });
-  //                 app.globalData.showToast('服务器请求出错');
-  //             }
-  //         });
-  //     },
-  //
-  //     // 获取商品列表
-  //     get_goods_list(is_mandatory) {
-  //         // 分页是否还有数据
-  //         if ((is_mandatory || 0) == 0) {
-  //             if (this.data_bottom_line_status == true) {
-  //                 uni.stopPullDownRefresh();
-  //                 return false;
-  //             }
-  //         }
-  //
-  //         // 请求参数
-  //         var data = {
-  //             page: this.data_page,
-  //             wd: this.search_keywords_value || ''
-  //         };
-  //         // 分类id
-  //         if((this.data_content || null) != null) {
-  //             // 主分类id
-  //             data['category_id'] = this.data_content['id'];
-  //             // 是否选中了二级分类
-  //             if(this.nav_active_item_two_index != -1) {
-  //                data['category_id'] = this.data_content['items'][this.nav_active_item_two_index]['id'];
-  //             }
-  //             // 是否选中了三级分类
-  //             if(this.data_three_content != null && this.nav_active_item_three_index != -1) {
-  //                data['category_id'] = this.data_three_content['items'][this.nav_active_item_three_index]['id'];
-  //             }
-  //         }
-  //
-  //         // 获取数据
-  //         uni.request({
-  //             url: app.globalData.get_request_url("datalist", "search"),
-  //             method: 'POST',
-  //             data: data,
-  //             dataType: 'json',
-  //             success: res => {
-  //                 if (res.data.code == 0) {
-  //                     var data = res.data.data;
-  //                     if (data.data.length > 0) {
-  //                         if (this.data_page <= 1) {
-  //                             var temp_data_list = data.data;
-  //                         } else {
-  //                             var temp_data_list = this.data_list || [];
-  //                             var temp_data = data.data;
-  //                             for (var i in temp_data) {
-  //                                 temp_data_list.push(temp_data[i]);
-  //                             }
-  //                         }
-  //                         this.setData({
-  //                             data_list: temp_data_list,
-  //                             data_total: data.total,
-  //                             data_page_total: data.page_total,
-  //                             data_list_loding_status: 3,
-  //                             data_page: this.data_page + 1
-  //                         });
-  //
-  //                         // 是否还有数据
-  //                         this.setData({
-  //                             data_bottom_line_status: (this.data_page > 1 && this.data_page > this.data_page_total)
-  //                         });
-  //
-  //                         // 购物车数据处理
-  //                         this.cart_data_list_handle();
-  //                     } else {
-  //                         this.setData({
-  //                             data_list_loding_status: 0,
-  //                             data_total: 0
-  //                         });
-  //                         if (this.data_page <= 1) {
-  //                             this.setData({
-  //                                 data_list: [],
-  //                                 data_bottom_line_status: false
-  //                             });
-  //                         }
-  //                     }
-  //                 } else {
-  //                     this.setData({
-  //                         data_list_loding_status: 0,
-  //                         data_list_loding_msg: res.data.msg
-  //                     });
-  //                     app.globalData.showToast(res.data.msg);
-  //                 }
-  //             },
-  //             fail: () => {
-  //                 this.setData({
-  //                     data_list_loding_status: 2,
-  //                     data_list_loding_msg: '服务器请求出错'
-  //                 });
-  //                 app.globalData.showToast('服务器请求出错');
-  //             }
-  //         });
-  //     },
-  //
-  //     // 重置滑动位置
-  //     reset_scroll() {
-  //         this.setData({
-  //             scroll_top: this.scroll_top_old
-  //         });
-  //         this.$nextTick(() => {
-  //             this.setData({
-  //                 scroll_top: 0
-  //             });
-  //         });
-  //     },
-  //
-  //     // 滑动事件位置记录
-  //     scroll_event(e) {
-  //         this.setData({
-  //             scroll_top_old: e.detail.scrollTop
-  //         });
-  //     },
-  //
-  //     // 滚动加载
-  //     scroll_lower(e) {
-  //         this.get_goods_list();
-  //     },
-  //
-  //     // 导航事件
-  //     nav_event(e) {
-  //         var index = e.currentTarget.dataset.index;
-  //         var two_index = e.currentTarget.dataset.itemtwoindex;
-  //         var three_index = e.currentTarget.dataset.itemthreeindex;
-  //         var temp_data_content = this.category_list[index] || null;
-  //         var temp_data_three_content = null;
-  //         if(two_index != -1 && temp_data_content != null) {
-  //             temp_data_three_content = temp_data_content['items'][two_index];
-  //         }
-  //         this.setData({
-  //             nav_active_index: index,
-  //             nav_active_item_two_index: two_index,
-  //             nav_active_item_three_index: three_index,
-  //             data_content: temp_data_content,
-  //             data_three_content: temp_data_three_content,
-  //             data_page: 1,
-  //             data_list_loding_status: 1,
-  //             data_list: []
-  //         });
-  //
-  //         // 商品模式则读取商品
-  //         if(this.category_show_level == 0) {
-  //             this.reset_scroll();
-  //             this.get_goods_list(1);
-  //         }
-  //     },
-  //
-  //     // 分类事件
-  //     category_event(e) {
-  //         uni.navigateTo({
-  //             url: '/pages/goods-search/goods-search?category_id=' + e.currentTarget.dataset.value
-  //         });
-  //     },
-  //
-  //     // 搜索事件
-  //     search_button_event(e) {
-  //         // 商品列表模式
-  //         if(this.category_show_level == 0) {
-  //             this.setData({
-  //                 search_keywords_value: e || '',
-  //                 data_page: 1,
-  //                 data_list_loding_status: 1,
-  //                 data_list: []
-  //             });
-  //             this.get_goods_list(1);
-  //         } else {
-  //             // 进入搜索页面
-  //             uni.navigateTo({
-  //                 url: '/pages/goods-search/goods-search'+(((e || null) == null) ? '' : '?keywords='+e)
-  //             });
-  //         }
-  //     },
-  //
-  //     // url事件
-  //     url_event(e) {
-  //         app.globalData.url_event(e);
-  //     },
-  //
-  //     // 列表数据操作
-  //     buy_number_event(e) {
-  //         if(!app.globalData.is_single_page_check()) {
-  //             return false;
-  //         }
-  //         var user = app.globalData.get_user_info(this);
-  //         if (user != false) {
-  //             // 用户未绑定用户则转到登录页面
-  //             if (app.globalData.user_is_need_login(user)) {
-  //                 uni.navigateTo({
-  //                     url: "/pages/login/login?event_callback=buy_number_event"
-  //                 });
-  //                 return false;
-  //             } else {
-  //                 var index = e.currentTarget.dataset.index;
-  //                 var type = parseInt(e.currentTarget.dataset.type) || 0;
-  //                 var temp_goods = this.data_list[index];
-  //
-  //                 // 是否存在多规格
-  //                 if((temp_goods.is_exist_many_spec || 0) != 0) {
-  //                     // 是否购物车中操作
-  //                     if(type == 0) {
-  //                         this.setData({
-  //                             cart_status: true
-  //                         });
-  //                         app.globalData.showToast('不同规格的商品需在购物车减购');
-  //                     } else {
-  //                         // 展示规格选择
-  //                         var temp_specifications = temp_goods['specifications']['choose'] || [];
-  //                         if(temp_specifications.length > 0) {
-  //                             for(var i in temp_specifications) {
-  //                                 for(var k in temp_specifications[i]['value']) {
-  //                                     temp_specifications[i]['value'][k]['is_active'] = '';
-  //                                     if(i > 0) {
-  //                                         temp_specifications[i]['value'][k]['is_dont'] = 'spec-dont-choose';
-  //                                     }
-  //                                 }
-  //                             }
-  //                         }
-  //                         this.setData({
-  //                             popup_spec_status: true,
-  //                             goods_choose_data: temp_goods,
-  //                             goods_specifications_choose: temp_specifications,
-  //                             goods_spec_base_price: temp_goods.price,
-  //                             goods_spec_base_original_price: temp_goods.original_price || 0,
-  //                             goods_spec_base_inventory: temp_goods.inventory,
-  //                             goods_spec_base_images: temp_goods.images,
-  //                         });
-  //                     }
-  //                     return false;
-  //                 }
-  //
-  //                 // 数据操作处理
-  //                 this.buy_number_event_handle(type, temp_goods);
-  //             }
-  //         }
-  //     },
-  //
-  //     // 列表数量事件处理
-  //     buy_number_event_handle(type, goods, spec = '') {
-  //         var res = this.buy_number_handle(type, goods, 'buy_number');
-  //         if(res === false) {
-  //             return false;
-  //         }
-  //
-  //         // 为0或减操作则查询
-  //         var cart_item = null;
-  //         if(type == 0 || (type == 1 && goods['buy_number'] > 0)) {
-  //             var cart_data = this.cart.data;
-  //             var params_spec = ((spec || null) == null || typeof(spec) != 'object') ? '' : JSON.stringify(spec);
-  //             for(var i in cart_data) {
-  //                 if(goods['id'] == cart_data[i]['goods_id']) {
-  //                     var cart_spec = ((cart_data[i]['spec'] || null) == null || typeof(cart_data[i]['spec']) != 'object') ? '' : JSON.stringify(cart_data[i]['spec']);
-  //                     if(type == 0 || (type == 1 && cart_spec == params_spec)) {
-  //                         cart_item = cart_data[i];
-  //                     }
-  //                     break;
-  //                 }
-  //             }
-  //         }
-  //
-  //         // 操作类型
-  //         if(res == 0) {
-  //             if(cart_item == null) {
-  //                 app.globalData.showToast('购物车id有误');
-  //                 return false;
-  //             }
-  //             this.cart_delete(cart_item.id);
-  //         } else if(cart_item == null) {
-  //             this.cart_save(goods['id'], res, spec);
-  //         } else {
-  //             var number = (type == 0) ? parseInt(cart_item['stock'])-res : res+parseInt(cart_item['stock']);
-  //             this.cart_update(cart_item.id, goods['id'], number);
-  //         }
-  //         return true;
-  //     },
-  //
-  //     // 购物车数量操作
-  //     cart_buy_number_event(e) {
-  //         if(!app.globalData.is_single_page_check()) {
-  //             return false;
-  //         }
-  //         var user = app.globalData.get_user_info(this);
-  //         if (user != false) {
-  //             // 用户未绑定用户则转到登录页面
-  //             if (app.globalData.user_is_need_login(user)) {
-  //                 uni.navigateTo({
-  //                     url: "/pages/login/login?event_callback=cart_buy_number_event"
-  //                 });
-  //                 return false;
-  //             } else {
-  //                 var index = e.currentTarget.dataset.index;
-  //                 var type = parseInt(e.currentTarget.dataset.type) || 0;
-  //                 var temp_data = this.cart.data;
-  //                 var temp_goods = temp_data[index];
-  //
-  //                 // 数据操作处理
-  //                 var res = this.buy_number_handle(type, temp_goods, 'stock');
-  //                 if(res === false) {
-  //                     return false;
-  //                 }
-  //
-  //                 // 操作类型
-  //                 if(res == 0) {
-  //                     this.cart_delete(temp_goods['id']);
-  //                 } else {
-  //                     var number = (type == 0) ? parseInt(temp_goods['stock'])-res : res+parseInt(temp_goods['stock']);
-  //                     this.cart_update(temp_goods['id'], temp_goods['goods_id'], number);
-  //                 }
-  //             }
-  //         }
-  //     },
-  //
-  //     // 数量操作处理
-  //     buy_number_handle(type, goods, buy_number_field) {
-  //         // 加减处理
-  //         var buy_number = parseInt(goods[buy_number_field]) || 0;
-  //         if(type == 0) {
-  //             buy_number -= 1;
-  //         } else {
-  //             buy_number += 1;
-  //         }
-  //         if(buy_number < 0) {
-  //             buy_number = 0;
-  //         }
-  //
-  //         // 数据校验
-  //         var buy_min_number = parseInt(goods['buy_min_number']) || 1;
-  //         var buy_max_number = parseInt(goods['buy_max_number']) || 0;
-  //         var inventory = parseInt(goods['inventory']);
-  //         var inventory_unit = goods['inventory_unit'];
-  //         if (buy_min_number > 0) {
-  //             if(type == 0) {
-  //                 if(buy_number < buy_min_number) {
-  //                     buy_number = 0;
-  //                 }
-  //             } else {
-  //                 if(buy_number < buy_min_number) {
-  //                     buy_number = buy_min_number;
-  //                 }
-  //             }
-  //         }
-  //         if (buy_max_number > 0 && buy_number > buy_max_number) {
-  //             app.globalData.showToast('限购' + buy_max_number + inventory_unit);
-  //             return false;
-  //         }
-  //         if (buy_number > inventory) {
-  //             app.globalData.showToast('库存数量' + inventory + inventory_unit);
-  //             return false;
-  //         }
-  //         if (goods[buy_number_field] == buy_number) {
-  //             app.globalData.showToast('数量为改变');
-  //             return false;
-  //         }
-  //
-  //         // 操作数量
-  //         var opt_number = 1;
-  //         if(type == 0) {
-  //             if(buy_number <= 0) {
-  //                 opt_number = 0;
-  //             }
-  //         } else {
-  //             if(buy_number > goods['buy_number']) {
-  //                 opt_number = buy_number-goods['buy_number'];
-  //             }
-  //         }
-  //         return opt_number;
-  //     },
-  //
-  //     // 购物车添加
-  //     cart_save(goods_id, buy_number, spec = '') {
-  //         uni.showLoading({
-  //             title: '处理中...'
-  //         });
-  //         uni.request({
-  //             url: app.globalData.get_request_url('save', 'cart'),
-  //             method: 'POST',
-  //             data: {
-  //                 "goods_id": goods_id,
-  //                 "stock": buy_number,
-  //                 "spec": spec
-  //             },
-  //             dataType: 'json',
-  //             success: res => {
-  //                 uni.hideLoading();
-  //                 if (res.data.code == 0) {
-  //                     this.get_cart_data();
-  //                 } else {
-  //                     if (app.globalData.is_login_check(res.data)) {
-  //                         app.globalData.showToast(res.data.msg);
-  //                     }
-  //                 }
-  //             },
-  //             fail: () => {
-  //                 uni.hideLoading();
-  //                 app.globalData.showToast('服务器请求出错');
-  //             }
-  //         });
-  //     },
-  //
-  //     // 购物车更新
-  //     cart_update(cart_id, goods_id, buy_number) {
-  //         uni.showLoading({
-  //             title: '处理中...',
-  //             mask: true
-  //         });
-  //         uni.request({
-  //             url: app.globalData.get_request_url("stock", "cart"),
-  //             method: 'POST',
-  //             data: {
-  //                 "id": cart_id,
-  //                 "goods_id": goods_id,
-  //                 "stock": buy_number
-  //             },
-  //             dataType: 'json',
-  //             success: res => {
-  //                 uni.hideLoading();
-  //                 if (res.data.code == 0) {
-  //                     this.get_cart_data();
-  //                 } else {
-  //                     if (app.globalData.is_login_check(res.data)) {
-  //                         app.globalData.showToast(res.data.msg);
-  //                     } else {
-  //                         app.globalData.showToast('提交失败，请重试！');
-  //                     }
-  //                 }
-  //             },
-  //             fail: () => {
-  //                 uni.hideLoading();
-  //                 app.globalData.showToast('服务器请求出错');
-  //             }
-  //         });
-  //     },
-  //
-  //     // 购物车删除
-  //     cart_delete(cart_id) {
-  //         uni.showLoading({
-  //             title: '处理中...',
-  //             mask: true
-  //         });
-  //         uni.request({
-  //             url: app.globalData.get_request_url('delete', 'cart'),
-  //             method: 'POST',
-  //             data: {
-  //                 "id": cart_id
-  //             },
-  //             dataType: 'json',
-  //             success: res => {
-  //                 uni.hideLoading();
-  //                 if (res.data.code == 0) {
-  //                     this.get_cart_data();
-  //                 } else {
-  //                     if (app.globalData.is_login_check(res.data)) {
-  //                         app.globalData.showToast(res.data.msg);
-  //                     } else {
-  //                         app.globalData.showToast('提交失败，请重试！');
-  //                     }
-  //                 }
-  //             },
-  //             fail: () => {
-  //                 uni.hideLoading();
-  //                 app.globalData.showToast('服务器请求出错');
-  //             }
-  //         });
-  //     },
-  //
-  //     // 获取购物车数据
-  //     get_cart_data() {
-  //         uni.request({
-  //             url: app.globalData.get_request_url("index", "cart"),
-  //             method: 'POST',
-  //             data: {},
-  //             dataType: 'json',
-  //             success: res => {
-  //                 if (res.data.code == 0) {
-  //                     var data = res.data.data;
-  //                     var temp_cart = data.data || [];
-  //                     this.setData({
-  //                         cart: res.data.data
-  //                     });
-  //                     this.cart_data_list_handle();
-  //
-  //                     // 导航购物车处理
-  //                     if (data.buy_number <= 0) {
-  //                         app.globalData.set_tab_bar_badge(2, 0);
-  //                     } else {
-  //                         app.globalData.set_tab_bar_badge(2, 1, data.buy_number);
-  //                     }
-  //                 }
-  //             },
-  //             fail: () => {
-  //                 app.globalData.showToast('服务器请求出错');
-  //             }
-  //         });
-  //     },
-  //
-  //     // 购物车更新列表数据处理
-  //     cart_data_list_handle() {
-  //         var temp_cart = this.cart || null;
-  //         if(temp_cart != null) {
-  //             var temp_data_list = this.data_list;
-  //             if(temp_data_list.length > 0) {
-  //                 for(var i in temp_data_list) {
-  //                     temp_data_list[i]['buy_number'] = 0;
-  //                     if(temp_cart.data.length > 0) {
-  //                         for(var k in temp_cart.data) {
-  //                             if(temp_cart.data[k]['goods_id'] == temp_data_list[i]['id']) {
-  //                                 temp_data_list[i]['buy_number'] += parseInt(temp_cart.data[k]['stock']);
-  //                             }
-  //                         }
-  //                     }
-  //                 }
-  //             }
-  //             this.setData({
-  //                 data_list: temp_data_list
-  //             });
-  //         }
-  //     },
-  //
-  //     // 规格选择弹层关闭
-  //     popup_spec_close_event(e) {
-  //         this.setData({
-  //             popup_spec_status: false
-  //         });
-  //     },
-  //
-  //     // 规格事件
-  //     goods_specifications_event(e) {
-  //         var key = e.currentTarget.dataset.key || 0;
-  //         var keys = e.currentTarget.dataset.keys || 0;
-  //         this.goods_specifications_handle(key, keys);
-  //     },
-  //
-  //     // 规格选择处理
-  //     goods_specifications_handle(key, keys) {
-  //         // 不能选择和禁止选择跳过
-  //         var temp_data = this.goods_specifications_choose;
-  //         var temp_images = this.goods_spec_base_images;
-  //         if ((temp_data[key]['value'][keys]['is_dont'] || null) == null && (temp_data[key]['value'][keys]['is_disabled'] || null) == null) {
-  //             // 规格选择
-  //             for (var i in temp_data) {
-  //                 for (var k in temp_data[i]['value']) {
-  //                     if ((temp_data[i]['value'][k]['is_dont'] || null) == null && (temp_data[i]['value'][k]['is_disabled'] || null) == null) {
-  //                         if (key == i) {
-  //                             if (keys == k && (temp_data[i]['value'][k]['is_active'] || null) == null) {
-  //                                 temp_data[i]['value'][k]['is_active'] = 'cr-white bg-main br-main';
-  //                                 if ((temp_data[i]['value'][k]['images'] || null) != null) {
-  //                                     temp_images = temp_data[i]['value'][k]['images'];
-  //                                 }
-  //                             } else {
-  //                                 temp_data[i]['value'][k]['is_active'] = '';
-  //                             }
-  //                         }
-  //                     }
-  //                 }
-  //             }
-  //             this.setData({
-  //                 goods_specifications_choose: temp_data,
-  //                 goods_spec_base_images: temp_images
-  //             });
-  //
-  //             // 不能选择规格处理
-  //             this.goods_specifications_choose_handle_dont(key);
-  //
-  //             // 获取下一个规格类型
-  //             this.get_goods_specifications_type(key);
-  //
-  //             // 获取规格详情
-  //             this.get_goods_specifications_detail();
-  //         }
-  //
-  //         // 已选择规格
-  //         var spec_selected = [];
-  //         for (var i in temp_data) {
-  //             for (var k in temp_data[i]['value']) {
-  //                 if ((temp_data[i]['value'][k]['is_active'] || null) != null)
-  //                 {
-  //                     spec_selected.push(temp_data[i]['value'][k]['name']);
-  //                 }
-  //             }
-  //         }
-  //         this.setData({
-  //             goods_spec_selected_text: (spec_selected.length <= 0) ? '请选择规格' : spec_selected.join(' / ')
-  //         });
-  //     },
-  //
-  //     // 不能选择规格处理
-  //     goods_specifications_choose_handle_dont(key) {
-  //         var temp_data = this.goods_specifications_choose || [];
-  //         if (temp_data.length <= 0) {
-  //             return false;
-  //         }
-  //
-  //         // 是否不能选择
-  //         key = parseInt(key);
-  //         for (var i in temp_data) {
-  //             for (var k in temp_data[i]['value']) {
-  //                 if (i > key) {
-  //                     temp_data[i]['value'][k]['is_dont'] = 'spec-dont-choose';
-  //                     temp_data[i]['value'][k]['is_disabled'] = '';
-  //                     temp_data[i]['value'][k]['is_active'] = '';
-  //                 }
-  //
-  //                 // 当只有一个规格的时候
-  //                 if (key == 0 && temp_data.length == 1) {
-  //                     temp_data[i]['value'][k]['is_disabled'] = (temp_data[i]['value'][k]['is_only_level_one'] || null) != null && (temp_data[i]['value'][k]['inventory'] || 0) <= 0 ? 'spec-items-disabled' : '';
-  //                 }
-  //             }
-  //         }
-  //
-  //         this.setData({
-  //             goods_specifications_choose: temp_data
-  //         });
-  //     },
-  //
-  //     // 获取下一个规格类型
-  //     get_goods_specifications_type(key) {
-  //         var temp_data = this.goods_specifications_choose;
-  //         var active_index = parseInt(key) + 1;
-  //         var sku_count = app.globalData.get_length(temp_data);
-  //         if (active_index <= 0 || active_index >= sku_count) {
-  //             return false;
-  //         }
-  //
-  //         // 获取规格值
-  //         var spec = [];
-  //         for (var i in temp_data) {
-  //             for (var k in temp_data[i]['value']) {
-  //                 if ((temp_data[i]['value'][k]['is_active'] || null) != null) {
-  //                     spec.push({
-  //                         "type": temp_data[i]['name'],
-  //                         "value": temp_data[i]['value'][k]['name']
-  //                     });
-  //                     break;
-  //                 }
-  //             }
-  //         }
-  //         if (spec.length <= 0) {
-  //             return false;
-  //         }
-  //
-  //         // 获取数据
-  //         uni.request({
-  //             url: app.globalData.get_request_url('spectype', 'goods'),
-  //             method: 'POST',
-  //             data: {
-  //                 id: this.goods_choose_data.id,
-  //                 spec: JSON.stringify(spec)
-  //             },
-  //             dataType: 'json',
-  //             success: (res) => {
-  //                 if (res.data.code == 0) {
-  //                     var spec_type = res.data.data.spec_type;
-  //                     var spec_count = spec.length;
-  //                     var index = spec_count > 0 ? spec_count : 0;
-  //                     if (index < sku_count) {
-  //                         for (var i in temp_data) {
-  //                             for (var k in temp_data[i]['value']) {
-  //                                 if (index == i) {
-  //                                     temp_data[i]['value'][k]['is_dont'] = '';
-  //                                     var temp_value = temp_data[i]['value'][k]['name'];
-  //                                     var temp_status = false;
-  //                                     for (var t in spec_type) {
-  //                                         if (spec_type[t] == temp_value) {
-  //                                             temp_status = true;
-  //                                             break;
-  //                                         }
-  //                                     }
-  //                                     if (temp_status == true) {
-  //                                         temp_data[i]['value'][k]['is_disabled'] = '';
-  //                                     } else {
-  //                                         temp_data[i]['value'][k]['is_disabled'] = 'spec-items-disabled';
-  //                                     }
-  //                                 }
-  //                             }
-  //                         }
-  //                         this.setData({
-  //                             goods_specifications_choose: temp_data
-  //                         });
-  //                     }
-  //                 } else {
-  //                     app.globalData.showToast(res.data.msg);
-  //                 }
-  //             },
-  //             fail: () => {
-  //                 app.globalData.showToast('服务器请求出错');
-  //             }
-  //         });
-  //     },
-  //
-  //     // 获取规格详情
-  //     get_goods_specifications_detail() {
-  //         // 获取规格值
-  //         var spec = this.goods_selected_spec();
-  //
-  //         // 存在规格的时候是否已完全选择规格
-  //         var sku_count = this.goods_specifications_choose.length;
-  //         var active_count = spec.length;
-  //         if (spec.length <= 0 || active_count < sku_count) {
-  //             this.setData({
-  //                 goods_spec_base_price: this.goods_choose_data.price,
-  //                 goods_spec_base_original_price: this.goods_choose_data.original_price || 0,
-  //                 goods_spec_base_inventory: this.goods_choose_data.inventory
-  //             });
-  //             return false;
-  //         }
-  //
-  //         // 获取数据
-  //         uni.request({
-  //             url: app.globalData.get_request_url('specdetail', 'goods'),
-  //             method: 'POST',
-  //             data: {
-  //                 id: this.goods_choose_data.id,
-  //                 spec: JSON.stringify(spec),
-  //                 stock: 1
-  //             },
-  //             dataType: 'json',
-  //             success: res => {
-  //                 if (res.data.code == 0) {
-  //                     this.goods_spec_detail_back_handle(res.data.data);
-  //                 } else {
-  //                     app.globalData.showToast(res.data.msg);
-  //                 }
-  //             },
-  //             fail: () => {
-  //                 app.globalData.showToast('服务器请求出错');
-  //             }
-  //         });
-  //     },
-  //
-  //     // 已选的商品规格
-  //     goods_selected_spec() {
-  //         var spec = [];
-  //         var temp_data = this.goods_specifications_choose;
-  //         for (var i in temp_data) {
-  //             for (var k in temp_data[i]['value']) {
-  //                 if ((temp_data[i]['value'][k]['is_active'] || null) != null) {
-  //                     spec.push({
-  //                         "type": temp_data[i]['name'],
-  //                         "value": temp_data[i]['value'][k]['name']
-  //                     });
-  //                     break;
-  //                 }
-  //             }
-  //         }
-  //         return spec;
-  //     },
-  //
-  //     // 商品规格详情返回数据处理
-  //     goods_spec_detail_back_handle(data) {
-  //         var spec_base = data.spec_base;
-  //         var data = {
-  //             goods_spec_base_price: spec_base.price,
-  //             goods_spec_base_original_price: spec_base.original_price || 0,
-  //             goods_spec_base_inventory: parseInt(spec_base.inventory)
-  //         };
-  //         this.setData(data);
-  //     },
-  //
-  //     // 规格选择确认
-  //     goods_spec_confirm_event(e) {
-  //         var user = app.globalData.get_user_info(this, 'goods_spec_confirm_event');
-  //         if (user != false) {
-  //             // 用户未绑定用户则转到登录页面
-  //             if (app.globalData.user_is_need_login(user)) {
-  //                 uni.navigateTo({
-  //                     url: "/pages/login/login?event_callback=goods_spec_confirm_event"
-  //                 });
-  //                 return false;
-  //             } else {
-  //                 // 属性
-  //                 var temp_data = this.goods_specifications_choose;
-  //                 var sku_count = temp_data.length;
-  //                 var active_count = 0;
-  //                 var spec = [];
-  //                 if (sku_count > 0) {
-  //                     for (var i in temp_data) {
-  //                         for (var k in temp_data[i]['value']) {
-  //                             if ((temp_data[i]['value'][k]['is_active'] || null) != null) {
-  //                                 active_count++;
-  //                                 spec.push({
-  //                                     "type": temp_data[i]['name'],
-  //                                     "value": temp_data[i]['value'][k]['name']
-  //                                 });
-  //                             }
-  //                         }
-  //                     }
-  //
-  //                     if (active_count < sku_count) {
-  //                         app.globalData.showToast('请选择规格');
-  //                         return false;
-  //                     }
-  //                 }
-  //
-  //                 // 数据操作处理
-  //                 if(this.buy_number_event_handle(1, this.goods_choose_data, spec)) {
-  //                     this.setData({
-  //                         popup_spec_status: false
-  //                     });
-  //                 }
-  //             }
-  //         }
-  //     },
-  //
-  //     // 规格图片查看
-  //     goods_spec_base_images_view_event(e) {
-  //         var value = e.currentTarget.dataset.value || null;
-  //         if (value != null) {
-  //             uni.previewImage({
-  //                 current: value,
-  //                 urls: [value]
-  //             });
-  //         }
-  //     },
-  //
-  //     // 批量删除操作
-  //     cart_all_delete_event(e) {
-  //         uni.showModal({
-  //             title: '温馨提示',
-  //             content: '挑了这么久，真的要清空吗？',
-  //             confirmText: '确认',
-  //             cancelText: '暂不',
-  //             success: result => {
-  //                 if (result.confirm) {
-  //                     var ids = [];
-  //                     var temp_data = this.cart.data;
-  //                     for (var i in temp_data) {
-  //                         ids.push(temp_data[i]['id']);
-  //                     }
-  //                     this.cart_delete(ids.join(','));
-  //                 }
-  //             }
-  //         });
-  //     },
-  //
-  //     // 购物车状态
-  //     cart_event(e) {
-  //         this.setData({
-  //             cart_status: !this.cart_status
-  //         });
-  //     },
-  //
-  //     // 购物车结算
-  //     buy_submit_event(e) {
-  //         if(!app.globalData.is_single_page_check()) {
-  //             return false;
-  //         }
-  //
-  //         // 获取购物车数据
-  //         var ids = [];
-  //         if((this.cart || null) != null) {
-  //             var temp_data = this.cart.data || [];
-  //             for (var i in temp_data) {
-  //                 if(temp_data[i]['is_error'] == 0) {
-  //                     ids.push(temp_data[i]['id']);
-  //                 }
-  //             }
-  //         }
-  //         if (ids.length <= 0) {
-  //             app.globalData.showToast('请先选购商品');
-  //             return false;
-  //         }
-  //
-  //         // 进入订单确认页面
-  //         var data = {
-  //             "buy_type": "cart",
-  //             "ids": ids.join(',')
-  //         };
-  //         uni.navigateTo({
-  //             url: '/pages/buy/buy?data=' + encodeURIComponent(JSON.stringify(data))
-  //         });
-  //     }
-  // }
+
+  methods: {
+        // 初始化配置
+        // initConfig(status) {
+        //     if (status === true) {
+        //         this.setData({
+        //             currency_symbol: app.globalData.get_config('currency_symbol'),
+        //             categoryShowLevel: app.globalData.get_config('config.categoryShowLevel')
+        //         });
+        //     } else {
+        //         app.globalData.is_config(this, 'initConfig');
+        //     }
+        // },
+
+        // 获取数据
+        init() {
+            if(this.isFirst) {
+                this.setData({
+                    dataListLoadingStatus: LOADING_STATUS.DEFAULT
+                });
+            }
+
+
+            uni.request({
+                url: app.globalData.get_request_url("category", "goods"),
+                method: 'POST',
+                data: {},
+                dataType: 'json',
+                success: res => {
+                    uni.stopPullDownRefresh();
+                    if (res.data.code == 0) {
+                        var temp_category = res.data.data.category || [];
+                        var upd_data = {
+                            categoryList: temp_category,
+                            data_content: temp_category[this.nav_active_index] || null
+                        }
+                        // 非商品列表模式
+                        if(this.categoryShowLevel != 0) {
+                            upd_data['dataListLoadingStatus'] = temp_category.length == 0 ? 0 : 3;
+                            upd_data['data_bottom_line_status'] = true;
+                        }
+                        this.setData(upd_data);
+
+                        // 商品列表模式
+                        if(this.categoryShowLevel == 0) {
+                            // 商品列表模式获取购物车数据
+                            this.get_cart_data();
+                            // 获取商品列表、仅首次请求商品列表
+                            if(this.isFirst == 1) {
+                                this.get_goods_list(1);
+                            }
+                        } else {
+                            // 分类模式下、仅首次请求购物车接口和商品模式下
+                            if(this.isFirst == 1 && this.categoryShowLevel == 0) {
+                                this.get_cart_data();
+                            }
+                        }
+                        // 是否首次记录
+                        this.setData({isFirst: 0});
+                    } else {
+                        this.setData({
+                            dataListLoadingStatus: 2,
+                            dataListLoadingMsg: res.data.msg
+                        });
+                    }
+
+                    // 基础自定义分享
+                    this.setData({
+                        share_info: {
+                            path: '/pages/product-category/product-category'
+                        }
+                    });
+
+                    // 分享菜单处理、延时执行，确保基础数据已加载完成
+                    setTimeout(function() {
+                        app.globalData.page_share_handle(this.share_info);
+                    }, 3000);
+                },
+                fail: () => {
+                    uni.stopPullDownRefresh();
+                    this.setData({
+                        dataListLoadingStatus: 2,
+                        dataListLoadingMsg: '服务器请求出错'
+                    });
+                    app.globalData.showToast('服务器请求出错');
+                }
+            });
+        },
+    //
+    //     // 获取商品列表
+    //     get_goods_list(is_mandatory) {
+    //         // 分页是否还有数据
+    //         if ((is_mandatory || 0) == 0) {
+    //             if (this.data_bottom_line_status == true) {
+    //                 uni.stopPullDownRefresh();
+    //                 return false;
+    //             }
+    //         }
+    //
+    //         // 请求参数
+    //         var data = {
+    //             page: this.data_page,
+    //             wd: this.search_keywords_value || ''
+    //         };
+    //         // 分类id
+    //         if((this.data_content || null) != null) {
+    //             // 主分类id
+    //             data['category_id'] = this.data_content['id'];
+    //             // 是否选中了二级分类
+    //             if(this.nav_active_item_two_index != -1) {
+    //                data['category_id'] = this.data_content['items'][this.nav_active_item_two_index]['id'];
+    //             }
+    //             // 是否选中了三级分类
+    //             if(this.data_three_content != null && this.nav_active_item_three_index != -1) {
+    //                data['category_id'] = this.data_three_content['items'][this.nav_active_item_three_index]['id'];
+    //             }
+    //         }
+    //
+    //         // 获取数据
+    //         uni.request({
+    //             url: app.globalData.get_request_url("datalist", "search"),
+    //             method: 'POST',
+    //             data: data,
+    //             dataType: 'json',
+    //             success: res => {
+    //                 if (res.data.code == 0) {
+    //                     var data = res.data.data;
+    //                     if (data.data.length > 0) {
+    //                         if (this.data_page <= 1) {
+    //                             var temp_data_list = data.data;
+    //                         } else {
+    //                             var temp_data_list = this.data_list || [];
+    //                             var temp_data = data.data;
+    //                             for (var i in temp_data) {
+    //                                 temp_data_list.push(temp_data[i]);
+    //                             }
+    //                         }
+    //                         this.setData({
+    //                             data_list: temp_data_list,
+    //                             data_total: data.total,
+    //                             data_page_total: data.page_total,
+    //                             dataListLoadingStatus: 3,
+    //                             data_page: this.data_page + 1
+    //                         });
+    //
+    //                         // 是否还有数据
+    //                         this.setData({
+    //                             data_bottom_line_status: (this.data_page > 1 && this.data_page > this.data_page_total)
+    //                         });
+    //
+    //                         // 购物车数据处理
+    //                         this.cart_data_list_handle();
+    //                     } else {
+    //                         this.setData({
+    //                             dataListLoadingStatus: 0,
+    //                             data_total: 0
+    //                         });
+    //                         if (this.data_page <= 1) {
+    //                             this.setData({
+    //                                 data_list: [],
+    //                                 data_bottom_line_status: false
+    //                             });
+    //                         }
+    //                     }
+    //                 } else {
+    //                     this.setData({
+    //                         dataListLoadingStatus: 0,
+    //                         dataListLoadingMsg: res.data.msg
+    //                     });
+    //                     app.globalData.showToast(res.data.msg);
+    //                 }
+    //             },
+    //             fail: () => {
+    //                 this.setData({
+    //                     dataListLoadingStatus: 2,
+    //                     dataListLoadingMsg: '服务器请求出错'
+    //                 });
+    //                 app.globalData.showToast('服务器请求出错');
+    //             }
+    //         });
+    //     },
+    //
+    //     // 重置滑动位置
+    //     reset_scroll() {
+    //         this.setData({
+    //             scroll_top: this.scroll_top_old
+    //         });
+    //         this.$nextTick(() => {
+    //             this.setData({
+    //                 scroll_top: 0
+    //             });
+    //         });
+    //     },
+    //
+    //     // 滑动事件位置记录
+    //     scroll_event(e) {
+    //         this.setData({
+    //             scroll_top_old: e.detail.scrollTop
+    //         });
+    //     },
+    //
+    //     // 滚动加载
+    //     scroll_lower(e) {
+    //         this.get_goods_list();
+    //     },
+    //
+    //     // 导航事件
+    //     nav_event(e) {
+    //         var index = e.currentTarget.dataset.index;
+    //         var two_index = e.currentTarget.dataset.itemtwoindex;
+    //         var three_index = e.currentTarget.dataset.itemthreeindex;
+    //         var temp_data_content = this.categoryList[index] || null;
+    //         var temp_data_three_content = null;
+    //         if(two_index != -1 && temp_data_content != null) {
+    //             temp_data_three_content = temp_data_content['items'][two_index];
+    //         }
+    //         this.setData({
+    //             nav_active_index: index,
+    //             nav_active_item_two_index: two_index,
+    //             nav_active_item_three_index: three_index,
+    //             data_content: temp_data_content,
+    //             data_three_content: temp_data_three_content,
+    //             data_page: 1,
+    //             dataListLoadingStatus: 1,
+    //             data_list: []
+    //         });
+    //
+    //         // 商品模式则读取商品
+    //         if(this.categoryShowLevel == 0) {
+    //             this.reset_scroll();
+    //             this.get_goods_list(1);
+    //         }
+    //     },
+    //
+    //     // 分类事件
+    //     category_event(e) {
+    //         uni.navigateTo({
+    //             url: '/pages/goods-search/goods-search?category_id=' + e.currentTarget.dataset.value
+    //         });
+    //     },
+    //
+    // 搜索事件
+    searchButtonEvent(e) {
+      // 商品列表模式
+      if (this.categoryShowLevel == 0) {
+        this.setData({
+          search_keywords_value: e || '',
+          data_page: 1,
+          dataListLoadingStatus: 1,
+          data_list: []
+        });
+        this.get_goods_list(1);
+      } else {
+        // 进入搜索页面
+        uni.navigateTo({
+          url: '/pages/goods-search/goods-search' + (((e || null) == null) ? '' : '?keywords=' + e)
+        });
+      }
+    },
+    //
+    //     // url事件
+    //     url_event(e) {
+    //         app.globalData.url_event(e);
+    //     },
+    //
+    //     // 列表数据操作
+    //     buy_number_event(e) {
+    //         if(!app.globalData.is_single_page_check()) {
+    //             return false;
+    //         }
+    //         var user = app.globalData.get_user_info(this);
+    //         if (user != false) {
+    //             // 用户未绑定用户则转到登录页面
+    //             if (app.globalData.user_is_need_login(user)) {
+    //                 uni.navigateTo({
+    //                     url: "/pages/login/login?event_callback=buy_number_event"
+    //                 });
+    //                 return false;
+    //             } else {
+    //                 var index = e.currentTarget.dataset.index;
+    //                 var type = parseInt(e.currentTarget.dataset.type) || 0;
+    //                 var temp_goods = this.data_list[index];
+    //
+    //                 // 是否存在多规格
+    //                 if((temp_goods.is_exist_many_spec || 0) != 0) {
+    //                     // 是否购物车中操作
+    //                     if(type == 0) {
+    //                         this.setData({
+    //                             cart_status: true
+    //                         });
+    //                         app.globalData.showToast('不同规格的商品需在购物车减购');
+    //                     } else {
+    //                         // 展示规格选择
+    //                         var temp_specifications = temp_goods['specifications']['choose'] || [];
+    //                         if(temp_specifications.length > 0) {
+    //                             for(var i in temp_specifications) {
+    //                                 for(var k in temp_specifications[i]['value']) {
+    //                                     temp_specifications[i]['value'][k]['is_active'] = '';
+    //                                     if(i > 0) {
+    //                                         temp_specifications[i]['value'][k]['is_dont'] = 'spec-dont-choose';
+    //                                     }
+    //                                 }
+    //                             }
+    //                         }
+    //                         this.setData({
+    //                             popup_spec_status: true,
+    //                             goods_choose_data: temp_goods,
+    //                             goods_specifications_choose: temp_specifications,
+    //                             goods_spec_base_price: temp_goods.price,
+    //                             goods_spec_base_original_price: temp_goods.original_price || 0,
+    //                             goods_spec_base_inventory: temp_goods.inventory,
+    //                             goods_spec_base_images: temp_goods.images,
+    //                         });
+    //                     }
+    //                     return false;
+    //                 }
+    //
+    //                 // 数据操作处理
+    //                 this.buy_number_event_handle(type, temp_goods);
+    //             }
+    //         }
+    //     },
+    //
+    //     // 列表数量事件处理
+    //     buy_number_event_handle(type, goods, spec = '') {
+    //         var res = this.buy_number_handle(type, goods, 'buy_number');
+    //         if(res === false) {
+    //             return false;
+    //         }
+    //
+    //         // 为0或减操作则查询
+    //         var cart_item = null;
+    //         if(type == 0 || (type == 1 && goods['buy_number'] > 0)) {
+    //             var cart_data = this.cart.data;
+    //             var params_spec = ((spec || null) == null || typeof(spec) != 'object') ? '' : JSON.stringify(spec);
+    //             for(var i in cart_data) {
+    //                 if(goods['id'] == cart_data[i]['goods_id']) {
+    //                     var cart_spec = ((cart_data[i]['spec'] || null) == null || typeof(cart_data[i]['spec']) != 'object') ? '' : JSON.stringify(cart_data[i]['spec']);
+    //                     if(type == 0 || (type == 1 && cart_spec == params_spec)) {
+    //                         cart_item = cart_data[i];
+    //                     }
+    //                     break;
+    //                 }
+    //             }
+    //         }
+    //
+    //         // 操作类型
+    //         if(res == 0) {
+    //             if(cart_item == null) {
+    //                 app.globalData.showToast('购物车id有误');
+    //                 return false;
+    //             }
+    //             this.cart_delete(cart_item.id);
+    //         } else if(cart_item == null) {
+    //             this.cart_save(goods['id'], res, spec);
+    //         } else {
+    //             var number = (type == 0) ? parseInt(cart_item['stock'])-res : res+parseInt(cart_item['stock']);
+    //             this.cart_update(cart_item.id, goods['id'], number);
+    //         }
+    //         return true;
+    //     },
+    //
+    //     // 购物车数量操作
+    //     cart_buy_number_event(e) {
+    //         if(!app.globalData.is_single_page_check()) {
+    //             return false;
+    //         }
+    //         var user = app.globalData.get_user_info(this);
+    //         if (user != false) {
+    //             // 用户未绑定用户则转到登录页面
+    //             if (app.globalData.user_is_need_login(user)) {
+    //                 uni.navigateTo({
+    //                     url: "/pages/login/login?event_callback=cart_buy_number_event"
+    //                 });
+    //                 return false;
+    //             } else {
+    //                 var index = e.currentTarget.dataset.index;
+    //                 var type = parseInt(e.currentTarget.dataset.type) || 0;
+    //                 var temp_data = this.cart.data;
+    //                 var temp_goods = temp_data[index];
+    //
+    //                 // 数据操作处理
+    //                 var res = this.buy_number_handle(type, temp_goods, 'stock');
+    //                 if(res === false) {
+    //                     return false;
+    //                 }
+    //
+    //                 // 操作类型
+    //                 if(res == 0) {
+    //                     this.cart_delete(temp_goods['id']);
+    //                 } else {
+    //                     var number = (type == 0) ? parseInt(temp_goods['stock'])-res : res+parseInt(temp_goods['stock']);
+    //                     this.cart_update(temp_goods['id'], temp_goods['goods_id'], number);
+    //                 }
+    //             }
+    //         }
+    //     },
+    //
+    //     // 数量操作处理
+    //     buy_number_handle(type, goods, buy_number_field) {
+    //         // 加减处理
+    //         var buy_number = parseInt(goods[buy_number_field]) || 0;
+    //         if(type == 0) {
+    //             buy_number -= 1;
+    //         } else {
+    //             buy_number += 1;
+    //         }
+    //         if(buy_number < 0) {
+    //             buy_number = 0;
+    //         }
+    //
+    //         // 数据校验
+    //         var buy_min_number = parseInt(goods['buy_min_number']) || 1;
+    //         var buy_max_number = parseInt(goods['buy_max_number']) || 0;
+    //         var inventory = parseInt(goods['inventory']);
+    //         var inventory_unit = goods['inventory_unit'];
+    //         if (buy_min_number > 0) {
+    //             if(type == 0) {
+    //                 if(buy_number < buy_min_number) {
+    //                     buy_number = 0;
+    //                 }
+    //             } else {
+    //                 if(buy_number < buy_min_number) {
+    //                     buy_number = buy_min_number;
+    //                 }
+    //             }
+    //         }
+    //         if (buy_max_number > 0 && buy_number > buy_max_number) {
+    //             app.globalData.showToast('限购' + buy_max_number + inventory_unit);
+    //             return false;
+    //         }
+    //         if (buy_number > inventory) {
+    //             app.globalData.showToast('库存数量' + inventory + inventory_unit);
+    //             return false;
+    //         }
+    //         if (goods[buy_number_field] == buy_number) {
+    //             app.globalData.showToast('数量为改变');
+    //             return false;
+    //         }
+    //
+    //         // 操作数量
+    //         var opt_number = 1;
+    //         if(type == 0) {
+    //             if(buy_number <= 0) {
+    //                 opt_number = 0;
+    //             }
+    //         } else {
+    //             if(buy_number > goods['buy_number']) {
+    //                 opt_number = buy_number-goods['buy_number'];
+    //             }
+    //         }
+    //         return opt_number;
+    //     },
+    //
+    //     // 购物车添加
+    //     cart_save(goods_id, buy_number, spec = '') {
+    //         uni.showLoading({
+    //             title: '处理中...'
+    //         });
+    //         uni.request({
+    //             url: app.globalData.get_request_url('save', 'cart'),
+    //             method: 'POST',
+    //             data: {
+    //                 "goods_id": goods_id,
+    //                 "stock": buy_number,
+    //                 "spec": spec
+    //             },
+    //             dataType: 'json',
+    //             success: res => {
+    //                 uni.hideLoading();
+    //                 if (res.data.code == 0) {
+    //                     this.get_cart_data();
+    //                 } else {
+    //                     if (app.globalData.is_login_check(res.data)) {
+    //                         app.globalData.showToast(res.data.msg);
+    //                     }
+    //                 }
+    //             },
+    //             fail: () => {
+    //                 uni.hideLoading();
+    //                 app.globalData.showToast('服务器请求出错');
+    //             }
+    //         });
+    //     },
+    //
+    //     // 购物车更新
+    //     cart_update(cart_id, goods_id, buy_number) {
+    //         uni.showLoading({
+    //             title: '处理中...',
+    //             mask: true
+    //         });
+    //         uni.request({
+    //             url: app.globalData.get_request_url("stock", "cart"),
+    //             method: 'POST',
+    //             data: {
+    //                 "id": cart_id,
+    //                 "goods_id": goods_id,
+    //                 "stock": buy_number
+    //             },
+    //             dataType: 'json',
+    //             success: res => {
+    //                 uni.hideLoading();
+    //                 if (res.data.code == 0) {
+    //                     this.get_cart_data();
+    //                 } else {
+    //                     if (app.globalData.is_login_check(res.data)) {
+    //                         app.globalData.showToast(res.data.msg);
+    //                     } else {
+    //                         app.globalData.showToast('提交失败，请重试！');
+    //                     }
+    //                 }
+    //             },
+    //             fail: () => {
+    //                 uni.hideLoading();
+    //                 app.globalData.showToast('服务器请求出错');
+    //             }
+    //         });
+    //     },
+    //
+    //     // 购物车删除
+    //     cart_delete(cart_id) {
+    //         uni.showLoading({
+    //             title: '处理中...',
+    //             mask: true
+    //         });
+    //         uni.request({
+    //             url: app.globalData.get_request_url('delete', 'cart'),
+    //             method: 'POST',
+    //             data: {
+    //                 "id": cart_id
+    //             },
+    //             dataType: 'json',
+    //             success: res => {
+    //                 uni.hideLoading();
+    //                 if (res.data.code == 0) {
+    //                     this.get_cart_data();
+    //                 } else {
+    //                     if (app.globalData.is_login_check(res.data)) {
+    //                         app.globalData.showToast(res.data.msg);
+    //                     } else {
+    //                         app.globalData.showToast('提交失败，请重试！');
+    //                     }
+    //                 }
+    //             },
+    //             fail: () => {
+    //                 uni.hideLoading();
+    //                 app.globalData.showToast('服务器请求出错');
+    //             }
+    //         });
+    //     },
+    //
+    //     // 获取购物车数据
+    //     get_cart_data() {
+    //         uni.request({
+    //             url: app.globalData.get_request_url("index", "cart"),
+    //             method: 'POST',
+    //             data: {},
+    //             dataType: 'json',
+    //             success: res => {
+    //                 if (res.data.code == 0) {
+    //                     var data = res.data.data;
+    //                     var temp_cart = data.data || [];
+    //                     this.setData({
+    //                         cart: res.data.data
+    //                     });
+    //                     this.cart_data_list_handle();
+    //
+    //                     // 导航购物车处理
+    //                     if (data.buy_number <= 0) {
+    //                         app.globalData.set_tab_bar_badge(2, 0);
+    //                     } else {
+    //                         app.globalData.set_tab_bar_badge(2, 1, data.buy_number);
+    //                     }
+    //                 }
+    //             },
+    //             fail: () => {
+    //                 app.globalData.showToast('服务器请求出错');
+    //             }
+    //         });
+    //     },
+    //
+    //     // 购物车更新列表数据处理
+    //     cart_data_list_handle() {
+    //         var temp_cart = this.cart || null;
+    //         if(temp_cart != null) {
+    //             var temp_data_list = this.data_list;
+    //             if(temp_data_list.length > 0) {
+    //                 for(var i in temp_data_list) {
+    //                     temp_data_list[i]['buy_number'] = 0;
+    //                     if(temp_cart.data.length > 0) {
+    //                         for(var k in temp_cart.data) {
+    //                             if(temp_cart.data[k]['goods_id'] == temp_data_list[i]['id']) {
+    //                                 temp_data_list[i]['buy_number'] += parseInt(temp_cart.data[k]['stock']);
+    //                             }
+    //                         }
+    //                     }
+    //                 }
+    //             }
+    //             this.setData({
+    //                 data_list: temp_data_list
+    //             });
+    //         }
+    //     },
+    //
+    //     // 规格选择弹层关闭
+    //     popup_spec_close_event(e) {
+    //         this.setData({
+    //             popup_spec_status: false
+    //         });
+    //     },
+    //
+    //     // 规格事件
+    //     goods_specifications_event(e) {
+    //         var key = e.currentTarget.dataset.key || 0;
+    //         var keys = e.currentTarget.dataset.keys || 0;
+    //         this.goods_specifications_handle(key, keys);
+    //     },
+    //
+    //     // 规格选择处理
+    //     goods_specifications_handle(key, keys) {
+    //         // 不能选择和禁止选择跳过
+    //         var temp_data = this.goods_specifications_choose;
+    //         var temp_images = this.goods_spec_base_images;
+    //         if ((temp_data[key]['value'][keys]['is_dont'] || null) == null && (temp_data[key]['value'][keys]['is_disabled'] || null) == null) {
+    //             // 规格选择
+    //             for (var i in temp_data) {
+    //                 for (var k in temp_data[i]['value']) {
+    //                     if ((temp_data[i]['value'][k]['is_dont'] || null) == null && (temp_data[i]['value'][k]['is_disabled'] || null) == null) {
+    //                         if (key == i) {
+    //                             if (keys == k && (temp_data[i]['value'][k]['is_active'] || null) == null) {
+    //                                 temp_data[i]['value'][k]['is_active'] = 'cr-white bg-main br-main';
+    //                                 if ((temp_data[i]['value'][k]['images'] || null) != null) {
+    //                                     temp_images = temp_data[i]['value'][k]['images'];
+    //                                 }
+    //                             } else {
+    //                                 temp_data[i]['value'][k]['is_active'] = '';
+    //                             }
+    //                         }
+    //                     }
+    //                 }
+    //             }
+    //             this.setData({
+    //                 goods_specifications_choose: temp_data,
+    //                 goods_spec_base_images: temp_images
+    //             });
+    //
+    //             // 不能选择规格处理
+    //             this.goods_specifications_choose_handle_dont(key);
+    //
+    //             // 获取下一个规格类型
+    //             this.get_goods_specifications_type(key);
+    //
+    //             // 获取规格详情
+    //             this.get_goods_specifications_detail();
+    //         }
+    //
+    //         // 已选择规格
+    //         var spec_selected = [];
+    //         for (var i in temp_data) {
+    //             for (var k in temp_data[i]['value']) {
+    //                 if ((temp_data[i]['value'][k]['is_active'] || null) != null)
+    //                 {
+    //                     spec_selected.push(temp_data[i]['value'][k]['name']);
+    //                 }
+    //             }
+    //         }
+    //         this.setData({
+    //             goods_spec_selected_text: (spec_selected.length <= 0) ? '请选择规格' : spec_selected.join(' / ')
+    //         });
+    //     },
+    //
+    //     // 不能选择规格处理
+    //     goods_specifications_choose_handle_dont(key) {
+    //         var temp_data = this.goods_specifications_choose || [];
+    //         if (temp_data.length <= 0) {
+    //             return false;
+    //         }
+    //
+    //         // 是否不能选择
+    //         key = parseInt(key);
+    //         for (var i in temp_data) {
+    //             for (var k in temp_data[i]['value']) {
+    //                 if (i > key) {
+    //                     temp_data[i]['value'][k]['is_dont'] = 'spec-dont-choose';
+    //                     temp_data[i]['value'][k]['is_disabled'] = '';
+    //                     temp_data[i]['value'][k]['is_active'] = '';
+    //                 }
+    //
+    //                 // 当只有一个规格的时候
+    //                 if (key == 0 && temp_data.length == 1) {
+    //                     temp_data[i]['value'][k]['is_disabled'] = (temp_data[i]['value'][k]['is_only_level_one'] || null) != null && (temp_data[i]['value'][k]['inventory'] || 0) <= 0 ? 'spec-items-disabled' : '';
+    //                 }
+    //             }
+    //         }
+    //
+    //         this.setData({
+    //             goods_specifications_choose: temp_data
+    //         });
+    //     },
+    //
+    //     // 获取下一个规格类型
+    //     get_goods_specifications_type(key) {
+    //         var temp_data = this.goods_specifications_choose;
+    //         var active_index = parseInt(key) + 1;
+    //         var sku_count = app.globalData.get_length(temp_data);
+    //         if (active_index <= 0 || active_index >= sku_count) {
+    //             return false;
+    //         }
+    //
+    //         // 获取规格值
+    //         var spec = [];
+    //         for (var i in temp_data) {
+    //             for (var k in temp_data[i]['value']) {
+    //                 if ((temp_data[i]['value'][k]['is_active'] || null) != null) {
+    //                     spec.push({
+    //                         "type": temp_data[i]['name'],
+    //                         "value": temp_data[i]['value'][k]['name']
+    //                     });
+    //                     break;
+    //                 }
+    //             }
+    //         }
+    //         if (spec.length <= 0) {
+    //             return false;
+    //         }
+    //
+    //         // 获取数据
+    //         uni.request({
+    //             url: app.globalData.get_request_url('spectype', 'goods'),
+    //             method: 'POST',
+    //             data: {
+    //                 id: this.goods_choose_data.id,
+    //                 spec: JSON.stringify(spec)
+    //             },
+    //             dataType: 'json',
+    //             success: (res) => {
+    //                 if (res.data.code == 0) {
+    //                     var spec_type = res.data.data.spec_type;
+    //                     var spec_count = spec.length;
+    //                     var index = spec_count > 0 ? spec_count : 0;
+    //                     if (index < sku_count) {
+    //                         for (var i in temp_data) {
+    //                             for (var k in temp_data[i]['value']) {
+    //                                 if (index == i) {
+    //                                     temp_data[i]['value'][k]['is_dont'] = '';
+    //                                     var temp_value = temp_data[i]['value'][k]['name'];
+    //                                     var temp_status = false;
+    //                                     for (var t in spec_type) {
+    //                                         if (spec_type[t] == temp_value) {
+    //                                             temp_status = true;
+    //                                             break;
+    //                                         }
+    //                                     }
+    //                                     if (temp_status == true) {
+    //                                         temp_data[i]['value'][k]['is_disabled'] = '';
+    //                                     } else {
+    //                                         temp_data[i]['value'][k]['is_disabled'] = 'spec-items-disabled';
+    //                                     }
+    //                                 }
+    //                             }
+    //                         }
+    //                         this.setData({
+    //                             goods_specifications_choose: temp_data
+    //                         });
+    //                     }
+    //                 } else {
+    //                     app.globalData.showToast(res.data.msg);
+    //                 }
+    //             },
+    //             fail: () => {
+    //                 app.globalData.showToast('服务器请求出错');
+    //             }
+    //         });
+    //     },
+    //
+    //     // 获取规格详情
+    //     get_goods_specifications_detail() {
+    //         // 获取规格值
+    //         var spec = this.goods_selected_spec();
+    //
+    //         // 存在规格的时候是否已完全选择规格
+    //         var sku_count = this.goods_specifications_choose.length;
+    //         var active_count = spec.length;
+    //         if (spec.length <= 0 || active_count < sku_count) {
+    //             this.setData({
+    //                 goods_spec_base_price: this.goods_choose_data.price,
+    //                 goods_spec_base_original_price: this.goods_choose_data.original_price || 0,
+    //                 goods_spec_base_inventory: this.goods_choose_data.inventory
+    //             });
+    //             return false;
+    //         }
+    //
+    //         // 获取数据
+    //         uni.request({
+    //             url: app.globalData.get_request_url('specdetail', 'goods'),
+    //             method: 'POST',
+    //             data: {
+    //                 id: this.goods_choose_data.id,
+    //                 spec: JSON.stringify(spec),
+    //                 stock: 1
+    //             },
+    //             dataType: 'json',
+    //             success: res => {
+    //                 if (res.data.code == 0) {
+    //                     this.goods_spec_detail_back_handle(res.data.data);
+    //                 } else {
+    //                     app.globalData.showToast(res.data.msg);
+    //                 }
+    //             },
+    //             fail: () => {
+    //                 app.globalData.showToast('服务器请求出错');
+    //             }
+    //         });
+    //     },
+    //
+    //     // 已选的商品规格
+    //     goods_selected_spec() {
+    //         var spec = [];
+    //         var temp_data = this.goods_specifications_choose;
+    //         for (var i in temp_data) {
+    //             for (var k in temp_data[i]['value']) {
+    //                 if ((temp_data[i]['value'][k]['is_active'] || null) != null) {
+    //                     spec.push({
+    //                         "type": temp_data[i]['name'],
+    //                         "value": temp_data[i]['value'][k]['name']
+    //                     });
+    //                     break;
+    //                 }
+    //             }
+    //         }
+    //         return spec;
+    //     },
+    //
+    //     // 商品规格详情返回数据处理
+    //     goods_spec_detail_back_handle(data) {
+    //         var spec_base = data.spec_base;
+    //         var data = {
+    //             goods_spec_base_price: spec_base.price,
+    //             goods_spec_base_original_price: spec_base.original_price || 0,
+    //             goods_spec_base_inventory: parseInt(spec_base.inventory)
+    //         };
+    //         this.setData(data);
+    //     },
+    //
+    //     // 规格选择确认
+    //     goods_spec_confirm_event(e) {
+    //         var user = app.globalData.get_user_info(this, 'goods_spec_confirm_event');
+    //         if (user != false) {
+    //             // 用户未绑定用户则转到登录页面
+    //             if (app.globalData.user_is_need_login(user)) {
+    //                 uni.navigateTo({
+    //                     url: "/pages/login/login?event_callback=goods_spec_confirm_event"
+    //                 });
+    //                 return false;
+    //             } else {
+    //                 // 属性
+    //                 var temp_data = this.goods_specifications_choose;
+    //                 var sku_count = temp_data.length;
+    //                 var active_count = 0;
+    //                 var spec = [];
+    //                 if (sku_count > 0) {
+    //                     for (var i in temp_data) {
+    //                         for (var k in temp_data[i]['value']) {
+    //                             if ((temp_data[i]['value'][k]['is_active'] || null) != null) {
+    //                                 active_count++;
+    //                                 spec.push({
+    //                                     "type": temp_data[i]['name'],
+    //                                     "value": temp_data[i]['value'][k]['name']
+    //                                 });
+    //                             }
+    //                         }
+    //                     }
+    //
+    //                     if (active_count < sku_count) {
+    //                         app.globalData.showToast('请选择规格');
+    //                         return false;
+    //                     }
+    //                 }
+    //
+    //                 // 数据操作处理
+    //                 if(this.buy_number_event_handle(1, this.goods_choose_data, spec)) {
+    //                     this.setData({
+    //                         popup_spec_status: false
+    //                     });
+    //                 }
+    //             }
+    //         }
+    //     },
+    //
+    //     // 规格图片查看
+    //     goods_spec_base_images_view_event(e) {
+    //         var value = e.currentTarget.dataset.value || null;
+    //         if (value != null) {
+    //             uni.previewImage({
+    //                 current: value,
+    //                 urls: [value]
+    //             });
+    //         }
+    //     },
+    //
+    //     // 批量删除操作
+    //     cart_all_delete_event(e) {
+    //         uni.showModal({
+    //             title: '温馨提示',
+    //             content: '挑了这么久，真的要清空吗？',
+    //             confirmText: '确认',
+    //             cancelText: '暂不',
+    //             success: result => {
+    //                 if (result.confirm) {
+    //                     var ids = [];
+    //                     var temp_data = this.cart.data;
+    //                     for (var i in temp_data) {
+    //                         ids.push(temp_data[i]['id']);
+    //                     }
+    //                     this.cart_delete(ids.join(','));
+    //                 }
+    //             }
+    //         });
+    //     },
+    //
+    //     // 购物车状态
+    //     cart_event(e) {
+    //         this.setData({
+    //             cart_status: !this.cart_status
+    //         });
+    //     },
+    //
+    //     // 购物车结算
+    //     buy_submit_event(e) {
+    //         if(!app.globalData.is_single_page_check()) {
+    //             return false;
+    //         }
+    //
+    //         // 获取购物车数据
+    //         var ids = [];
+    //         if((this.cart || null) != null) {
+    //             var temp_data = this.cart.data || [];
+    //             for (var i in temp_data) {
+    //                 if(temp_data[i]['is_error'] == 0) {
+    //                     ids.push(temp_data[i]['id']);
+    //                 }
+    //             }
+    //         }
+    //         if (ids.length <= 0) {
+    //             app.globalData.showToast('请先选购商品');
+    //             return false;
+    //         }
+    //
+    //         // 进入订单确认页面
+    //         var data = {
+    //             "buy_type": "cart",
+    //             "ids": ids.join(',')
+    //         };
+    //         uni.navigateTo({
+    //             url: '/pages/buy/buy?data=' + encodeURIComponent(JSON.stringify(data))
+    //         });
+    //     }
+  }
 };
 </script>
 <style lang="scss">

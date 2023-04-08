@@ -1,6 +1,8 @@
 import {createSSRApp} from "vue";
 import App from "./App.vue";
 
+import "./static/css/common.css";
+
 import mock from "./common/mock/index";
 import api from "./common/api/index";
 

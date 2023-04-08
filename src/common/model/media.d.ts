@@ -1,3 +1,4 @@
+
 declare namespace API {
 
 	export interface Media extends Model {
@@ -61,3 +62,6 @@ declare namespace API {
 		data: Showcase[];
 	}
 }
+
+
+

@@ -3,38 +3,38 @@ import {STATUS_CODE_UNAUTHORIZED} from "@/common/model/constant";
 const TOKEN_KEY = 'token';
 const USER_INFO_KEY = 'user_info';
 
-const isLogin = () => {
+const IsLogin = () => {
 	const token = uni.getStorageSync(TOKEN_KEY)
 	return (!!token || token.token == "");
 };
 
-const getToken = (): API.Token => {
+const GetToken = (): API.Token => {
 	return JSON.parse(uni.getStorageSync(TOKEN_KEY));
 };
 
-const setToken = (token: API.Token) => {
+const SetToken = (token: API.Token) => {
 	// const jsonToken: string = JSON.stringify(token)
 	uni.setStorageSync(TOKEN_KEY, token);
 };
 
-const clearToken = () => {
+const ClearToken = () => {
 	uni.removeStorage({key: TOKEN_KEY});
 };
 
-const getUserInfo = (): API.User => {
+const GetUserInfo = (): API.User => {
 	return uni.getStorageSync(USER_INFO_KEY);
 };
 
 
-const isAuthorized = () => {
-	let userInfo = getUserInfo();
+const IsAuthorized = () => {
+	let userInfo = GetUserInfo();
 	return !!userInfo.phoneNumber
 };
 
-const checkLoginAuth = ($api) => {
-	if (!isLogin()) {
+const CheckLoginAuth = ($api: any) => {
+	if (!IsLogin()) {
 
-		$api.user.wxLogin().then((wxRes) => {
+		$api.user.wxLogin().then((wxRes: any) => {
 			wxRes.code
 			// console.log(wxRes.code)
 
@@ -43,13 +43,13 @@ const checkLoginAuth = ($api) => {
 			}
 
 			// 小程序客户登录，code换取token
-			$api.user.userLogin(obj).then((res) => {
+			$api.user.userLogin(obj).then((res: any) => {
 				// console.log(res.data)
 				// 手机号码客户已经授权过
 				if (!!res.data.phoneNumber) {
 					console.log(res.data.token)
 					// 只需保存token
-					setToken(res.data.token)
+					SetToken(res.data.token)
 
 					uni.redirectTo({
 						url: '/pages/index/index',
@@ -62,7 +62,7 @@ const checkLoginAuth = ($api) => {
 					})
 				}
 
-			}).catch((err) => {
+			}).catch((err: any) => {
 				console.error("checkLoginAuth user login", err)
 
 				if (err.statusCode == STATUS_CODE_UNAUTHORIZED) {
@@ -84,7 +84,7 @@ const checkLoginAuth = ($api) => {
 
 			})
 
-		}).catch((err) => {
+		}).catch((err: any) => {
 			// 获取微信的登录code出错
 			console.error("checkLoginAuth wx login err:", err)
 			uni.showModal({
@@ -98,6 +98,6 @@ const checkLoginAuth = ($api) => {
 
 
 export {
-	isLogin, getToken, setToken, clearToken,
-	getUserInfo, isAuthorized, checkLoginAuth
+	IsLogin, GetToken, SetToken, ClearToken,
+	GetUserInfo, IsAuthorized, CheckLoginAuth
 };

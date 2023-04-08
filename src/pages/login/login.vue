@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts">
-import {setToken} from "@/utils/auth";
+import {SetToken} from "@/utils/auth";
 
 export default {
 
@@ -33,7 +33,7 @@ export default {
   methods: {
 
     //获取手机号
-    async getPhone(e) {
+    async getPhone(e:any) {
 
       if (!e.detail.iv) {
         uni.showToast({
@@ -44,7 +44,7 @@ export default {
       }
 
       // 小程序登录，获取code
-      this.$api.user.wxLogin().then((wxRes) => {
+      this.$api.user.wxLogin().then((wxRes:any) => {
         wxRes.code
         console.log(wxRes.code)
 
@@ -55,7 +55,7 @@ export default {
         }
 
         // 小程序客户登录，code换取token
-        this.$api.user.authByPhone(obj).then((res) => {
+        this.$api.user.authByPhone(obj).then((res:any) => {
           // console.log(res)
           if (!!res.data.phoneNumber) {
             if (!!res.data.token) {
@@ -78,7 +78,7 @@ export default {
               content: "授权手机为空",
             });
           }
-        }).catch((err) => {
+        }).catch((err:any) => {
 
           // 手机用户授权登录失败
           console.error(err)
@@ -88,7 +88,7 @@ export default {
           });
         })
 
-      }).catch((err) => {
+      }).catch((err:any) => {
         // 获取微信登录code失败
         console.error(err)
         uni.showModal({

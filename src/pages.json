@@ -2,15 +2,10 @@
   "pages": [
     //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
     {
-      "path": "pages/index/index",
+      "path": "pages/product-category/product-category",
       "style": {
-        "navigationBarTitleText": "小裂匠"
-      }
-    },
-    {
-      "path": "pages/login/login",
-      "style": {
-        "navigationBarTitleText": "用户登录"
+        "navigationBarTitleText": "商店",
+        "enablePullDownRefresh": false
       }
     },
     {
@@ -21,10 +16,15 @@
       }
     },
     {
-      "path": "pages/product-category/product-category",
+      "path": "pages/index/index",
       "style": {
-        "navigationBarTitleText": "商店",
-        "enablePullDownRefresh": false
+        "navigationBarTitleText": "小裂匠"
+      }
+    },
+    {
+      "path": "pages/login/login",
+      "style": {
+        "navigationBarTitleText": "用户登录"
       }
     },
     {

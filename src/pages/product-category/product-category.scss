@@ -12,9 +12,9 @@
     padding-bottom: 10px;
 }
 .category-content {
-    height: calc(100vh - 68px);
+    height: calc(100vh - 68rpx);
     /* #ifdef H5 || APP */
-    height: calc(100vh - 98px) !important;
+    height: calc(100vh - 98rpx) !important;
     /* #endif */
 }
 
