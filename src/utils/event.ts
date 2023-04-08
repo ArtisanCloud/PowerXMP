@@ -1,4 +1,4 @@
-export function addEventListen(
+export function AddEventListen(
   target: Window | HTMLElement,
   event: string,
   handler: EventListenerOrEventListenerObject,
@@ -12,7 +12,7 @@ export function addEventListen(
   }
 }
 
-export function removeEventListen(
+export function RemoveEventListen(
   target: Window | HTMLElement,
   event: string,
   handler: EventListenerOrEventListenerObject,

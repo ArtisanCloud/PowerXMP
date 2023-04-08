@@ -1,92 +1,150 @@
 {
-	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
-		{
-			"path": "pages/index/index",
-			"style": {
-				"navigationBarTitleText": "小裂匠"
-			}
-		}, {
-			"path": "pages/opportunity/opportunity",
-			"style": {
-				"navigationBarTitleText": "预约",
-				"enablePullDownRefresh": false
-			}
-
-		}, {
-			"path": "pages/earn/earn",
-			"style": {
-				"navigationBarTitleText": "赚零钱",
-				"enablePullDownRefresh": false
-			}
-		}, {
-			"path": "pages/index/work/work",
-			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
-			}
-
-		}, {
-			"path": "pages/index/case/case",
-			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
-			}
-
-		}, {
-			"path": "pages/index/brandInfo/brandInfo",
-			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
-			}
-
-		}
-	],
-	"globalStyle": {
-		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "小裂匠",
-		"navigationBarBackgroundColor": "#F8F8F8",
-		"backgroundColor": "#F8F8F8",
-		"navigationStyle": "custom"
-	},
-	"easycom": {
-		"autoscan": true, //是否自动扫描组件
-		"custom": { //自定义扫描规则
-			"^uni-(.*)": "@dcloudio/uni-ui/lib/uni-$1/uni-$1.vue",
-			//			"^uni-(.*)": "@/components/uni-$1.vue" // 匹配components目录内的vue文件
-			// "^u-(.*)": "uview-plus/components/u-$1/u-$1.vue"//匹配uView-ui
-		}
-	},
-	"uniIdRouter": {},
-	"tabBar": {
-		"color": "#7A7E83",
-		"selectedColor": "#3cc51f",
-		"borderStyle": "black",
-		"backgroundColor": "#ffffff",
-		"height": "50px",
-		"fontSize": "10px",
-		"iconWidth": "24px",
-		"spacing": "3px",
-		"list": [{
-			"pagePath": "pages/index/index",
-			"iconPath": "static/images/icon-home.png",
-			"selectedIconPath": "static/images/icon-home.png",
-			"text": "首页"
-		}, {
-			"pagePath": "pages/opportunity/opportunity",
-			"iconPath": "static/images/icon-opportunity.png",
-			"selectedIconPath": "static/images/icon-opportunity.png",
-			"text": "预约"
-		}, {
-			"pagePath": "pages/earn/earn",
-			"iconPath": "static/images/icon-earn.png",
-			"selectedIconPath": "static/images/icon-earn.png",
-			"text": "赚零钱"
-		}]
-		// "midButton": {
-		// 	"pagePath": "pages/opportunity/opportunity",
-		// 	"text": "预约",
-		// 	"iconPath": "static/images/icon-opportunity.png"
-
-		// }
-	}
+  "pages": [
+    //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+    {
+      "path": "pages/product-category/product-category",
+      "style": {
+        "navigationBarTitleText": "商店",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/shop/shop",
+      "style": {
+        "navigationBarTitleText": "商店",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/index/index",
+      "style": {
+        "navigationBarTitleText": "小裂匠"
+      }
+    },
+    {
+      "path": "pages/login/login",
+      "style": {
+        "navigationBarTitleText": "用户登录"
+      }
+    },
+    {
+      "path": "pages/chat/chat",
+      "style": {
+        "navigationBarTitleText": "对话",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/pano-webview/pano-webview",
+      "style": {
+        "navigationBarTitleText": "全景展示厅",
+        "enablePullDownRefresh": false
+      }
+    },
+    //    {
+    //      "path": "pages/webview/threeD-webview",
+    //      "style": {
+    //        "navigationBarTitleText": "3D展示厅",
+    //        "enablePullDownRefresh": false
+    //      }
+    //    },
+    {
+      "path": "pages/opportunity/opportunity",
+      "style": {
+        "navigationBarTitleText": "预约",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/earn/earn",
+      "style": {
+        "navigationBarTitleText": "赚零钱",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/me/me",
+      "style": {
+        "navigationBarTitleText": "我的",
+        "enablePullDownRefresh": false
+      }
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "小裂匠",
+    "navigationBarBackgroundColor": "#F8F8F8",
+    "backgroundColor": "#F8F8F8",
+    "navigationStyle": "custom"
+  },
+  "easycom": {
+    "autoscan": true,
+    //是否自动扫描组件
+    "custom": {
+      //自定义扫描规则
+      "^uni-(.*)": "@dcloudio/uni-ui/lib/uni-$1/uni-$1.vue"
+      //			"^u-(.*)": "uview-plus/components/u-$1/u-$1.vue"//匹配uView-ui
+      //			"^uni-(.*)": "@/components/uni-$1.vue" // 匹配components目录内的vue文件
+    }
+  },
+  "uniIdRouter": {},
+  "tabBar": {
+    "color": "#7A7E83",
+    "selectedColor": "#3cc51f",
+    "borderStyle": "black",
+    "backgroundColor": "#ffffff",
+    "height": "50px",
+    "fontSize": "10px",
+    "iconWidth": "24px",
+    "spacing": "3px",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "iconPath": "static/images/icon-home.png",
+        "selectedIconPath": "static/images/icon-home.png",
+        "text": "首页"
+      },
+      //      {
+      //        "pagePath": "pages/shop/shop",
+      //        "iconPath": "static/images/icon-shop.png",
+      //        "selectedIconPath": "static/images/icon-shop.png",
+      //        "text": "商店"
+      //      },
+      {
+        "pagePath": "pages/product-category/product-category",
+        "iconPath": "static/images/icon-shop.png",
+        "selectedIconPath": "static/images/icon-shop.png",
+        "text": "商店"
+      },
+      //      {
+      //        "pagePath": "pages/chat/chat",
+      //        "text": "对话",
+      //        "iconPath": "static/images/icon-chat.png",
+      //        "selectedIconPath": "static/images/icon-chat.png"
+      //      },
+      //      {
+      //        "pagePath": "pages/opportunity/opportunity",
+      //        "iconPath": "static/images/icon-opportunity.png",
+      //        "selectedIconPath": "static/images/icon-opportunity.png",
+      //        "text": "预约"
+      //      },
+      {
+        "pagePath": "pages/earn/earn",
+        "iconPath": "static/images/icon-earn.png",
+        "selectedIconPath": "static/images/icon-earn.png",
+        "text": "赚零钱"
+      },
+      {
+        "pagePath": "pages/me/me",
+        "iconPath": "static/images/icon-me.png",
+        "selectedIconPath": "static/images/icon-me.png",
+        "text": "我的"
+      }
+    ]
+    //    "midButton": {
+    //      "text": "对话",
+    //      "iconPath": "static/images/icon-chat.png",
+    //      "selectedIconPath": "static/images/icon-chat.png"
+    //    }
+  }
 }
