@@ -11,7 +11,7 @@
     {
       "path": "pages/shop/shop",
       "style": {
-        "navigationBarTitleText": "商店",
+        "navigationBarTitleText": "门店",
         "enablePullDownRefresh": false
       }
     },
@@ -104,12 +104,12 @@
         "selectedIconPath": "static/images/icon-home.png",
         "text": "首页"
       },
-      //      {
-      //        "pagePath": "pages/shop/shop",
-      //        "iconPath": "static/images/icon-shop.png",
-      //        "selectedIconPath": "static/images/icon-shop.png",
-      //        "text": "商店"
-      //      },
+      {
+        "pagePath": "pages/shop/shop",
+        "iconPath": "static/images/icon-shop.png",
+        "selectedIconPath": "static/images/icon-shop.png",
+        "text": "门店"
+      },
       {
         "pagePath": "pages/product-category/product-category",
         "iconPath": "static/images/icon-shop.png",
@@ -128,12 +128,12 @@
       //        "selectedIconPath": "static/images/icon-opportunity.png",
       //        "text": "预约"
       //      },
-      {
-        "pagePath": "pages/earn/earn",
-        "iconPath": "static/images/icon-earn.png",
-        "selectedIconPath": "static/images/icon-earn.png",
-        "text": "赚零钱"
-      },
+//      {
+//        "pagePath": "pages/earn/earn",
+//        "iconPath": "static/images/icon-earn.png",
+//        "selectedIconPath": "static/images/icon-earn.png",
+//        "text": "赚零钱"
+//      },
       {
         "pagePath": "pages/me/me",
         "iconPath": "static/images/icon-me.png",

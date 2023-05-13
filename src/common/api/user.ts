@@ -1,7 +1,7 @@
 import {$http} from "@/common/api/http";
-import {API_METHOD_POST, restURL} from "@/common/api/index";
+import {APIMethodPost, restURL} from "@/common/api/index";
 
-const URI_MP_CUSTOMER = 'mp/customer/'
+const URIMPCustomer = 'mp/customer/'
 
 export const wxLogin = (): any => {
 	// console.log("wxLogin")
@@ -26,8 +26,8 @@ export const userLogin = (obj: {
 }): any => {
 	// console.log("wxLogin")
 	return $http({
-		url: restURL(URI_MP_CUSTOMER + 'login'),
-		method: API_METHOD_POST,
+		url: restURL(URIMPCustomer + 'login'),
+		method: APIMethodPost,
 		data: obj,
 	}).then(res => {
 		return res;
@@ -37,8 +37,8 @@ export const userLogin = (obj: {
 
 export const authByPhone = async (data: any) => {
 	return $http({
-		url: restURL(URI_MP_CUSTOMER + 'authByPhone'),
-		method: API_METHOD_POST,
+		url: restURL(URIMPCustomer + 'authByPhone'),
+		method: APIMethodPost,
 		data: data,
 	}).then(res => {
 		return res;

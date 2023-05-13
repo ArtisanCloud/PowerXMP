@@ -64,6 +64,20 @@ export function SetSceneData(params: any): number {
 
 
 /**
+ * 加载后台系统的数据字典
+ */
+export function InitSystemOptions(options:any){
+
+	options.fetchApprovalStatusOptions()
+	options.fetchSalesChannelsOptions()
+	options.fetchPromoteChannelsOptions()
+	options.fetchSourceTypesOptions()
+	options.fetchCustomerTypesOptions()
+
+	// custom
+}
+
+/**
  * 当前是否单页模式
  */
 export function IsCurrentSinglePage(): boolean {

@@ -1,28 +1,33 @@
 import {STATUS_CODE_UNAUTHORIZED} from "@/common/model/constant";
+import type {Token} from "@/common/model";
+import type {User} from "@/common/model/user";
+import useOptionsStore from "@/store/modules/data-dictionary";
+import {InitSystemOptions} from "@/utils/cachedData";
 
-const TOKEN_KEY = 'token';
-const USER_INFO_KEY = 'user_info';
+const TokenKey = 'token';
+const UserInfoKey = 'user_info';
 
 const IsLogin = () => {
-	const token = uni.getStorageSync(TOKEN_KEY)
+	const token = uni.getStorageSync(TokenKey)
 	return (!!token || token.token == "");
 };
 
-const GetToken = (): API.Token => {
-	return JSON.parse(uni.getStorageSync(TOKEN_KEY));
+const GetToken = (): Token => {
+	return uni.getStorageSync(TokenKey)
+
 };
 
-const SetToken = (token: API.Token) => {
+const SetToken = (token: Token) => {
 	// const jsonToken: string = JSON.stringify(token)
-	uni.setStorageSync(TOKEN_KEY, token);
+	uni.setStorageSync(TokenKey, token);
 };
 
 const ClearToken = () => {
-	uni.removeStorage({key: TOKEN_KEY});
+	uni.removeStorage({key: TokenKey});
 };
 
-const GetUserInfo = (): API.User => {
-	return uni.getStorageSync(USER_INFO_KEY);
+const GetUserInfo = (): User => {
+	return uni.getStorageSync(UserInfoKey);
 };
 
 
@@ -31,7 +36,7 @@ const IsAuthorized = () => {
 	return !!userInfo.phoneNumber
 };
 
-const CheckLoginAuth = ($api: any) => {
+const CheckLoginAuth = ($api: any): boolean => {
 	if (!IsLogin()) {
 
 		$api.user.wxLogin().then((wxRes: any) => {
@@ -44,12 +49,16 @@ const CheckLoginAuth = ($api: any) => {
 
 			// 小程序客户登录，code换取token
 			$api.user.userLogin(obj).then((res: any) => {
-				// console.log(res.data)
+				// console.log(res)
+				const resData = res
 				// 手机号码客户已经授权过
-				if (!!res.data.phoneNumber) {
-					console.log(res.data.token)
+				if (!!resData.phoneNumber) {
+					console.log(resData.token)
 					// 只需保存token
-					SetToken(res.data.token)
+					SetToken(resData.token)
+
+					const options = useOptionsStore();
+					InitSystemOptions(options)
 
 					uni.redirectTo({
 						url: '/pages/index/index',
@@ -67,7 +76,6 @@ const CheckLoginAuth = ($api: any) => {
 
 				if (err.statusCode == STATUS_CODE_UNAUTHORIZED) {
 					// 获取客户授权登录出错
-
 					uni.showModal({
 						title: '警示',
 						content: err.data.msg,
@@ -77,11 +85,7 @@ const CheckLoginAuth = ($api: any) => {
 							})
 						}
 					})
-
-
 				}
-
-
 			})
 
 		}).catch((err: any) => {
@@ -92,8 +96,10 @@ const CheckLoginAuth = ($api: any) => {
 				content: err.errMsg,
 			});
 		})
-
+		return false
 	}
+
+	return true
 }
 
 

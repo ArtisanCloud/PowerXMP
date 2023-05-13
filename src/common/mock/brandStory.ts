@@ -1,8 +1,10 @@
 import Mock from "mockjs";
 import {MediaType} from "@/common/model/constant";
+import type {Brand} from "@/common/model/brand";
+import type {Employee} from "@/common/model/employee";
 
 
-function mockEmployee(id: number): API.Employee {
+function mockEmployee(id: number): Employee {
 	return {
 		id: id,
 		account: Mock.Random.title(),
@@ -13,12 +15,12 @@ function mockEmployee(id: number): API.Employee {
 	}
 }
 
-function mockBrandStory(): API.Brand {
+function mockBrandStory(): Brand {
 
-	let team: API.Employee[] = []
+	let team: Employee[] = []
 
 	for (let i = 0; i < 4; i++) {
-		let newObject: API.Employee = mockEmployee(i + 1)
+		let newObject: Employee = mockEmployee(i + 1)
 
 		team.push(newObject)
 	}

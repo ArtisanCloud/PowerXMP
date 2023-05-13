@@ -5,6 +5,7 @@ import "./static/css/common.css";
 
 import mock from "./common/mock/index";
 import api from "./common/api/index";
+import pinia from "@/store";
 
 // 引入第三方UI组件
 // import uViewPlus from "uview-plus";
@@ -13,6 +14,8 @@ import api from "./common/api/index";
 
 export function createApp() {
 	const app = createSSRApp(App);
+
+	app.use(pinia)
 
 	// 基于Vue3的一些额外配置
 	{

@@ -1,49 +1,88 @@
 import {ProductType} from "@/common/model/constant";
 
-declare namespace API {
+export interface ProductSpecific {
+	inventory: number
+	weight: number
+	volume: number
+	encode: string
+	barCode: string
+	extra: string
+}
 
-	export interface Product extends Model {
+export interface Product extends Model, ProductSpecific {
+	name: string,
+	type: number,
+	plan: number,
+	accountingCategory: string,
+	canSellOnline: boolean,
+	canUseForDeduct: boolean,
+	approvalStatus: number,
+	isActivated: boolean,
+	description: string,
+	coverURL: string,
+	purchasedQuantity: number,
+	validityPeriodDays: number,
+	salesChannelsItemIds: number[]
+	promoteChannelsItemIds: number[]
+	saleStartDate: Date,
+	saleEndDate: Date,
+
+}
 
 
-	}
+export interface ListProductPageRequest {
+	ids?: number[];
+	likeName?: string;
+	storeIds?: number[];
+	pageIndex?: number;
+	pageSize?: number;
+}
 
-	export interface Goods extends Product {
-		type: ProductType.goods
-	}
+export interface ListProductPageReply {
+	list: Product[];
+	pageIndex: number;
+	pageSize: number;
+	total: number;
+}
 
-	export interface Service extends Product {
-		type: ProductType.service
-	}
 
+export interface Goods extends Product {
+	type: ProductType.goods
+}
+
+export interface Service extends Product {
+	type: ProductType.service
+}
 
 
 // --- Request Models ---
-	export interface RequestGetProductList extends RequestPagination {
-		
-	}
+export interface GetProductListRequest extends PaginationRequest {
 
-	export interface RequestGetGoodsList extends RequestPagination {
-		type: ProductType.goods
-	}
-	export interface RequestGetServiceList extends RequestPagination {
-		type: ProductType.service
-	}
-	
+}
 
-	export interface RequestGetProductDetail extends RequestGetDetailByID {
+export interface GetGoodsListRequest extends PaginationRequest {
+	type: ProductType.goods
+}
 
-	}
+export interface GetServiceListRequest extends PaginationRequest {
+	type: ProductType.service
+}
+
+
+export interface GetProductDetailRequest extends GetDetailByIDRequest {
+
+}
 
 // --- Response Models ---
-	export interface ResponseGetProductList extends APIResponse, ResponsePagination {
-		data: Product[];
-	}
-
-	export interface ResponseGetGoodsList extends APIResponse, ResponsePagination {
-		data: Goods[];
-	}
-
-	export interface ResponseGetServiceList extends APIResponse, ResponsePagination {
-		data: Service[];
-	}
+export interface GetProductListResponse extends APIResponse, PaginationResponse {
+	data: Product[];
 }
+
+export interface GetGoodsListResponse extends APIResponse, PaginationResponse {
+	data: Goods[];
+}
+
+export interface GetServiceListResponse extends APIResponse, PaginationResponse {
+	data: Service[];
+}
+

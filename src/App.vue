@@ -2,17 +2,22 @@
 import {onLaunch, onShow, onHide} from "@dcloudio/uni-app";
 import {inject} from 'vue';
 import {SetDeviceSystemInfo} from "@/utils/device";
-import {SetLaunchCacheInfo, SetSceneData} from "@/utils/cachedData";
+import {InitSystemOptions, SetLaunchCacheInfo, SetSceneData} from "@/utils/cachedData";
 import {CheckLoginAuth} from "@/utils/auth";
+import useOptionsStore from "@/store/modules/data-dictionary";
 
 const $api = inject('$api');
+
+
+
+
 
 /**
  * 小程序初始化
  */
 onLaunch(async (params) => {
   console.log("App Launch");
-  console.log(params);
+  // console.log(params);
 
 
   // console.log($api)
@@ -25,10 +30,19 @@ onLaunch(async (params) => {
  */
 onShow(async (params) => {
   console.log("App Show");
-  console.log(params);
+  // console.log(params);
 
   // 登录授权
-  CheckLoginAuth($api)
+  const isLogin = CheckLoginAuth($api)
+  if (!isLogin){
+    return
+  }
+
+  /**
+   * 加载后台系统的数据字典
+   */
+  const options = useOptionsStore();
+  InitSystemOptions(options)
 
   // 设置设备信息
   SetDeviceSystemInfo();
@@ -40,6 +54,8 @@ onShow(async (params) => {
   SetSceneData(params);
 
 });
+
+
 onHide(() => {
   console.log("App Hide");
 });
