@@ -18,7 +18,7 @@ export interface ProductCategory extends Model, imageAbleInfo, position {
 
 
 export interface GetCategoryTreeRequest {
-	id: number;
+	categoryPID: number;
 
 
 }

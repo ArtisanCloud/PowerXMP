@@ -82,13 +82,14 @@ export default defineComponent({
 		async fetchCategoryTree() {
 			this.loading = true;
 			try {
-				const res = await getCategoryTree({id: 0});
+				const res = await getCategoryTree({categoryPID: 0});
 				this.categoryTree = res.tree;
 				this.categoryTree.forEach(item => {
 					if (item.pId == 0) {
 						this.fList.push(item);  //pid为父级id, 没有pid或者pid=0是一级分类
 					}
 				})
+				this.currentId = this.fList[0].id!
 				this.sList = this.fList[0].children
 				this.tList = this.sList[0].children
 
@@ -151,7 +152,7 @@ export default defineComponent({
 		},
 		navToList(sId: number, tId: number) {
 			uni.navigateTo({
-				url: `/pages/product/list?fid=${this.currentId}&sid=${sId}&tid=${tId}`
+				url: `/pages/product/list?fId=${this.currentId}&sId=${sId}&tId=${tId}`
 			})
 		}
 

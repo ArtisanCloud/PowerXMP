@@ -16,6 +16,20 @@
       }
     },
     {
+      "path": "pages/product/list",
+      "style": {
+        "navigationBarTitleText": "商品列表",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/product/product",
+      "style": {
+        "navigationBarTitleText": "商品详情",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
       "path": "pages/index/index",
       "style": {
         "navigationBarTitleText": "小裂匠"
@@ -74,8 +88,8 @@
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "小裂匠",
     "navigationBarBackgroundColor": "#F8F8F8",
-    "backgroundColor": "#F8F8F8",
-    "navigationStyle": "custom"
+    "backgroundColor": "#F8F8F8"
+//    "navigationStyle": "custom"
   },
   "easycom": {
     "autoscan": true,

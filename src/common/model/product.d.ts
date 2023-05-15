@@ -2,6 +2,7 @@ import {ProductType} from "@/common/model/constant";
 
 export interface ProductSpecific {
 	inventory: number
+	soldAmount: number
 	weight: number
 	volume: number
 	encode: string
@@ -32,6 +33,7 @@ export interface Product extends Model, ProductSpecific {
 
 export interface ListProductPageRequest {
 	ids?: number[];
+	productCategoryId: number
 	likeName?: string;
 	storeIds?: number[];
 	pageIndex?: number;

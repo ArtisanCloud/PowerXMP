@@ -6,6 +6,9 @@ import * as brandStory from './brandStory'
 const APIHost = import.meta.env.VITE_APIHost
 const APIURIVersion = import.meta.env.VITE_API_VERSION
 
+export const DefaultPageSize = 10;
+export const MaxPageSize = 99;
+
 export const
 	APIMethodPost = 'POST',
 	APIMethodGet = 'GET',
