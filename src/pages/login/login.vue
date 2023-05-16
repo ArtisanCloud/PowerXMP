@@ -46,7 +46,7 @@ export default {
       // 小程序登录，获取code
       this.$api.user.wxLogin().then((wxRes:any) => {
         wxRes.code
-        console.log(wxRes.code)
+        // console.log(wxRes.code)
 
         var obj = {
           code: wxRes.code,
@@ -57,10 +57,11 @@ export default {
         // 小程序客户登录，code换取token
         this.$api.user.authByPhone(obj).then((res:any) => {
           // console.log(res)
-          if (!!res.data.phoneNumber) {
-            if (!!res.data.token) {
+					const resData = res
+          if (!!resData.phoneNumber) {
+            if (!!resData.token) {
               // 只需保存token
-              setToken(res.data.token)
+              SetToken(resData.token)
               uni.switchTab({
                 url: '/pages/index/index',
               })
