@@ -1,9 +1,9 @@
 import {ProductType} from "@/common/model/constant";
 import type {Model} from "@/common/model/index";
 import type {MediaResource} from "@/common/model/mediaResource";
-import Product from "@/pages/product/product.vue";
 
-export interface ProductSpecific {
+
+export interface ProductAttribute {
 	inventory: number
 	soldAmount: number
 	weight: number
@@ -12,6 +12,17 @@ export interface ProductSpecific {
 	barCode: string
 	extra: string
 }
+export interface ProductSpecific extends Model {
+	id: number
+	name:string
+	specificOptions: SpecificOption[]
+
+}
+export interface SpecificOption extends Model {
+	name:string
+	selected:boolean
+}
+
 
 export interface PriceEntry extends Model {
 	unitPrice: number
@@ -24,10 +35,11 @@ export interface SKU extends Model {
 	inventory: number
 	unitPrice: number
 	retailPrice: number
+	optionsIds: number[]
 	isActive: boolean
 }
 
-export interface Product extends Model, ProductSpecific {
+export interface Product extends Model, ProductAttribute {
 	name: string,
 	spu: string,
 	type: number,
@@ -37,6 +49,7 @@ export interface Product extends Model, ProductSpecific {
 	detailImages: MediaResource[];
 	// saleStartDate: Date,
 	// saleEndDate: Date,
+	productSpecifics: ProductSpecific[],
 	skus: SKU[],
 	priceEntry: PriceEntry,
 	viewedCount: number

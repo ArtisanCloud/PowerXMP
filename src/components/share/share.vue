@@ -2,7 +2,7 @@
 	<view v-if="show" class="mask" @click="toggleMask" @touchmove.stop.prevent="stopPrevent"
 		:style="{backgroundColor: backgroundColor}"
 	>
-		<view 
+		<view
 			class="mask-content"
 			@click.stop.prevent="stopPrevent"
 			:style="[{
@@ -10,14 +10,14 @@
 				transform: transform
 			}]"
 		>
-			<scroll-view class="view-content" scroll-y>
+			<scroll-view class="view-content" scroll-y="true">
 				<view class="share-header">
 					分享到
 				</view>
 				<view class="share-list">
-					<view 
+					<view
 						v-for="(item, index) in shareList" :key="index"
-						class="share-item" 
+						class="share-item"
 						@click="shareToFriend(item.text)"
 					>
 						<image :src="item.icon" mode=""></image>
@@ -77,7 +77,7 @@
 				setTimeout(()=>{
 					this.timer = 0;
 				}, 500)
-				
+
 				if(this.show){
 					this.transform = this.config.transform;
 					this.backgroundColor = 'rgba(0,0,0,0)';
@@ -87,7 +87,7 @@
 					}, 200)
 					return;
 				}
-				
+
 				this.show = true;
 				//等待mask重绘完成执行
 				if(this.hasTabbar){
