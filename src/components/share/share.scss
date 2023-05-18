@@ -78,13 +78,13 @@
   align-items: center;
   height: 180rpx;
 
-  image {
+  .img-share {
     width: 80rpx;
     height: 80rpx;
     margin-bottom: 16rpx;
   }
 
-  text {
+  .txt-share {
     font-size: $font-base;
     color: $font-color-base;
   }

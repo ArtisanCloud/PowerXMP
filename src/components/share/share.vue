@@ -20,8 +20,8 @@
 						class="share-item"
 						@click="shareToFriend(item.text)"
 					>
-						<image :src="item.icon" mode=""></image>
-						<text>{{item.text}}</text>
+						<image class="img-share" :src="item.icon" mode=""></image>
+						<text class="txt-share">{{item.text}}</text>
 					</view>
 				</view>
 			</scroll-view>

@@ -152,7 +152,7 @@
 						</view>
 					</view>
 				</view>
-				<view v-for="(specific,specificIndex) in product.productSpecifics" :key="index" class="attr-list">
+				<view v-for="(specific,specificIndex) in product.productSpecifics" :key="specificIndex" class="attr-list">
 					<text>{{ specific?.name }}</text>
 					<view class="item-list">
 						<text
@@ -278,9 +278,14 @@ export default defineComponent({
 		},
 
 		getSKUBy(skus: SKU[], specificId: number, options: SpecificOption[]): SKU | null {
-			const optionIds = options.map((option) => option.id);
-			return skus.find((sku) => AreArraysEqual(sku.optionsIds, optionIds)) || null;
-
+			let optionIds: number[] = []
+			options.map((option: SpecificOption) => {
+				optionIds.push(option.id!)
+			});
+			return skus.find((sku) => {
+					return AreArraysEqual(sku.optionsIds, optionIds)
+				}
+			) || null;
 		},
 
 		//选择规格
@@ -311,8 +316,6 @@ export default defineComponent({
 			if (sku != null) {
 				this.currentSKU = sku
 			}
-			console.log(this.currentSKU)
-
 
 		},
 		//分享
