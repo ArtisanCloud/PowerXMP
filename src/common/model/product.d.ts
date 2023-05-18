@@ -1,4 +1,7 @@
 import {ProductType} from "@/common/model/constant";
+import type {Model} from "@/common/model/index";
+import type {MediaResource} from "@/common/model/mediaResource";
+import Product from "@/pages/product/product.vue";
 
 export interface ProductSpecific {
 	inventory: number
@@ -10,24 +13,33 @@ export interface ProductSpecific {
 	extra: string
 }
 
+export interface PriceEntry extends Model {
+	unitPrice: number
+	retailPrice: number
+	discount: number
+}
+
+export interface SKU extends Model {
+	skuNo: string
+	inventory: number
+	unitPrice: number
+	retailPrice: number
+	isActive: boolean
+}
+
 export interface Product extends Model, ProductSpecific {
 	name: string,
+	spu: string,
 	type: number,
 	plan: number,
-	accountingCategory: string,
-	canSellOnline: boolean,
-	canUseForDeduct: boolean,
-	approvalStatus: number,
-	isActivated: boolean,
 	description: string,
-	coverURL: string,
-	purchasedQuantity: number,
-	validityPeriodDays: number,
-	salesChannelsItemIds: number[]
-	promoteChannelsItemIds: number[]
-	saleStartDate: Date,
-	saleEndDate: Date,
-
+	coverImages: MediaResource[];
+	detailImages: MediaResource[];
+	// saleStartDate: Date,
+	// saleEndDate: Date,
+	skus: SKU[],
+	priceEntry: PriceEntry,
+	viewedCount: number
 }
 
 
@@ -47,6 +59,10 @@ export interface ListProductPageReply {
 	total: number;
 }
 
+export interface GetProductRequest extends Model {
+}
+
+export type GetProductReply = Product
 
 export interface Goods extends Product {
 	type: ProductType.goods

@@ -23,11 +23,11 @@
 				@click="navToDetailPage(item)"
 			>
 				<view class="image-wrapper">
-					<image :src="item.coverURL" mode="aspectFill"></image>
+					<image :src="item.coverImages[0]?.url" mode="aspectFill"></image>
 				</view>
 				<text class="title clamp">{{ item.name }}</text>
 				<view class="price-box">
-					<text class="price">{{ 100.00 }}</text>
+					<text class="price">{{ item.priceEntry.unitPrice }}</text>
 					<text>已售 {{ item.soldAmount }}</text>
 				</view>
 			</view>
@@ -37,7 +37,7 @@
 		<view class="cate-mask" :class="cateMaskState===0 ? 'none' : cateMaskState===1 ? 'show' : ''"
 					@click="toggleCateMask">
 			<view class="cate-content" @click.stop.prevent="stopPrevent" @touchmove.stop.prevent="stopPrevent">
-				<scroll-view scroll-y="true" class="cate-list">
+				<scroll-view enable-flex="true" scroll-y="true" class="cate-list">
 					<view v-for="item in cateList" :key="item.id">
 						<view class="cate-item b-b two">{{ item.name }}</view>
 						<view
@@ -230,7 +230,7 @@ export default defineComponent({
 		//详情
 		navToDetailPage(item: Product) {
 			//测试数据没有写id，用title代替
-			let id = item.name;
+			let id = item.id;
 			uni.navigateTo({
 				url: `/pages/product/product?id=${id}`
 			})

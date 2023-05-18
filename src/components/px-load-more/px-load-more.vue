@@ -1,23 +1,23 @@
 <template>
 	<view class="px-load-more">
 		<view class="px-load-more__img" v-show="status === 'loading' && showIcon">
-			<view class="load1">
-				<view :style="{background:color}"></view>
-				<view :style="{background:color}"></view>
-				<view :style="{background:color}"></view>
-				<view :style="{background:color}"></view>
+			<view class="px-view load1">
+				<view class="nth" :style="{background:color}"></view>
+				<view class="nth" :style="{background:color}"></view>
+				<view class="nth" :style="{background:color}"></view>
+				<view class="nth" :style="{background:color}"></view>
 			</view>
-			<view class="load2">
-				<view :style="{background:color}"></view>
-				<view :style="{background:color}"></view>
-				<view :style="{background:color}"></view>
-				<view :style="{background:color}"></view>
+			<view class="px-view load2">
+				<view class="nth" :style="{background:color}"></view>
+				<view class="nth" :style="{background:color}"></view>
+				<view class="nth" :style="{background:color}"></view>
+				<view class="nth" :style="{background:color}"></view>
 			</view>
-			<view class="load3">
-				<view :style="{background:color}"></view>
-				<view :style="{background:color}"></view>
-				<view :style="{background:color}"></view>
-				<view :style="{background:color}"></view>
+			<view class="px-view load3">
+				<view class="nth" :style="{background:color}"></view>
+				<view class="nth" :style="{background:color}"></view>
+				<view class="nth" :style="{background:color}"></view>
+				<view class="nth" :style="{background:color}"></view>
 			</view>
 		</view>
 		<text class="px-load-more__text" :style="{color:color}">{{status === 'more' ? contentText.contentDown : (status === 'loading' ? contentText.contentRefresh : contentText.contentNoMore)}}</text>
