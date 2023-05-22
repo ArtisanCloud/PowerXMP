@@ -19,7 +19,7 @@
 			<view class="price-box">
 				<text class="price-tip">¥</text>
 				<text class="price">{{ product.priceEntry?.unitPrice }}</text>
-				<text class="m-price">¥{{ product.priceEntry?.retailPrice }}</text>
+				<text class="m-price">¥{{ product.priceEntry?.listPrice }}</text>
 				<text class="coupon-tip">{{ product.priceEntry?.discount }}折</text>
 			</view>
 			<view class="bot-row">
@@ -123,7 +123,7 @@
 
 			<view class="action-btn-group">
 				<button type="primary" class=" action-btn no-border buy-now-btn" @click="buy">立即购买</button>
-				<button type="primary" class=" action-btn no-border add-cart-btn">加入购物车</button>
+				<button type="primary" @click="addToCart" class=" action-btn no-border add-cart-btn">加入购物车</button>
 			</view>
 		</view>
 
@@ -142,8 +142,8 @@
 					<image
 						:src="getSkuCoverImage"></image>
 					<view class="right">
-						<text class="price">¥{{ this.currentSKU.unitPrice }}</text>
-						<text class="stock">库存：{{ this.currentSKU.inventory }}件</text>
+						<text class="price">¥{{ this.currentSKU?.unitPrice }}</text>
+						<text class="stock">库存：{{ this.currentSKU?.inventory }}件</text>
 						<view class="selected">
 							已选：
 							<text class="selected-text" v-for="(sItem, sIndex) in optionSelected" :key="sIndex">
@@ -185,6 +185,9 @@ import {defineComponent, ref} from "vue";
 import {getProduct} from "@/common/api/product";
 import type {Product, SKU, SpecificOption} from "@/common/model/product";
 import {AreArraysEqual} from "@/utils/is";
+import type {AddToCartRequest} from "@/common/model/cart";
+import {addToCart} from "@/common/api/cart";
+import {ShowToast} from "@/utils";
 
 
 export default defineComponent({
@@ -200,7 +203,7 @@ export default defineComponent({
 		return {
 			specClass: 'none',
 			optionSelected: [] as SpecificOption[],
-			currentSKU: {} as SKU,
+			currentSKU: null as SKU | null,
 			product: {} as Product,
 			favorite: true,
 			shareList: [] as any[],
@@ -220,6 +223,11 @@ export default defineComponent({
 			this.$set(option, 'selected', true);
 			this.optionSelected.push(option);
 		})
+
+		const sku = this.getSKUBy(this.product.skus, this.optionSelected)
+		if (sku) {
+			this.currentSKU = sku
+		}
 
 		this.shareList = [{
 			type: 1,
@@ -277,7 +285,7 @@ export default defineComponent({
 			}
 		},
 
-		getSKUBy(skus: SKU[], specificId: number, options: SpecificOption[]): SKU | null {
+		getSKUBy(skus: SKU[], options: SpecificOption[]): SKU | null {
 			let optionIds: number[] = []
 			options.map((option: SpecificOption) => {
 				optionIds.push(option.id!)
@@ -312,7 +320,7 @@ export default defineComponent({
 				})
 			})
 
-			const sku = this.getSKUBy(this.product.skus, this.product.productSpecifics[specificIndex].id, this.optionSelected)
+			const sku = this.getSKUBy(this.product.skus, this.optionSelected)
 			if (sku != null) {
 				this.currentSKU = sku
 			}
@@ -328,11 +336,39 @@ export default defineComponent({
 		},
 		buy() {
 			uni.navigateTo({
-				url: `/pages/order/createOrder`
+				url: `/pages/order/create-order`
 			})
 		},
 		stopPrevent() {
+		},
+		async addToCart() {
+
+
+			let requestItem: AddToCartRequest = {
+				productId: this.product.id!,
+				productName: this.product.name,
+				listPrice: this.product.priceEntry.listPrice,
+				unitPrice: this.product.priceEntry.unitPrice,
+				discount: this.product.priceEntry.discount,
+				quantity: 1,
+				imageUrl: this.product.coverImages[0].url,
+			}
+			if (this.currentSKU) {
+				requestItem.skuId = this.currentSKU.id
+				requestItem.specifications = this.currentSKU.skuNo
+				requestItem.listPrice = this.currentSKU.listPrice
+				requestItem.unitPrice = this.currentSKU.unitPrice
+				requestItem.discount = this.currentSKU.discount
+			}
+			console.log(this.currentSKU, requestItem)
+			const res = await addToCart(requestItem);
+			if (res.id) {
+				ShowToast("添加购物车成功", "success")
+			} else {
+				ShowToast("添加购物失败", "error")
+			}
 		}
+
 	},
 
 });

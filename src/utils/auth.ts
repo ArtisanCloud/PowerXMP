@@ -2,7 +2,6 @@ import {STATUS_CODE_UNAUTHORIZED} from "@/common/model/constant";
 import type {Token} from "@/common/model";
 import type {User} from "@/common/model/user";
 import useOptionsStore from "@/store/modules/data-dictionary";
-import {InitSystemOptions} from "@/utils/cachedData";
 
 const TokenKey = 'token';
 const UserInfoKey = 'user_info';
@@ -37,6 +36,8 @@ const IsAuthorized = () => {
 };
 
 const CheckLoginAuth = ($api: any): boolean => {
+	const optionsStore = useOptionsStore();
+
 	if (!IsLogin()) {
 
 		$api.user.wxLogin().then((wxRes: any) => {
@@ -57,8 +58,12 @@ const CheckLoginAuth = ($api: any): boolean => {
 					// 只需保存token
 					SetToken(resData.token)
 
-					const options = useOptionsStore();
-					InitSystemOptions(options)
+					// init options after login
+					if (!optionsStore.isSetup()) {
+						optionsStore.fetchAllOptions().then(() => {
+							// do something when options is ready
+						});
+					}
 
 					uni.redirectTo({
 						url: '/pages/index/index',
@@ -97,6 +102,13 @@ const CheckLoginAuth = ($api: any): boolean => {
 			});
 		})
 		return false
+	}
+
+	// init options after login
+	if (!optionsStore.isSetup()) {
+		optionsStore.fetchAllOptions().then(() => {
+			// do something when options is ready
+		});
 	}
 
 	return true

@@ -1,0 +1,41 @@
+
+.icon .mix-list-cell.b-b:after{
+  left: 90rpx;
+}
+.mix-list-cell{
+  display:flex;
+  align-items:baseline;
+  padding: 20rpx $page-row-spacing;
+  line-height:60rpx;
+  position:relative;
+
+  &.cell-hover{
+    background:#fafafa;
+  }
+  &.b-b:after{
+    left: 30rpx;
+  }
+
+  .cell-icon{
+    align-self:center;
+    width:56rpx;
+    max-height:60rpx;
+    font-size:38rpx;
+  }
+  .cell-more{
+    align-self: center;
+    font-size:30rpx;
+    color:$font-color-base;
+    margin-left:$uni-spacing-row-sm;
+  }
+  .cell-tit{
+    flex: 1;
+    font-size: $font-base;
+    color: $font-color-dark;
+    margin-right:10rpx;
+  }
+  .cell-tip{
+    font-size: $font-sm+2rpx;
+    color: $font-color-light;
+  }
+}

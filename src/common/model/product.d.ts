@@ -26,7 +26,7 @@ export interface SpecificOption extends Model {
 
 export interface PriceEntry extends Model {
 	unitPrice: number
-	retailPrice: number
+	listPrice: number
 	discount: number
 }
 
@@ -34,7 +34,8 @@ export interface SKU extends Model {
 	skuNo: string
 	inventory: number
 	unitPrice: number
-	retailPrice: number
+	listPrice: number
+	discount: number
 	optionsIds: number[]
 	isActive: boolean
 }

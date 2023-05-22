@@ -2,16 +2,28 @@
   "pages": [
     //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
     {
-      "path": "pages/product-category/product-category",
+      "path": "pages/index/index",
       "style": {
-        "navigationBarTitleText": "商店",
+        "navigationBarTitleText": "小裂匠"
+      }
+    },
+    {
+      "path": "pages/login/login",
+      "style": {
+        "navigationBarTitleText": "用户登录"
+      }
+    },
+    {
+      "path": "pages/store/store",
+      "style": {
+        "navigationBarTitleText": "门店",
         "enablePullDownRefresh": false
       }
     },
     {
-      "path": "pages/shop/shop",
+      "path": "pages/product-category/product-category",
       "style": {
-        "navigationBarTitleText": "门店",
+        "navigationBarTitleText": "分类",
         "enablePullDownRefresh": false
       }
     },
@@ -30,15 +42,52 @@
       }
     },
     {
-      "path": "pages/index/index",
+      "path": "pages/cart/cart",
       "style": {
-        "navigationBarTitleText": "小裂匠"
+        "navigationBarTitleText": "购物车",
+        "enablePullDownRefresh": false
       }
     },
     {
-      "path": "pages/login/login",
+      "path": "pages/order/order",
       "style": {
-        "navigationBarTitleText": "用户登录"
+        "navigationBarTitleText": "订单",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/order/create-order",
+      "style": {
+        "navigationBarTitleText": "下单",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/address/address",
+      "style": {
+        "navigationBarTitleText": "地址",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/address/address-manage",
+      "style": {
+        "navigationBarTitleText": "地址管理",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/payment/payment",
+      "style": {
+        "navigationBarTitleText": "支付",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/payment/paySuccess",
+      "style": {
+        "navigationBarTitleText": "支付成功",
+        "enablePullDownRefresh": false
       }
     },
     {
@@ -48,20 +97,6 @@
         "enablePullDownRefresh": false
       }
     },
-    {
-      "path": "pages/pano-webview/pano-webview",
-      "style": {
-        "navigationBarTitleText": "全景展示厅",
-        "enablePullDownRefresh": false
-      }
-    },
-    //    {
-    //      "path": "pages/webview/threeD-webview",
-    //      "style": {
-    //        "navigationBarTitleText": "3D展示厅",
-    //        "enablePullDownRefresh": false
-    //      }
-    //    },
     {
       "path": "pages/opportunity/opportunity",
       "style": {
@@ -77,9 +112,31 @@
       }
     },
     {
-      "path": "pages/me/me",
+      "path": "pages/me-mall/me-mall",
       "style": {
         "navigationBarTitleText": "我的",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/me-px/me-px",
+      "style": {
+        "navigationBarTitleText": "我的",
+        "enablePullDownRefresh": false
+      }
+    },
+    // custom
+    {
+      "path": "pages/webview/pano-webview",
+      "style": {
+        "navigationBarTitleText": "全景展示厅",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/webview/threeD-webview",
+      "style": {
+        "navigationBarTitleText": "3D展示厅",
         "enablePullDownRefresh": false
       }
     }
@@ -89,7 +146,7 @@
     "navigationBarTitleText": "小裂匠",
     "navigationBarBackgroundColor": "#F8F8F8",
     "backgroundColor": "#F8F8F8"
-//    "navigationStyle": "custom"
+    //    "navigationStyle": "custom"
   },
   "easycom": {
     "autoscan": true,
@@ -111,54 +168,38 @@
     "fontSize": "10px",
     "iconWidth": "24px",
     "spacing": "3px",
+    "iconfontSrc": "static/fonts/iconfont.ttf",
     "list": [
       {
         "pagePath": "pages/index/index",
         "iconPath": "static/images/icon-home.png",
-        "selectedIconPath": "static/images/icon-home.png",
+        "selectedIconPath": "static/images/icon-home-selected.png",
         "text": "首页"
       },
       {
-        "pagePath": "pages/shop/shop",
-        "iconPath": "static/images/icon-shop.png",
-        "selectedIconPath": "static/images/icon-shop.png",
+        "pagePath": "pages/store/store",
+        "iconPath": "static/images/icon-store.png",
+        "selectedIconPath": "static/images/icon-store-selected.png",
         "text": "门店"
       },
       {
         "pagePath": "pages/product-category/product-category",
-        "iconPath": "static/images/icon-shop.png",
-        "selectedIconPath": "static/images/icon-shop.png",
-        "text": "商店"
+        "iconPath": "static/images/icon-category.png",
+        "selectedIconPath": "static/images/icon-category-selected.png",
+        "text": "分类"
       },
-      //      {
-      //        "pagePath": "pages/chat/chat",
-      //        "text": "对话",
-      //        "iconPath": "static/images/icon-chat.png",
-      //        "selectedIconPath": "static/images/icon-chat.png"
-      //      },
-      //      {
-      //        "pagePath": "pages/opportunity/opportunity",
-      //        "iconPath": "static/images/icon-opportunity.png",
-      //        "selectedIconPath": "static/images/icon-opportunity.png",
-      //        "text": "预约"
-      //      },
-//      {
-//        "pagePath": "pages/earn/earn",
-//        "iconPath": "static/images/icon-earn.png",
-//        "selectedIconPath": "static/images/icon-earn.png",
-//        "text": "赚零钱"
-//      },
       {
-        "pagePath": "pages/me/me",
+        "pagePath": "pages/cart/cart",
+        "iconPath": "static/images/icon-cart.png",
+        "selectedIconPath": "static/images/icon-cart-selected.png",
+        "text": "购物车"
+      },
+      {
+        "pagePath": "pages/me-mall/me-mall",
         "iconPath": "static/images/icon-me.png",
-        "selectedIconPath": "static/images/icon-me.png",
+        "selectedIconPath": "static/images/icon-me-selected.png",
         "text": "我的"
       }
     ]
-    //    "midButton": {
-    //      "text": "对话",
-    //      "iconPath": "static/images/icon-chat.png",
-    //      "selectedIconPath": "static/images/icon-chat.png"
-    //    }
   }
 }

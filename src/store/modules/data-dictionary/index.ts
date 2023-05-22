@@ -22,6 +22,8 @@ const useOptionsStore = defineStore('options', {
 		promoteChannels: [],
 		sourceTypes: [],
 
+		setup: false,
+
 		// custom
 
 	}),
@@ -121,6 +123,21 @@ const useOptionsStore = defineStore('options', {
 			}
 		},
 
+
+		async fetchAllOptions() {
+			await this.fetchCustomerTypesOptions();
+			await this.fetchProductTypeOptions();
+			await this.fetchProductPlanOptions();
+			await this.fetchApprovalStatusOptions();
+			await this.fetchSalesChannelsOptions();
+			await this.fetchPromoteChannelsOptions();
+			await this.fetchSourceTypesOptions();
+			this.setup = true;
+		},
+
+		isSetup() {
+			return this.setup;
+		},
 
 		// custom
 

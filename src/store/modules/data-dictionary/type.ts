@@ -9,6 +9,8 @@ export interface OptionsState {
 	promoteChannels: DictionaryItem[],
 	sourceTypes: DictionaryItem[],
 
+	setup: boolean;
+
 	// custom
 
 }

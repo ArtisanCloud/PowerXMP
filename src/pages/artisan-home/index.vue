@@ -1,6 +1,9 @@
 <template>
   <view class="home">
 
+    <px-cover></px-cover>
+    <px-show-room class="showroom"></px-show-room>
+
   </view>
 </template>
 
@@ -40,5 +43,14 @@ page {
   }
 
 }
+
+.showroom {
+  overflow: hidden;
+  height: 100%;
+  @if $debug or $globalDebug {
+    border: 5rpx blue solid;
+  }
+}
+
 
 </style>

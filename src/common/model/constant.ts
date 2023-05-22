@@ -1,6 +1,4 @@
 
-export const DefaultPageSize = 10
-export const MaxPageSize = 9999
 
 // API Status Code
 export const

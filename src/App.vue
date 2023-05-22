@@ -17,11 +17,6 @@ const $api = inject('$api');
  */
 onLaunch(async (params) => {
   console.log("App Launch");
-  // console.log(params);
-
-
-  // console.log($api)
-
 });
 
 
@@ -37,21 +32,6 @@ onShow(async (params) => {
   if (!isLogin){
     return
   }
-
-  /**
-   * 加载后台系统的数据字典
-   */
-  const options = useOptionsStore();
-  InitSystemOptions(options)
-
-  // 设置设备信息
-  SetDeviceSystemInfo();
-
-  // 参数处理+缓存
-  SetLaunchCacheInfo(params);
-
-  // 场景值
-  SetSceneData(params);
 
 });
 

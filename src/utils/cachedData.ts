@@ -1,4 +1,5 @@
 import {URLParamsToJson} from "@/utils/index";
+import type {SKU} from "@/common/model/product";
 
 const CACHE_LAUNCH_INFO_KEY = 'cache_launch_info_key'
 const CACHE_SCENE_KEY = 'cache_scene_key'
@@ -62,21 +63,6 @@ export function SetSceneData(params: any): number {
 	return scene;
 }
 
-
-/**
- * 加载后台系统的数据字典
- */
-export function InitSystemOptions(options:any){
-
-	options.fetchApprovalStatusOptions()
-	options.fetchSalesChannelsOptions()
-	options.fetchPromoteChannelsOptions()
-	options.fetchSourceTypesOptions()
-	options.fetchCustomerTypesOptions()
-
-	// custom
-}
-
 /**
  * 当前是否单页模式
  */
@@ -88,4 +74,47 @@ export function IsCurrentSinglePage(): boolean {
 	// #endif
 
 	return false;
+}
+
+
+// 保存选中的 SKU 记录到 sessionStorage
+export function SaveSelectedSKUsToStorage(selectedSKUs: SKU[]) {
+	try {
+		uni.setStorageSync('selectedSKUs', selectedSKUs);
+		console.log('Selected SKUs saved to sessionStorage.');
+	} catch (e) {
+		console.error('Error saving selected SKUs to sessionStorage:', e);
+	}
+}
+
+// 从 sessionStorage 中读取选中的 SKU 记录
+function GetSelectedSKUsFromStorage() {
+	try {
+		const selectedSKUs = uni.getStorageSync('selectedSKUs');
+		console.log('Selected SKUs retrieved from sessionStorage:', selectedSKUs);
+		return selectedSKUs;
+	} catch (e) {
+		console.error('Error retrieving selected SKUs from sessionStorage:', e);
+		return null;
+	}
+}
+
+// 清空指定键的数据
+function ClearKeyFromStorage(key:string) {
+	try {
+		uni.removeStorageSync(key);
+		console.log(`Key '${key}' cleared from sessionStorage.`);
+	} catch (e) {
+		console.error(`Error clearing key '${key}' from sessionStorage:`, e);
+	}
+}
+
+// 清空所有数据
+function ClearAllFromStorage() {
+	try {
+		uni.clearStorageSync();
+		console.log('All data cleared from sessionStorage.');
+	} catch (e) {
+		console.error('Error clearing all data from sessionStorage:', e);
+	}
 }
