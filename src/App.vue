@@ -1,15 +1,9 @@
 <script setup lang="ts">
 import {onLaunch, onShow, onHide} from "@dcloudio/uni-app";
 import {inject} from 'vue';
-import {SetDeviceSystemInfo} from "@/utils/device";
-import {InitSystemOptions, SetLaunchCacheInfo, SetSceneData} from "@/utils/cachedData";
 import {CheckLoginAuth} from "@/utils/auth";
-import useOptionsStore from "@/store/modules/data-dictionary";
 
 const $api = inject('$api');
-
-
-
 
 
 /**

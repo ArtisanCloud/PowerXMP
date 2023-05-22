@@ -1,8 +1,8 @@
-import type {PaginationRequest, PaginationResponse} from "@/common/model/index";
+import type {Model, PaginationRequest, PaginationResponse} from "@/common/model/index";
 
 export interface ShippingAddress extends Model {
 
-	customerId: number
+	customerId?: number
 	name:string
 	recipient: string
 	addressLine: string
@@ -37,16 +37,10 @@ export interface ListShippingAddressesPageReply extends PaginationResponse<Shipp
 }
 
 export type  CreateShippingAddressRequest = ShippingAddress
-
-export interface CreateShippingAddressReply {
-	shippingAddressId: number
-}
-
+export type CreateShippingAddressReply = ShippingAddress
 export interface  UpdateShippingAddressRequest extends ShippingAddress{
 	shippingAddressId: number
-
 }
-
 export type  UpdateShippingAddressReply = ShippingAddress
 
 export interface DeleteShippingAddressRequest {

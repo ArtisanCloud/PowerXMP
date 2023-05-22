@@ -1,15 +1,15 @@
 <template>
 	<view>
 		<!-- 地址 -->
-		<navigator url="/pages/address/address?source=1" class="address-section">
+		<navigator :url="'/pages/address/address?source=1&addresses='+encodeURIComponent(JSON.stringify(this.addressList))" class="address-section">
 			<view class="order-content">
 				<text class="yticon icon-shouhuodizhi"></text>
 				<view class="cen">
 					<view class="top">
-						<text class="name">{{ addressData?.recipient }}</text>
-						<text class="mobile">{{ addressData?.phoneNumber }}</text>
+						<text class="name">{{ addressData?.addressLine }}</text>
+						<text class="mobile">{{ addressData?.city }}</text>
 					</view>
-					<text class="address">{{ addressData?.addressLine }} {{ addressData?.province }}</text>
+					<text class="address">{{ addressData?.recipient }} {{ addressData?.phoneNumber }}</text>
 				</view>
 				<text class="yticon icon-you"></text>
 			</view>
@@ -119,6 +119,7 @@ import type {CartItem} from "../../common/model/cart";
 import {defineComponent} from "vue";
 import type {ShippingAddress} from "@/common/model/address";
 import {getShippingAddressesPageList} from "@/common/api/address";
+import {MaxPageSize} from "@/common/api";
 
 export default defineComponent({
 	data() {
@@ -141,6 +142,7 @@ export default defineComponent({
 				}
 			],
 			addressData: null as ShippingAddress | null,
+			addressList: [] as ShippingAddress[],
 			cartItemList: [] as CartItem[],
 			total:0,
 		}
@@ -153,10 +155,12 @@ export default defineComponent({
 		this.total = data.total
 
 		// 获取默认地址
-		const res = await getShippingAddressesPageList({pageIndex: 1, pageSize: 1})
-		if (res.list[0]) {
-			this.addressData = res.list[0]
+		const res = await getShippingAddressesPageList({pageIndex: 1, pageSize: MaxPageSize})
+		this.addressList = res.list
+		if (this.addressList[0]) {
+			this.addressData = this.addressList[0]
 		}
+
 
 	},
 	methods: {
@@ -177,7 +181,7 @@ export default defineComponent({
 		},
 		submit() {
 			uni.redirectTo({
-				url: '/pages/money/pay'
+				url: '/pages/payment/payment'
 			})
 		},
 		stopPrevent() {

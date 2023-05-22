@@ -34,7 +34,7 @@ export const createShippingAddress = (data: CreateShippingAddressRequest): Promi
 	});
 };
 
-export const putShippingAddress = (data: UpdateShippingAddressRequest): Promise<UpdateShippingAddressReply> => {
+export const updateShippingAddress = (data: UpdateShippingAddressRequest): Promise<UpdateShippingAddressReply> => {
 	const url = restURL(URIMPTrade + "address/shipping/"+data.shippingAddressId);
 
 	return $http<UpdateShippingAddressReply>({

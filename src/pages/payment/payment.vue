@@ -6,40 +6,35 @@
 		</view>
 
 		<view class="pay-type-list">
-			<radio-group @change="radioChange">
-				<view class="type-item b-b" @click="changePayType(1)">
-					<text class="icon yticon icon-weixinzhifu"></text>
-					<view class="con">
-						<text class="tit">微信支付</text>
-						<text>推荐使用微信支付</text>
-					</view>
-					<label class="radio">
-						<radio value="" color="#fa436a" :checked='payType == 1'/>
-						</radio>
-					</label>
+			<view class="type-item b-b" @click="changePayType(1)">
+				<text class="icon yticon icon-weixinzhifu"></text>
+				<view class="con">
+					<text class="tit">微信支付</text>
+					<text>推荐使用微信支付</text>
 				</view>
-				<view class="type-item b-b" @click="changePayType(2)">
-					<text class="icon yticon icon-alipay"></text>
-					<view class="con">
-						<text class="tit">支付宝支付</text>
-					</view>
-					<label class="radio">
-						<radio value="" color="#fa436a" :checked='payType == 2'/>
-						</radio>
-					</label>
+				<label class="radio">
+					<radio value="" color="#fa436a" :checked='payType == 1' />
+				</label>
+			</view>
+			<view class="type-item b-b" @click="changePayType(2)">
+				<text class="icon yticon icon-alipay"></text>
+				<view class="con">
+					<text class="tit">支付宝支付</text>
 				</view>
-				<view class="type-item" @click="changePayType(3)">
-					<text class="icon yticon icon-erjiye-yucunkuan"></text>
-					<view class="con">
-						<text class="tit">预存款支付</text>
-						<text>可用余额 ¥198.5</text>
-					</view>
-					<label class="radio">
-						<radio value="" color="#fa436a" :checked='payType == 3'/>
-						</radio>
-					</label>
+				<label class="radio">
+					<radio value="" color="#fa436a" :checked='payType == 2'/>
+				</label>
+			</view>
+			<view class="type-item" @click="changePayType(3)">
+				<text class="icon yticon icon-erjiye-yucunkuan"></text>
+				<view class="con">
+					<text class="tit">预存款支付</text>
+					<text>可用余额 ¥198.5</text>
 				</view>
-			</radio-group>
+				<label class="radio">
+					<radio value="" color="#fa436a" :checked='payType == 3'/>
+				</label>
+			</view>
 		</view>
 
 		<text class="mix-btn" @click="confirm">确认支付</text>
@@ -70,7 +65,7 @@ export default defineComponent({
 		//确认支付
 		confirm: async function () {
 			uni.redirectTo({
-				url: '/pages/money/paySuccess'
+				url: '/pages/payment/paySuccess'
 			})
 		},
 	}
