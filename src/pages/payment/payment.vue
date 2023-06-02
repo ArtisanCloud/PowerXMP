@@ -2,7 +2,7 @@
 	<view class="app">
 		<view class="price-box">
 			<text>支付金额</text>
-			<text class="price">38.88</text>
+			<text class="price">{{ this.orderInfo.unitPrice }}</text>
 		</view>
 
 		<view class="pay-type-list">
@@ -13,28 +13,28 @@
 					<text>推荐使用微信支付</text>
 				</view>
 				<label class="radio">
-					<radio value="" color="#fa436a" :checked='payType == 1' />
+					<radio value="" color="#BDFA43FF" :checked='this.paymentTypeId == this.paymentTypeWechatId'/>
 				</label>
 			</view>
-			<view class="type-item b-b" @click="changePayType(2)">
-				<text class="icon yticon icon-alipay"></text>
-				<view class="con">
-					<text class="tit">支付宝支付</text>
-				</view>
-				<label class="radio">
-					<radio value="" color="#fa436a" :checked='payType == 2'/>
-				</label>
-			</view>
-			<view class="type-item" @click="changePayType(3)">
-				<text class="icon yticon icon-erjiye-yucunkuan"></text>
-				<view class="con">
-					<text class="tit">预存款支付</text>
-					<text>可用余额 ¥198.5</text>
-				</view>
-				<label class="radio">
-					<radio value="" color="#fa436a" :checked='payType == 3'/>
-				</label>
-			</view>
+			<!--			<view class="type-item b-b" @click="changePayType(2)">-->
+			<!--				<text class="icon yticon icon-alipay"></text>-->
+			<!--				<view class="con">-->
+			<!--					<text class="tit">支付宝支付</text>-->
+			<!--				</view>-->
+			<!--				<label class="radio">-->
+			<!--					<radio value="" color="#fa436a" :checked='paymentType == 2'/>-->
+			<!--				</label>-->
+			<!--			</view>-->
+			<!--			<view class="type-item" @click="changePayType(3)">-->
+			<!--				<text class="icon yticon icon-erjiye-yucunkuan"></text>-->
+			<!--				<view class="con">-->
+			<!--					<text class="tit">预存款支付</text>-->
+			<!--					<text>可用余额 ¥198.5</text>-->
+			<!--				</view>-->
+			<!--				<label class="radio">-->
+			<!--					<radio value="" color="#fa436a" :checked='paymentType == 3'/>-->
+			<!--				</label>-->
+			<!--			</view>-->
 		</view>
 
 		<text class="mix-btn" @click="confirm">确认支付</text>
@@ -44,29 +44,80 @@
 <script lang="ts">
 
 import {defineComponent} from "vue";
+import {createPaymentFromOrder, PaymentTypeWeChat} from "@/common/api/payment";
+import type {Order} from "@/common/model/order";
+import {Alert} from "@/utils";
+import useOptionsStore from "@/store/modules/data-dictionary";
+import {OrderStatusToBePaid} from "@/common/api/order";
 
 export default defineComponent({
 	data() {
+		const optionsStore = useOptionsStore();
+		const paymentTypeWechatId = optionsStore.GetOptionByKey(optionsStore.paymentTypes, PaymentTypeWeChat)?.id
 		return {
-			payType: 1,
-			orderInfo: {}
+			paymentTypeWechatId: paymentTypeWechatId,
+			paymentTypeId: paymentTypeWechatId,
+			orderInfo: {} as Order
 		};
 	},
 	computed: {},
-	onLoad(options) {
-
+	onLoad(options: any) {
+		this.orderInfo = JSON.parse(options.order);
 	},
 
 	methods: {
 		//选择支付方式
-		changePayType(type) {
-			this.payType = type;
+		changePayType(typeId: number) {
+			this.paymentTypeId = typeId;
 		},
+
+
+
 		//确认支付
 		confirm: async function () {
-			uni.redirectTo({
-				url: '/pages/payment/paySuccess'
-			})
+			switch (this.paymentTypeId) {
+				case this.paymentTypeWechatId: {
+					const res = await createPaymentFromOrder({
+						orderId: this.orderInfo.id!,
+						paymentType: this.paymentTypeWechatId!,
+					})
+					if (res.paymentId && res.paymentId > 0) {
+
+						const data = res.data
+
+
+						// 调用微信支付
+						uni.requestPayment({
+							provider: 'wxpay',
+							timeStamp: res.data.timeStamp,
+							nonceStr: res.data.nonceStr,
+							package: res.data.package,
+							signType: res.data.signType,
+							paySign: res.data.paySign,
+							success: function (res) {
+								console.log(res)
+								// 支付成功回调
+								uni.redirectTo({
+									url: '/pages/payment/paySuccess'
+								})
+							},
+							fail: function (err) {
+								console.error(err)
+								// 支付失败回调
+								Alert('支付失败，请重新尝试')
+							}
+						});
+
+
+					} else {
+						Alert('生成支付单失败')
+					}
+					break
+				}
+				default:
+					Alert('请选择正确的付费方式')
+			}
+
 		},
 	}
 })

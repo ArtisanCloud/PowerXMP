@@ -2,10 +2,10 @@ import {$http} from "@/common/api/http";
 import {APIMethodGet, restURL} from "@/common/api/index";
 import type {ListStoreReply, ListStoreRequest, Store} from "@/common/model/store";
 
-export const URIMPProduct = 'mp/product/'
+export const UriMPProduct = 'mp/product/'
 
 export const getStoreList = (data: ListStoreRequest): Promise<ListStoreReply> => {
-	const url = restURL(URIMPProduct + "stores/page-list");
+	const url = restURL(UriMPProduct + "stores/page-list");
 
 	return $http<ListStoreReply>({
 		url: url,

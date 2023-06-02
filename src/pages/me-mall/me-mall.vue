@@ -2,26 +2,26 @@
 	<view class="container">
 
 		<view class="user-section">
-			<image class="bg" src="/static/user-bg.jpg"></image>
+			<image class="bg" src="/static/images/user-bg.png"></image>
 			<view class="user-info-box">
 				<view class="portrait-box">
-					<image class="portrait" :src="userInfo.portrait || '/static/missing-face.png'"></image>
+					<image class="portrait" src="/static/images/logo-accessory-me.png"></image>
 				</view>
 				<view class="info-box">
-					<text class="username">{{ userInfo.nickname || '游客' }}</text>
+					<text class="username">{{ userInfo?.nickname || '游客' }}</text>
 				</view>
 			</view>
 			<view class="vip-card-box">
-				<image class="card-bg" src="/static/vip-card-bg.png" mode=""></image>
+				<image class="card-bg" src="/static/images/vip-card-bg.png" mode=""></image>
 				<view class="b-btn">
 					立即开通
 				</view>
 				<view class="tit">
 					<text class="yticon icon-iLinkapp-"></text>
-					DCloud会员
+					小裂匠会员
 				</view>
-				<text class="e-m">DCloud Union</text>
-				<text class="e-b">开通会员开发无bug 一测就上线</text>
+				<text class="e-m">Artisan Cloud</text>
+				<text class="e-b">开通会员</text>
 			</view>
 		</view>
 
@@ -35,11 +35,11 @@
 			@touchmove="coverTouchmove"
 			@touchend="coverTouchend"
 		>
-			<image class="arc" src="/static/arc.png"></image>
+			<image class="arc" src="/static/images/arc.png"></image>
 
 			<view class="tj-sction">
 				<view class="tj-item">
-					<text class="num">128.8</text>
+					<text class="num">0.0</text>
 					<text>余额</text>
 				</view>
 				<view class="tj-item">
@@ -47,7 +47,7 @@
 					<text>优惠券</text>
 				</view>
 				<view class="tj-item">
-					<text class="num">20</text>
+					<text class="num">0</text>
 					<text>积分</text>
 				</view>
 			</view>
@@ -80,24 +80,9 @@
 					<text class="yticon icon-lishijilu"></text>
 					<text>浏览历史</text>
 				</view>
-				<scroll-view scroll-x class="h-list">
+				<scroll-view scroll-x="true" class="h-list">
 					<image @click="navTo('/pages/product/product')"
-								 src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1553105186633&di=c121a29beece4e14269948d990f9e720&imgtype=0&src=http%3A%2F%2Fimg004.hc360.cn%2Fm8%2FM04%2FDE%2FDE%2FwKhQplZ-QteEBvsbAAAAADUkobU751.jpg"
-								 mode="aspectFill"></image>
-					<image @click="navTo('/pages/product/product')"
-								 src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1553105231218&di=09534b9833b5243296630e6d5b728eff&imgtype=0&src=http%3A%2F%2Fimg002.hc360.cn%2Fm1%2FM05%2FD1%2FAC%2FwKhQcFQ3iN2EQTo8AAAAAHQU6_8355.jpg"
-								 mode="aspectFill"></image>
-					<image @click="navTo('/pages/product/product')"
-								 src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1553105320890&di=c743386be51f2c4c0fd4b75754d14f3c&imgtype=0&src=http%3A%2F%2Fimg007.hc360.cn%2Fhb%2FMTQ1OTg4ODY0MDA3Ny05OTQ4ODY1NDQ%3D.jpg"
-								 mode="aspectFill"></image>
-					<image @click="navTo('/pages/product/product')"
-								 src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2691146630,2165926318&fm=26&gp=0.jpg"
-								 mode="aspectFill"></image>
-					<image @click="navTo('/pages/product/product')"
-								 src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1553105443324&di=8141bf13f3f208c61524d67f9bb83942&imgtype=0&src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F01ac9a5548d29b0000019ae98e6d98.jpg"
-								 mode="aspectFill"></image>
-					<image @click="navTo('/pages/product/product')"
-								 src="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=191678693,2701202375&fm=26&gp=0.jpg"
+								 src=""
 								 mode="aspectFill"></image>
 				</scroll-view>
 				<px-list-cell icon="icon-iconfontweixin" iconColor="#e07472" title="我的钱包"
@@ -108,17 +93,20 @@
 				<px-list-cell icon="icon-pinglun-copy" iconColor="#ee883b" title="晒单" tips="晒单抢红包"></px-list-cell>
 				<px-list-cell icon="icon-shoucang_xuanzhongzhuangtai" iconColor="#54b4ef" title="我的收藏"></px-list-cell>
 				<px-list-cell icon="icon-shezhi1" iconColor="#e07472" title="设置" border=""
-											@eventClick="navTo('/pages/set/set')"></px-list-cell>
+											@eventClick="navTo('/pages/setting/setting')"></px-list-cell>
 			</view>
 		</view>
 
 
 	</view>
 </template>
-<script>
+<script lang="ts">
+
+import {defineComponent} from "vue";
+import {GetUserInfo, IsLogin} from "@/utils/auth";
 
 let startY = 0, moveY = 0, pageAtTop = true;
-export default {
+export default defineComponent({
 
 	data() {
 		return {
@@ -128,12 +116,14 @@ export default {
 		}
 	},
 	onLoad() {
+
+
 	},
 	// #ifndef MP
 	onNavigationBarButtonTap(e) {
 		const index = e.index;
 		if (index === 0) {
-			this.navTo('/pages/set/set');
+			this.navTo('/pages/setting/setting');
 		} else if (index === 1) {
 			// #ifdef APP-PLUS
 			const pages = getCurrentPages();
@@ -150,7 +140,9 @@ export default {
 	},
 	// #endif
 	computed: {
-		// ...mapState(['hasLogin','userInfo'])
+		userInfo() {
+			return GetUserInfo();
+		}
 	},
 	methods: {
 
@@ -158,9 +150,10 @@ export default {
 		 * 统一跳转接口,拦截未登录路由
 		 * navigator标签现在默认没有转场动画，所以用view
 		 */
-		navTo(url) {
-			if (!this.hasLogin) {
-				url = '/pages/public/login';
+		navTo(url:string) {
+			console.log(url)
+			if (!IsLogin()) {
+				url = '/pages/login/login';
 			}
 			uni.navigateTo({
 				url
@@ -206,7 +199,8 @@ export default {
 			this.coverTransform = 'translateY(0px)';
 		}
 	}
-}
+})
+
 </script>
 <style lang='scss'>
 @import "./me-mall";

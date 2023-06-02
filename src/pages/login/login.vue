@@ -15,6 +15,7 @@
 
 <script lang="ts">
 import {SetToken} from "@/utils/auth";
+import {PathHomePage} from "@/common/api";
 
 export default {
 
@@ -63,7 +64,7 @@ export default {
               // 只需保存token
               SetToken(resData.token)
               uni.switchTab({
-                url: '/pages/index/index',
+                url: PathHomePage,
               })
             } else {
               // 授权手机为空

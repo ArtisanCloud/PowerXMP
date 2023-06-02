@@ -2,6 +2,7 @@ import {STATUS_CODE_UNAUTHORIZED} from "@/common/model/constant";
 import type {Token} from "@/common/model";
 import type {User} from "@/common/model/user";
 import useOptionsStore from "@/store/modules/data-dictionary";
+import {PathHomePage} from "@/common/api";
 
 const TokenKey = 'token';
 const UserInfoKey = 'user_info';
@@ -54,7 +55,6 @@ const CheckLoginAuth = ($api: any): boolean => {
 				const resData = res
 				// 手机号码客户已经授权过
 				if (!!resData.phoneNumber) {
-					console.log(resData.token)
 					// 只需保存token
 					SetToken(resData.token)
 
@@ -64,10 +64,11 @@ const CheckLoginAuth = ($api: any): boolean => {
 							// do something when options is ready
 						});
 					}
-
-					uni.redirectTo({
-						url: '/pages/index/index',
+					// uni.redirectTo({
+					uni.switchTab({
+						url: PathHomePage,
 					})
+
 				} else {
 					console.error("checkLoginAuth user login, phone is empty")
 					// 需要先授权手机号码

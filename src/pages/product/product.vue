@@ -6,7 +6,7 @@
 					<view class="image-wrapper">
 						<image
 							:src="cover.url"
-							class="loaded"
+							class="image-loaded loaded"
 							mode="aspectFill"
 						></image>
 					</view>
@@ -188,6 +188,7 @@ import {AreArraysEqual} from "@/utils/is";
 import type {AddToCartRequest} from "@/common/model/cart";
 import {addToCart} from "@/common/api/cart";
 import {ShowToast} from "@/utils";
+import {CreateMethodByProducts} from "@/common/api/order";
 
 
 export default defineComponent({
@@ -314,7 +315,7 @@ export default defineComponent({
 			this.optionSelected = [];
 			this.product.productSpecifics.forEach(specific => {
 				specific.specificOptions.forEach(item => {
-					if (item.selected === true) {
+					if (item.selected) {
 						this.optionSelected.push(item);
 					}
 				})
@@ -335,14 +336,31 @@ export default defineComponent({
 			this.favorite = !this.favorite;
 		},
 		buy() {
+
+			let total = this.currentSKU?.unitPrice!
+			total = Number(total.toFixed(2));
+
+			const list = [{
+				productName: this.product.name,
+				imageUrl: this.product.coverImages[0].url,
+				quantity: 1,
+				skuId: this.currentSKU?.id,
+				unitPrice: this.currentSKU?.unitPrice,
+				listPrice: this.currentSKU?.listPrice,
+				discount: this.currentSKU?.discount,
+			}]
+
 			uni.navigateTo({
-				url: `/pages/order/create-order`
+				url: `/pages/order/create-order?data=${JSON.stringify({
+					goodsData: list,
+					total: total,
+					makeOrderBy: CreateMethodByProducts,
+				})}`
 			})
 		},
 		stopPrevent() {
 		},
 		async addToCart() {
-
 
 			let requestItem: AddToCartRequest = {
 				productId: this.product.id!,
@@ -360,7 +378,7 @@ export default defineComponent({
 				requestItem.unitPrice = this.currentSKU.unitPrice
 				requestItem.discount = this.currentSKU.discount
 			}
-			console.log(this.currentSKU, requestItem)
+			// console.log(this.currentSKU, requestItem)
 			const res = await addToCart(requestItem);
 			if (res.id) {
 				ShowToast("添加购物车成功", "success")

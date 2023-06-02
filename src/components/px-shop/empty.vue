@@ -42,11 +42,11 @@
 		right: 0;
 		bottom: 0;
 		background: $page-color-base;
-		padding-bottom: 120upx;
+		padding-bottom: 120rpx;
 
 		&-image {
-			width: 200upx;
-			height: 200upx;
+			width: 200rpx;
+			height: 200rpx;
 		}
 	}
 </style>

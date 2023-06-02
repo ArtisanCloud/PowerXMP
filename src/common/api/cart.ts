@@ -10,11 +10,10 @@ import type {
 	UpdateCartItemQuantityReply,
 	UpdateCartItemQuantityRequest
 } from "@/common/model/cart";
-
-export const URIMPTrade = 'mp/trade/'
+import {UriMPTrade} from "@/common/api/order";
 
 export const getCartItemsPageList = (data: ListCartItemsPageRequest): Promise<ListCartItemsPageReply> => {
-	const url = restURL(URIMPTrade + "cart/items/page-list");
+	const url = restURL(UriMPTrade + "cart/items/page-list");
 
 	return $http<ListCartItemsPageReply>({
 		url: url,
@@ -25,7 +24,7 @@ export const getCartItemsPageList = (data: ListCartItemsPageRequest): Promise<Li
 	});
 };
 export const addToCart = (data: AddToCartRequest): Promise<AddToCartReply> => {
-	const url = restURL(URIMPTrade + "cart/items");
+	const url = restURL(UriMPTrade + "cart/items");
 
 	return $http<AddToCartReply>({
 		url: url,
@@ -37,7 +36,7 @@ export const addToCart = (data: AddToCartRequest): Promise<AddToCartReply> => {
 };
 
 export const updateCartItemQuantity = (data: UpdateCartItemQuantityRequest): Promise<UpdateCartItemQuantityReply> => {
-	const url = restURL(URIMPTrade + "cart/items/"+data.itemId);
+	const url = restURL(UriMPTrade + "cart/items/"+data.itemId);
 
 	return $http<UpdateCartItemQuantityReply>({
 		url: url,
@@ -51,7 +50,7 @@ export const updateCartItemQuantity = (data: UpdateCartItemQuantityRequest): Pro
 
 
 export const removeCartItem = (data: RemoveCartItemRequest): Promise<RemoveCartItemReply> => {
-	const url = restURL(URIMPTrade + "cart/items/"+data.itemId);
+	const url = restURL(UriMPTrade + "cart/items/"+data.itemId);
 
 	return $http<RemoveCartItemReply>({
 		url: url,
@@ -64,7 +63,7 @@ export const removeCartItem = (data: RemoveCartItemRequest): Promise<RemoveCartI
 
 
 export const clearCartItems = (data: ClearCartItemsRequest): Promise<ClearCartItemsReply> => {
-	const url = restURL(URIMPTrade + "cart/items/clear");
+	const url = restURL(UriMPTrade + "cart/items/clear");
 
 	return $http<ClearCartItemsReply>({
 		url: url,

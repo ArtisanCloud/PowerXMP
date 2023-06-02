@@ -9,3 +9,12 @@ export interface MediaResource extends Model {
 	contentType: string;
 	resourceType: string;
 }
+
+export interface MediaSet {
+	coverImage?: MediaResource;
+	coverImages?: MediaResource[];
+	detailImages?: MediaResource[];
+	coverImageId?: number;
+	coverImageIds?: number[];
+	detailImageIds?: number[];
+}

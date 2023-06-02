@@ -1,6 +1,6 @@
 import {APIMethodDelete, APIMethodGet, APIMethodPost, APIMethodPut, restURL} from "@/common/api/index";
 import {$http} from "@/common/api/http";
-import {URIMPTrade} from "@/common/api/cart";
+import {UriMPTrade} from "@/common/api/order";
 import type {
 	CreateShippingAddressReply, CreateShippingAddressRequest,
 	DeleteShippingAddressReply,
@@ -11,7 +11,7 @@ import type {
 
 
 export const getShippingAddressesPageList = (data: ListShippingAddressesPageRequest): Promise<ListShippingAddressesPageReply> => {
-	const url = restURL(URIMPTrade + "address/shipping/page-list");
+	const url = restURL(UriMPTrade + "address/shipping/page-list");
 
 	return $http<ListShippingAddressesPageReply>({
 		url: url,
@@ -23,7 +23,7 @@ export const getShippingAddressesPageList = (data: ListShippingAddressesPageRequ
 };
 
 export const createShippingAddress = (data: CreateShippingAddressRequest): Promise<CreateShippingAddressReply> => {
-	const url = restURL(URIMPTrade + "address/shipping");
+	const url = restURL(UriMPTrade + "address/shipping");
 
 	return $http<CreateShippingAddressReply>({
 		url: url,
@@ -35,7 +35,7 @@ export const createShippingAddress = (data: CreateShippingAddressRequest): Promi
 };
 
 export const updateShippingAddress = (data: UpdateShippingAddressRequest): Promise<UpdateShippingAddressReply> => {
-	const url = restURL(URIMPTrade + "address/shipping/"+data.shippingAddressId);
+	const url = restURL(UriMPTrade + "address/shipping/"+data.shippingAddressId);
 
 	return $http<UpdateShippingAddressReply>({
 		url: url,
@@ -47,7 +47,7 @@ export const updateShippingAddress = (data: UpdateShippingAddressRequest): Promi
 };
 
 export const deleteShippingAddress = (data: DeleteShippingAddressRequest): Promise<DeleteShippingAddressReply> => {
-	const url = restURL(URIMPTrade + "address/shipping/"+data.shippingAddressId);
+	const url = restURL(UriMPTrade + "address/shipping/"+data.shippingAddressId);
 
 	return $http<DeleteShippingAddressReply>({
 		url: url,

@@ -1,0 +1,62 @@
+
+page {
+  background: $page-color-base;
+}
+
+.container{
+
+  .list-cell {
+    display: flex;
+    align-items: baseline;
+    padding: 20rpx $page-row-spacing;
+    line-height: 60rpx;
+    position: relative;
+    background: #fff;
+    justify-content: center;
+
+    &.log-out-btn {
+      margin-top: 40rpx;
+
+      .cell-tit {
+        color: $uni-color-primary;
+        text-align: center;
+        margin-right: 0;
+      }
+    }
+
+    &.cell-hover {
+      background: #fafafa;
+    }
+
+    &.b-b:after {
+      left: 30rpx;
+    }
+
+    &.m-t {
+      margin-top: 16rpx;
+    }
+
+    .cell-more {
+      align-self: baseline;
+      font-size: $font-lg;
+      color: $font-color-light;
+      margin-left: 10rpx;
+    }
+
+    .cell-tit {
+      flex: 1;
+      font-size: $font-base + 2rpx;
+      color: $font-color-dark;
+      margin-right: 10rpx;
+    }
+
+    .cell-tip {
+      font-size: $font-base;
+      color: $font-color-light;
+    }
+
+    switch {
+      transform: translateX(16rpx) scale(.84);
+    }
+  }
+}

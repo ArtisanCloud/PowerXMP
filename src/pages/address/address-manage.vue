@@ -58,7 +58,7 @@ export default defineComponent({
 		this.manageAction = option.action;
 		if (this.manageAction === 'edit') {
 			title = '编辑收货地址'
-			console.log(option.data)
+			// console.log(option.data)
 			this.addressData = JSON.parse(option.data)
 		}
 

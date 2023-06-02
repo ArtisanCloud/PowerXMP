@@ -55,7 +55,6 @@ export interface Token {
 export interface imageAbleInfo {
 	icon: string;
 	backgroundColor: string;
-	imageURL: string;
 }
 
 

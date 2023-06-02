@@ -2,15 +2,19 @@ import {defineStore} from 'pinia';
 import type {DictionaryItem} from "@/common/model/dictionary";
 
 import type {OptionsState} from "@/store/modules/data-dictionary/type";
-import {listDictionaryItems} from "@/common/api/dictionary";
+import {
+	ArtisanLevelDDType,
+	listDictionaryItems,
+	OrderStatusDDType,
+	OrderTypeDDType, PaymentStatusDDType, PaymentTypeDDType,
+	TypeMediaTypeDDType
+} from "@/common/api/dictionary";
 import {
 	ApprovalStatusDDType,
 	CustomerTypesDDType,
 	ProductPlanDDType,
 	ProductTypesDDType, PromoteChannelsDDType, SalesChannelsDDType, SourceTypesDDType
 } from "@/common/api/dictionary";
-
-
 
 const useOptionsStore = defineStore('options', {
 	state: (): OptionsState => ({
@@ -21,10 +25,15 @@ const useOptionsStore = defineStore('options', {
 		salesChannels: [],
 		promoteChannels: [],
 		sourceTypes: [],
-
-		setup: false,
+		artisanLevels: [],
+		mediaTypes: [],
+		orderTypes: [],
+		orderStatus: [],
+		paymentTypes: [],
+		paymentStatus: [],
 
 		// custom
+		setup: false,
 
 	}),
 
@@ -123,6 +132,65 @@ const useOptionsStore = defineStore('options', {
 			}
 		},
 
+		async fetchArtisanLevelsOptions() {
+			try {
+				const res = await listDictionaryItems({ type: ArtisanLevelDDType });
+				this.artisanLevels = res.list;
+				// console.log(dictionaryTypeList)
+			} finally {
+				// console.log("fetch approval status options")
+			}
+		},
+
+		async fetchMediaTypesOptions() {
+			try {
+				const res = await listDictionaryItems({ type: TypeMediaTypeDDType });
+				this.mediaTypes = res.list;
+				// console.log(this.mediaTypes)
+			} finally {
+				// console.log("fetch approval status options")
+			}
+		},
+
+		async fetchOrderTypesOptions() {
+			try {
+				const res = await listDictionaryItems({ type: OrderTypeDDType });
+				this.orderTypes = res.list;
+				// console.log(dictionaryTypeList)
+			} finally {
+				// console.log("fetch approval status options")
+			}
+		},
+
+		async fetchOrderStatusOptions() {
+			try {
+				const res = await listDictionaryItems({ type: OrderStatusDDType });
+				this.orderStatus = res.list;
+				// console.log(dictionaryTypeList)
+			} finally {
+				// console.log("fetch approval status options")
+			}
+		},
+
+		async fetchPaymentTypesOptions() {
+			try {
+				const res = await listDictionaryItems({ type: PaymentTypeDDType });
+				this.paymentTypes = res.list;
+				// console.log(dictionaryTypeList)
+			} finally {
+				// console.log("fetch approval status options")
+			}
+		},
+
+		async fetchPaymentStatusOptions() {
+			try {
+				const res = await listDictionaryItems({ type: PaymentStatusDDType });
+				this.paymentStatus = res.list;
+				// console.log(dictionaryTypeList)
+			} finally {
+				// console.log("fetch approval status options")
+			}
+		},
 
 		async fetchAllOptions() {
 			await this.fetchCustomerTypesOptions();
@@ -132,6 +200,12 @@ const useOptionsStore = defineStore('options', {
 			await this.fetchSalesChannelsOptions();
 			await this.fetchPromoteChannelsOptions();
 			await this.fetchSourceTypesOptions();
+			await this.fetchArtisanLevelsOptions();
+			await this.fetchMediaTypesOptions();
+			await this.fetchOrderTypesOptions();
+			await this.fetchOrderStatusOptions();
+			await this.fetchPaymentTypesOptions();
+			await this.fetchPaymentStatusOptions();
 			this.setup = true;
 		},
 

@@ -17,6 +17,12 @@ export const ApprovalStatusDDType = '_approval_status'
 export const SalesChannelsDDType = '_sales_channel'
 export const PromoteChannelsDDType = '_promote_channel'
 export const SourceTypesDDType = '_source_channel'
+export const ArtisanLevelDDType = '_artisan_level';
+export const TypeMediaTypeDDType = '_media_type';
+export const OrderTypeDDType = '_order_type';
+export const OrderStatusDDType = '_order_status';
+export const PaymentTypeDDType = '_payment_type';
+export const PaymentStatusDDType = '_payment_status';
 
 export const StatusDraft = '_draft'
 export const StatusActive = '_active'

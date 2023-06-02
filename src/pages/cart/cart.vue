@@ -71,7 +71,7 @@
 					<text class="price">¥{{ total }}</text>
 					<text class="coupon">
 						已优惠
-						<text>74.35</text>
+						<text>0.0</text>
 						元
 					</text>
 				</view>
@@ -90,6 +90,7 @@ import {clearCartItems, getCartItemsPageList, removeCartItem, updateCartItemQuan
 import type {CartItem} from "@/common/model/cart";
 import {MaxPageSize} from "@/common/api";
 import {ShowToast} from "@/utils";
+import {CreateMethodByCartItems} from "@/common/api/order";
 
 export default defineComponent({
 	components: {
@@ -138,10 +139,12 @@ export default defineComponent({
 
 		//监听image加载完成
 		onImageLoad(index: number) {
+			// console.log("loaded:",index)
 			this.cartItemList[index].loaded = 'loaded';
 		},
 		//监听image加载失败
 		onImageError(index: number) {
+			// console.log("load err:",index)
 			this.cartItemList[index].imageUrl = '/static/images/errorImage.jpg';
 		},
 
@@ -241,6 +244,7 @@ export default defineComponent({
 				url: `/pages/order/create-order?data=${JSON.stringify({
 					goodsData: list,
 					total: this.total,
+					makeOrderBy: CreateMethodByCartItems,
 				})}`
 			})
 

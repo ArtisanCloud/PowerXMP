@@ -126,7 +126,7 @@ export default defineComponent({
 
 			this.loading = true;
 			try {
-				const res = await getCategoryTree({categoryPID: fId});
+				const res = await getCategoryTree({categoryPId: fId});
 				this.cateList = res.tree;
 				// console.log(this.cateList)
 
@@ -145,7 +145,6 @@ export default defineComponent({
 				if (this.loadingType === 'nomore') {
 					return;
 				}
-				this.pagination.currentPage += 1
 				// 当前处于添加数据状态中
 				this.loadingType = 'loading';
 
@@ -172,7 +171,7 @@ export default defineComponent({
 				this.goodsList = this.goodsList.concat(res.list);
 				// console.log(list, this.goodsList)
 			}
-			this.pagination.currentPage = res.pageIndex
+			this.pagination.currentPage = res.pageIndex + 1
 
 
 			//判断是否还有下一页，有是more  没有是nomore(测试数据判断大于20就没有了)

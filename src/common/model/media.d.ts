@@ -1,16 +1,25 @@
 import type {GetDetailByIDRequest, Model, PaginationRequest, PaginationResponse} from "@/common/model/index";
 import {MediaType} from "@/common/model/constant";
+import type {MediaResource} from "@/common/model/mediaResource";
 
-export interface Media extends Model {
+export interface Media extends Model,MediaSet {
 	title: string
 	subTitle: string
-	coverURL: string
-	awesomeLink: string
-	content: string
-	type: MediaType
+	coverImageId: number
+	resourceUrl: string
+	description: string
+	mediaType: number
 	viewedCount: number
+
 }
 
+
+export interface ListMediasPageRequest extends PaginationRequest {
+	mediaTypes: number[]
+}
+
+export interface ListMediasPageReply extends PaginationResponse<Media> {
+}
 
 export interface News extends Media {
 	type: MediaType.news
@@ -37,12 +46,15 @@ export interface GetMediaListRequest extends PaginationRequest {
 export interface GetNewsListRequest extends PaginationRequest {
 	type: MediaType.news
 }
+
 export interface GetPanoWorkListRequest extends PaginationRequest {
 	type: MediaType.panoWork
 }
+
 export interface GetThreeDWorkListRequest extends PaginationRequest {
 	type: MediaType.threeDWork
 }
+
 export interface GetShowcaseListRequest extends PaginationRequest {
 	type: MediaType.showcase
 }
@@ -53,15 +65,15 @@ export interface RequestGetMediaDetail extends GetDetailByIDRequest {
 }
 
 // --- Response Models ---
-export interface GetNewsListResponse extends  PaginationResponse<News> {
+export interface GetNewsListResponse extends PaginationResponse<News> {
 	data: News[];
 }
 
-export interface GetWorkListResponse extends  PaginationResponse<VRWork> {
+export interface GetWorkListResponse extends PaginationResponse<VRWork> {
 	data: VRWork[];
 }
 
-export interface GetPanoWorkListResponse extends  PaginationResponse<ThreeDWork> {
+export interface GetPanoWorkListResponse extends PaginationResponse<ThreeDWork> {
 	data: ThreeDWork[];
 }
 

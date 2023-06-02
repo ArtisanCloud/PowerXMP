@@ -33,7 +33,7 @@ export function $http<T>(options: {
 				if (res.statusCode == STATUS_CODE_SUCCESS) {
 					resolve(res.data as T);
 				} else if (res.statusCode == STATUS_CODE_UNAUTHORIZED) {
-					console.error("http res :");
+					console.error("http res :",res);
 
 					uni.redirectTo({
 						url: "/pages/login/login",

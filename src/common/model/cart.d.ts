@@ -20,9 +20,9 @@ export interface CartItem extends Model {
 	specifications?: string
 	imageUrl?: string
 	// extend
-	checked: boolean
-	loaded: string
-	stock: number
+	checked?: boolean
+	loaded?: string
+	stock?: number
 }
 
 

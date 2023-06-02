@@ -1,6 +1,6 @@
-export function PrePage() {
+export function PrePage(preStep: number = 2) {
 	let pages = getCurrentPages();
-	let prePage = pages[pages.length - 2];
+	let prePage = pages[pages.length - preStep];
 
 	// #ifdef H5
 	return prePage;

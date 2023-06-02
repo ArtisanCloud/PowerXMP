@@ -35,11 +35,23 @@ export default defineComponent({
 			addressList: [] as ShippingAddress[]
 		}
 	},
-	onLoad(option: any) {
+	async onLoad(option: any) {
 		// console.log(option);
 		// console.log(option.addresses)
-		this.addressList = JSON.parse(decodeURIComponent(option.addresses));
+
 		this.source = option.source;
+		if (this.source == 1) {
+			this.addressList = JSON.parse(decodeURIComponent(option.addresses));
+		} else {
+			const res = await getShippingAddressesPageList({
+				pageIndex: 1,
+				pageSize: MaxPageSize
+			})
+			if (res.list) {
+				this.addressList = res.list
+			}
+		}
+
 
 	},
 	methods: {
@@ -63,9 +75,12 @@ export default defineComponent({
 
 			const res = await getShippingAddressesPageList({pageIndex: 1, pageSize: MaxPageSize})
 			this.addressList = res.list
-			console.log("refresh",action)
-			PrePage().addressList =  res.list
-			// console.log(PrePage().addressList)
+
+			// refreshList会被在address-manage这里调用，所以需要-3
+			let ppp = PrePage(3)
+
+			ppp.addressList = res.list
+			ppp.addressData = res.list[0]
 			// console.log(data, type);
 		}
 	}

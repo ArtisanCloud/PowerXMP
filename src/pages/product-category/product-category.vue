@@ -19,7 +19,7 @@
 						<view @click="navToList(item.id, tItem.id)"
 									v-if="tItem?.pId === item.id"
 									class="t-item">
-							<image :src="'/static/images/temp/' + tItem.imageURL +'.jpg'"></image>
+							<image :src="tItem.coverImage?.url"></image>
 							<text>{{ tItem.name }}</text>
 						</view>
 					</block>
@@ -32,15 +32,11 @@
 <script lang="ts">
 
 import {defineComponent} from 'vue';
-
-import {staticURL} from "@/common/api";
 import {getCategoryTree} from "@/common/api/productCategory";
 import type {ProductCategory} from "@/common/model/productCategory";
+import {mpStaticURL} from "@/common/api";
 
 
-const mpStaticUrl = (uri: string): string => {
-	return staticURL(uri)
-}
 
 
 export default defineComponent({
@@ -79,10 +75,16 @@ export default defineComponent({
 
 	methods: {
 
+		getMpStaticUrl (uri: string){
+			const temp = uri + ".jpg"
+			return mpStaticURL(temp)
+		},
+
+
 		async fetchCategoryTree() {
 			this.loading = true;
 			try {
-				const res = await getCategoryTree({categoryPID: 0});
+				const res = await getCategoryTree({categoryPId: 0});
 				this.categoryTree = res.tree;
 				this.categoryTree.forEach(item => {
 					if (item.pId == 0) {
