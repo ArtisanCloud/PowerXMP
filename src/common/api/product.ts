@@ -7,11 +7,11 @@ import type {
 	ListProductPageRequest
 } from "@/common/model/product";
 
-export const UriProductApi = 'mp/product/'
+export const UriMPProduct = 'mp/product/'
 
 
 export const getProductList = (data: ListProductPageRequest): Promise<ListProductPageReply> => {
-	const url = restURL(UriProductApi + "products/page-list");
+	const url = restURL(UriMPProduct + "products/page-list");
 
 	return $http<ListProductPageReply>({
 		url: url,
@@ -24,7 +24,7 @@ export const getProductList = (data: ListProductPageRequest): Promise<ListProduc
 
 
 export const getProduct = (data: GetProductRequest): Promise<GetProductReply> => {
-	const url = restURL(UriProductApi + 'products/' + data.id);
+	const url = restURL(UriMPProduct + 'products/' + data.id);
 
 	return $http<GetProductReply>({
 		url: url,

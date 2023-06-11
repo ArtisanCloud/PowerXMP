@@ -24,7 +24,7 @@ export const restURL = (uri: string): string => {
 }
 
 export const staticURL = (uri: string): string => {
-	return APIHost + '/resource/static/' + uri
+	return APIHost + '/resource/static/mp' + uri
 }
 
 export const mpStaticURL = (uri: string): string => {
