@@ -2,7 +2,7 @@ import type {ListMediasPageReply, ListMediasPageRequest} from "@/common/model/me
 import {APIMethodGet, restURL} from "@/common/api/index";
 import {$http} from "@/common/api/http";
 
-const UriMPMarket =  'mp/market/'
+export const UriMPMarket =  'mp/market/'
 
 export const MediaTypeProductShowcase = '_product_showcase'; // 产品展示
 export const MediaTypeTutorialDemo = '_tutorial_demo'; // 教程和演示

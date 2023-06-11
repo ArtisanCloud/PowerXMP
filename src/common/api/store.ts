@@ -1,11 +1,11 @@
 import {$http} from "@/common/api/http";
 import {APIMethodGet, restURL} from "@/common/api/index";
 import type {ListStoreReply, ListStoreRequest, Store} from "@/common/model/store";
+import {UriMPMarket} from "@/common/api/media";
 
-export const UriMPProduct = 'mp/product/'
 
 export const getStoreList = (data: ListStoreRequest): Promise<ListStoreReply> => {
-	const url = restURL(UriMPProduct + "stores/page-list");
+	const url = restURL(UriMPMarket + "stores/page-list");
 
 	return $http<ListStoreReply>({
 		url: url,

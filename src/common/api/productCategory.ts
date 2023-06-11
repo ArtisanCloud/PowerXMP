@@ -6,11 +6,11 @@ import type {
 	GetCategoryTreeReply,
 	GetCategoryTreeRequest
 } from "@/common/model/productCategory";
-import {UriProductApi} from "@/common/api/product";
+import {UriMPProduct} from "@/common/api/product";
 
 
 export const getCategoryTree = (data: GetCategoryTreeRequest): Promise<GetCategoryTreeReply> => {
-	const url = restURL(UriProductApi + "product-category-tree");
+	const url = restURL(UriMPProduct + "product-category-tree");
 
 	return $http<GetCategoryTreeReply>({
 		url: url,
@@ -23,7 +23,7 @@ export const getCategoryTree = (data: GetCategoryTreeRequest): Promise<GetCatego
 
 
 export const getCategoryList = (data: GetCategoryListRequest): Promise<GetCategoryListReply> => {
-	const url = restURL(UriProductApi + "product-categories");
+	const url = restURL(UriMPProduct + "product-categories");
 
 	return $http<GetCategoryListReply>({
 		url: url,
