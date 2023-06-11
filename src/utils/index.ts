@@ -80,7 +80,7 @@ export function Alert(e:any) {
 			}
 		});
 	} else {
-		ShowToast('提示信息为空 alert', "");
+		ShowToast(e, "");
 	}
 }
 

@@ -1,8 +1,9 @@
 import Mock from "mockjs";
 import {$getList} from "@/common/mock/mock";
 import {MediaType} from "@/common/model/constant";
+import type {GetShowcaseListRequest, Media} from "@/common/model/media";
 
-let List: API.Media[] = []
+let List: Media[] = []
 
 for (let i = 0; i < 50; i++) {
 	let newObject: any = {}
@@ -28,7 +29,7 @@ function mockCreateShowcase(id: number) {
 }
 
 
-export const getShowcaseList = async (data: API.RequestGetShowcaseList) => {
+export const getShowcaseList = async (data: GetShowcaseListRequest) => {
 	return $getList(data, List)
 }
 

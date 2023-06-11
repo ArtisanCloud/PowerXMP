@@ -3,19 +3,38 @@ import * as work from './work'
 import * as showcase from './showcase'
 import * as brandStory from './brandStory'
 
-const API_HOST = import.meta.env.VITE_API_HOST
-const API_URI_VERSION = import.meta.env.VITE_API_VERSION
+// export const PathHomePage = '/pages/index/index'
+export const PathHomePage = '/pages/index-mall/index-mall'
+
+const APIHost = import.meta.env.VITE_APIHost
+const APIURIVersion = import.meta.env.VITE_API_VERSION
+
+export const DefaultPageSize = 10;
+export const MaxPageSize = 99;
 
 export const
-	API_METHOD_POST = 'POST',
-	API_METHOD_GET = 'GET',
-	API_METHOD_PUT = 'PUT',
-	API_METHOD_DELETE = 'DELETE'
+	APIMethodPost = 'POST',
+	APIMethodGet = 'GET',
+	APIMethodPut = 'PUT',
+	APIMethodDelete = 'DELETE'
 
 
 export const restURL = (uri: string): string => {
-	return API_HOST + '/' + API_URI_VERSION + '/' + uri
+	return APIHost + '/' + APIURIVersion + '/' + uri
 }
+
+export const staticURL = (uri: string): string => {
+	return APIHost + '/resource/static/' + uri
+}
+
+export const mpStaticURL = (uri: string): string => {
+	if (uri==undefined){
+		return ""
+	}
+	return '/static/images/temp/' + uri
+}
+
+
 
 export default {
 	user,

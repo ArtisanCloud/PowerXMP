@@ -1,4 +1,4 @@
-const CACHE_SYSTEM_INFO_KEY = 'cache_shop_system_info_key'
+const CacheSystemInfoKey = 'cache_shop_system_info_key'
 
 
 
@@ -8,7 +8,7 @@ const CACHE_SYSTEM_INFO_KEY = 'cache_shop_system_info_key'
  */
 export function SetDeviceSystemInfo(): any {
 	const system_info = uni.getSystemInfoSync();
-	uni.setStorageSync(CACHE_SYSTEM_INFO_KEY, system_info);
+	uni.setStorageSync(CacheSystemInfoKey, system_info);
 	return system_info;
 }
 
@@ -21,7 +21,7 @@ export function GetDeviceSystemInfo(key: string, dv: any, is_real: boolean): any
 	if (is_real) {
 		info = SetDeviceSystemInfo() || null;
 	} else {
-		info = uni.getStorageSync(CACHE_SYSTEM_INFO_KEY) || null;
+		info = uni.getStorageSync(CacheSystemInfoKey) || null;
 	}
 	if (info == null || (key || null) == null) {
 		return info;

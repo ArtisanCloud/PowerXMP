@@ -1,8 +1,9 @@
 import Mock from "mockjs";
 import {$getList} from "@/common/mock/mock";
 import {MediaType} from "@/common/model/constant";
+import type {GetProductCategoryListRequest, ProductCategory} from "@/common/model/productCategory";
 
-let List: API.ProductCategory[] = []
+let List: ProductCategory[] = []
 
 for (let i = 0; i < 10; i++) {
 	let newObject: any = {}
@@ -28,7 +29,7 @@ function mockCreateProductCategory(id: number) {
 }
 
 
-export const getProductCategoryList = async (data: API.RequestGetProductCategoryList) => {
+export const getProductCategoryList = async (data: GetProductCategoryListRequest) => {
 	return $getList(data, List)
 }
 
