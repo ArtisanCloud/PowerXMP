@@ -42,14 +42,14 @@ import {MediaType} from "@/common/model/constant";
 export default {
   name: "px-work",
   props: {
-    workList: Array<API.Media>
+    workList: Array<Media>
   },
   data() {
     return {}
   },
   methods: {
 
-    showDetail(item: API.Media) {
+    showDetail(item: Media) {
 
       // console.log(item.title)
       if (item.type == MediaType.threeDWork) {

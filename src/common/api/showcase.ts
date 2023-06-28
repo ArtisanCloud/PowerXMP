@@ -1,3 +1,5 @@
-export const getShowcaseList = async (data: API.RequestGetShowcaseList) => {
+import type {GetShowcaseListRequest} from "@/common/model/media";
+
+export const getShowcaseList = async (data: GetShowcaseListRequest) => {
 	return []
 }

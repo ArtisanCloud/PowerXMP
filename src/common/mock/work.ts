@@ -1,9 +1,10 @@
 import Mock from "mockjs";
 import {$getList} from "@/common/mock/mock";
 import {MediaType} from "@/common/model/constant";
+import type {GetPanoWorkListRequest, GetThreeDWorkListRequest, Media} from "@/common/model/media";
 
 
-let List: API.Media[] = []
+let List: Media[] = []
 
 for (let i = 0; i < 50; i++) {
 	let newObject: any = {}
@@ -73,7 +74,11 @@ function mockCreate3DWork(id: number) {
 }
 
 
-export const getWorkList = async (data: API.RequestGetWorkList) => {
+export const getVRWorkList = async (data: GetPanoWorkListRequest) => {
+	return $getList(data, List)
+}
+
+export const getThreeWorkList = async (data: GetThreeDWorkListRequest) => {
 	return $getList(data, List)
 }
 

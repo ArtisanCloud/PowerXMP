@@ -38,7 +38,7 @@
 export default {
   name: "px-showcase",
   props: {
-    showcaseList: Array<API.Showcase>
+    showcaseList: Array<Showcase>
   },
   data() {
     return {}
