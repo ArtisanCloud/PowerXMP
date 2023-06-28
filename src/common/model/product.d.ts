@@ -24,10 +24,18 @@ export interface SpecificOption extends Model {
 }
 
 
-export interface PriceEntry extends Model {
-	unitPrice: number
-	listPrice: number
-	discount: number
+export interface PriceBookEntry extends Model, ProductAttribute {
+	priceBookId: number;
+	productId: number;
+	skuId?: number;
+	unitPrice: number;
+	listPrice?: number;
+	isActive: boolean;
+	// extend
+	productName?: string;
+	spu?: string;
+	skuNo?: string;
+	skuEntries?: PriceBookEntry[];
 }
 
 export interface SKU extends Model {
@@ -52,7 +60,7 @@ export interface Product extends Model, ProductAttribute {
 	// saleEndDate: Date,
 	productSpecifics: ProductSpecific[],
 	skus: SKU[],
-	priceEntry: PriceEntry,
+	activePriceBookEntry: PriceBookEntry,
 	viewedCount: number
 }
 
@@ -106,15 +114,15 @@ export interface GetProductDetailRequest extends GetDetailByIDRequest {
 }
 
 // --- Response Models ---
-export interface GetProductListResponse extends APIResponse, PaginationResponse {
+export interface GetProductListResponse extends PaginationResponse {
 	data: Product[];
 }
 
-export interface GetGoodsListResponse extends APIResponse, PaginationResponse {
+export interface GetGoodsListResponse extends PaginationResponse {
 	data: Goods[];
 }
 
-export interface GetServiceListResponse extends APIResponse, PaginationResponse {
+export interface GetServiceListResponse extends PaginationResponse {
 	data: Service[];
 }
 

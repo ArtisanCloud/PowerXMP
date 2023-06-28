@@ -144,7 +144,7 @@
 					>
 						<image :src="product.coverImages[0].url" mode="aspectFill"></image>
 						<text class="title clamp">{{ product.name }}</text>
-						<text class="price">￥{{ product.priceEntry.unitPrice }}</text>
+						<text class="price">￥{{ product.activePriceBookEntry.unitPrice }}</text>
 					</view>
 					<view class="more">
 						<text>查看全部</text>

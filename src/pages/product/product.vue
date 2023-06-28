@@ -18,9 +18,9 @@
 			<text class="title">{{ product.name }}</text>
 			<view class="price-box">
 				<text class="price-tip">¥</text>
-				<text class="price">{{ product.priceEntry?.unitPrice }}</text>
-				<text class="m-price">¥{{ product.priceEntry?.listPrice }}</text>
-				<text class="coupon-tip">{{ product.priceEntry?.discount }}折</text>
+				<text class="price">{{ product.activePriceBookEntry?.unitPrice }}</text>
+				<text class="m-price">¥{{ product.activePriceBookEntry?.listPrice }}</text>
+				<text class="coupon-tip">{{ product.activePriceBookEntry?.discount }}折</text>
 			</view>
 			<view class="bot-row">
 				<text>销量: {{ product.soldAmount }}</text>
@@ -365,9 +365,9 @@ export default defineComponent({
 			let requestItem: AddToCartRequest = {
 				productId: this.product.id!,
 				productName: this.product.name,
-				listPrice: this.product.priceEntry.listPrice,
-				unitPrice: this.product.priceEntry.unitPrice,
-				discount: this.product.priceEntry.discount,
+				listPrice: this.product.activePriceBookEntry.listPrice,
+				unitPrice: this.product.activePriceBookEntry.unitPrice,
+				discount: this.product.activePriceBookEntry.discount,
 				quantity: 1,
 				imageUrl: this.product.coverImages[0].url,
 			}
