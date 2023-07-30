@@ -5,7 +5,7 @@
 				<swiper-item class="swiper-item" v-for="(cover,index) in product.coverImages" :key="index">
 					<view class="image-wrapper">
 						<image
-							:src="cover.url"
+							:src="getOssUrl(cover)"
 							class="image-loaded loaded"
 							mode="aspectFill"
 						></image>
@@ -189,6 +189,8 @@ import type {AddToCartRequest} from "@/common/model/cart";
 import {addToCart} from "@/common/api/cart";
 import {ShowToast} from "@/utils";
 import {CreateMethodByProducts} from "@/common/api/order";
+import {ossURL, staticURL} from "@/common/api";
+import type {MediaResource} from "@/common/model/mediaResource";
 
 
 export default defineComponent({
@@ -258,7 +260,7 @@ export default defineComponent({
 				return {
 					name: "img",
 					attrs: {
-						src: image.url,
+						src: this.getOssUrl(image) ,
 						style: "width:100%;display:block;"
 					}
 				};
@@ -274,6 +276,17 @@ export default defineComponent({
 	},
 
 	methods: {
+
+		// Function to get OSS URL
+		getOssUrl(resource:MediaResource) {
+			if (resource){
+				if (resource.isLocalStored){
+					return staticURL(resource.url)
+				}
+				return ossURL(resource.url)
+			}
+		},
+
 		//规格弹窗开关
 		toggleSpec() {
 			if (this.specClass === 'show') {
