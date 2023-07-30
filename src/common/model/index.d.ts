@@ -22,6 +22,8 @@ export interface GetDetailByIDRequest {
 
 
 // --- Response Models ---
+export interface APIResponse extends ResponseErr{
+}
 
 export interface Meta {
 	locale?: string;
@@ -32,7 +34,7 @@ export interface Meta {
 	timezone?: string;
 }
 
-export interface PaginationResponse<T> {
+export interface PaginationResponse<T> extends APIResponse{
 	list: T[];
 	pageIndex: number;
 	pageSize: number;
@@ -40,8 +42,8 @@ export interface PaginationResponse<T> {
 }
 
 export interface ResponseErr {
-	reason: string,
-	msg: string
+	reason?: string,
+	msg?: string
 }
 
 export interface Token {

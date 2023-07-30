@@ -23,11 +23,11 @@
 				@click="navToDetailPage(item)"
 			>
 				<view class="image-wrapper">
-					<image :src="item.coverImages[0]?.url" mode="aspectFill"></image>
+					<image :src="getOssUrl(item.coverImages[0])" mode="aspectFill"></image>
 				</view>
 				<text class="title clamp">{{ item.name }}</text>
 				<view class="price-box">
-					<text class="price">{{ item.priceEntry.unitPrice }}</text>
+					<text class="price">{{ item.activePriceBookEntry.unitPrice }}</text>
 					<text>已售 {{ item.soldAmount }}</text>
 				</view>
 			</view>
@@ -63,7 +63,8 @@ import {getCategoryTree} from "@/common/api/productCategory";
 import type {ProductCategory} from "@/common/model/productCategory";
 import type {Product} from "@/common/model/product";
 import {getProductList} from "@/common/api/product";
-import {DefaultPageSize} from "@/common/api";
+import {DefaultPageSize, ossURL, staticURL} from "@/common/api";
+import type {MediaResource} from "@/common/model/mediaResource";
 
 export default defineComponent({
 
@@ -121,6 +122,17 @@ export default defineComponent({
 		this.loadData('add', false);
 	},
 	methods: {
+
+		// Function to get OSS URL
+		getOssUrl(resource: MediaResource) {
+			if (resource){
+				if (resource.isLocalStored){
+					return staticURL(resource.url)
+				}
+				return ossURL(resource.url)
+			}
+		},
+
 		//加载分类
 		async loadCateList(fId: number, sId: number) {
 
