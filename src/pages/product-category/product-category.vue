@@ -19,7 +19,7 @@
 						<view @click="navToList(item.id, tItem.id)"
 									v-if="tItem?.pId === item.id"
 									class="t-item">
-							<image :src="tItem.coverImage?.url"></image>
+							<image :src="getOssUrl(tItem.coverImage)"></image>
 							<text>{{ tItem.name }}</text>
 						</view>
 					</block>
@@ -34,7 +34,8 @@
 import {defineComponent} from 'vue';
 import {getCategoryTree} from "@/common/api/productCategory";
 import type {ProductCategory} from "@/common/model/productCategory";
-import {mpStaticURL} from "@/common/api";
+import {mpStaticURL, ossURL, staticURL} from "@/common/api";
+import type {MediaResource} from "@/common/model/mediaResource";
 
 
 
@@ -80,6 +81,14 @@ export default defineComponent({
 			return mpStaticURL(temp)
 		},
 
+		getOssUrl(resource: MediaResource){
+			if (resource){
+				if (resource.isLocalStored){
+					return staticURL(resource.url)
+				}
+				return ossURL(resource.url)
+			}
+		},
 
 		async fetchCategoryTree() {
 			this.loading = true;

@@ -2,7 +2,8 @@
 	<view class="container">
 
 		<view class="user-section">
-			<image class="bg" src="/static/images/user-bg.png"></image>
+			<image class="bg" :src="getOssUrl(carouselList[0]?.coverImage.url)"></image>
+			<!--			<image class="bg" src="http://localhost:9001/bucket.product/citrus-fruits-350X700.png"></image>-->
 			<view class="user-info-box">
 				<view class="portrait-box">
 					<image class="portrait" src="/static/images/logo-accessory-me.png"></image>
@@ -18,7 +19,7 @@
 				</view>
 				<view class="tit">
 					<text class="yticon icon-iLinkapp-"></text>
-					小裂匠会员
+					LBEE Club会员
 				</view>
 				<text class="e-m">Artisan Cloud</text>
 				<text class="e-b">开通会员</text>
@@ -100,108 +101,107 @@
 
 	</view>
 </template>
-<script lang="ts">
 
-import {defineComponent} from "vue";
+<script lang='ts' setup>
+import {ref} from 'vue';
 import {GetUserInfo, IsLogin} from "@/utils/auth";
+import {getMediasPageList, MediaTypeBrandStory} from "@/common/api/media";
+import {MaxPageSize, ossURL, staticURL} from "@/common/api";
+import useOptionsStore from "@/store/modules/data-dictionary";
+import type {Media} from "@/common/model/media";
+import type {MediaResource} from "@/common/model/mediaResource";
 
-let startY = 0, moveY = 0, pageAtTop = true;
-export default defineComponent({
+let coverTransform = ref('translateY(0px)');
+let coverTransition = ref('0s');
+let moving = ref(false);
+let carouselList = ref([] as Media[]);
+const startY = ref(0); // 添加 startY 的声明
+const moveY = ref(0); // 添加 moveY 的声明
+const pageAtTop = ref(true); // 添加 pageAtTop 的声明
 
-	data() {
-		return {
-			coverTransform: 'translateY(0px)',
-			coverTransition: '0s',
-			moving: false,
+
+const userInfo = GetUserInfo();
+
+function getOssUrl(resource: MediaResource) {
+	if (resource){
+		if (resource.isLocalStored){
+			return staticURL(resource.url)
 		}
-	},
-	onLoad() {
-
-
-	},
-	// #ifndef MP
-	onNavigationBarButtonTap(e) {
-		const index = e.index;
-		if (index === 0) {
-			this.navTo('/pages/setting/setting');
-		} else if (index === 1) {
-			// #ifdef APP-PLUS
-			const pages = getCurrentPages();
-			const page = pages[pages.length - 1];
-			const currentWebview = page.$getAppWebview();
-			currentWebview.hideTitleNViewButtonRedDot({
-				index
-			});
-			// #endif
-			uni.navigateTo({
-				url: '/pages/notice/notice'
-			})
-		}
-	},
-	// #endif
-	computed: {
-		userInfo() {
-			return GetUserInfo();
-		}
-	},
-	methods: {
-
-		/**
-		 * 统一跳转接口,拦截未登录路由
-		 * navigator标签现在默认没有转场动画，所以用view
-		 */
-		navTo(url:string) {
-			console.log(url)
-			if (!IsLogin()) {
-				url = '/pages/login/login';
-			}
-			uni.navigateTo({
-				url
-			})
-		},
-
-		/**
-		 *  会员卡下拉和回弹
-		 *  1.关闭bounce避免ios端下拉冲突
-		 *  2.由于touchmove事件的缺陷（以前做小程序就遇到，比如20跳到40，h5反而好很多），下拉的时候会有掉帧的感觉
-		 *    transition设置0.1秒延迟，让css来过渡这段空窗期
-		 *  3.回弹效果可修改曲线值来调整效果，推荐一个好用的bezier生成工具 http://cubic-bezier.com/
-		 */
-		coverTouchstart(e) {
-			if (pageAtTop === false) {
-				return;
-			}
-			this.coverTransition = 'transform .1s linear';
-			startY = e.touches[0].clientY;
-		},
-		coverTouchmove(e) {
-			moveY = e.touches[0].clientY;
-			let moveDistance = moveY - startY;
-			if (moveDistance < 0) {
-				this.moving = false;
-				return;
-			}
-			this.moving = true;
-			if (moveDistance >= 80 && moveDistance < 100) {
-				moveDistance = 80;
-			}
-
-			if (moveDistance > 0 && moveDistance <= 80) {
-				this.coverTransform = `translateY(${moveDistance}px)`;
-			}
-		},
-		coverTouchend() {
-			if (this.moving === false) {
-				return;
-			}
-			this.moving = false;
-			this.coverTransition = 'transform 0.3s cubic-bezier(.21,1.93,.53,.64)';
-			this.coverTransform = 'translateY(0px)';
-		}
+		return ossURL(resource.url)
 	}
-})
+}
 
+async function loadData() {
+	const optionsStore = useOptionsStore();
+	if (!optionsStore.isSetup()) {
+		await optionsStore.fetchAllOptions();
+	}
+	const mediaTypeBrandStory = optionsStore.GetOptionByKey(
+		optionsStore.mediaTypes,
+		MediaTypeBrandStory
+	);
+	if (!mediaTypeBrandStory) {
+		console.error("system data mediaType err loaded");
+		return;
+	}
+
+	const list = await getMediasPageList({
+		pageIndex: 0,
+		pageSize: MaxPageSize,
+		mediaTypes: [mediaTypeBrandStory?.id || 0],
+	});
+	carouselList.value = list.list;
+	// console.log(carouselList.value)
+}
+
+function navTo(url: string) {
+	console.log(url);
+	if (!IsLogin()) {
+		url = '/pages/login/login';
+	}
+	uni.navigateTo({
+		url,
+	});
+}
+
+function coverTouchstart(e: any) {
+	if (pageAtTop.value === false) {
+		return;
+	}
+	coverTransition.value = 'transform .1s linear';
+	startY.value = e.touches[0].clientY;
+}
+
+function coverTouchmove(e: any) {
+	moveY.value = e.touches[0].clientY;
+	let moveDistance = moveY.value - startY.value;
+	if (moveDistance < 0) {
+		moving.value = false;
+		return;
+	}
+	moving.value = true;
+	if (moveDistance >= 80 && moveDistance < 100) {
+		moveDistance = 80;
+	}
+
+	if (moveDistance > 0 && moveDistance <= 80) {
+		coverTransform.value = `translateY(${moveDistance}px)`;
+	}
+}
+
+function coverTouchend() {
+	if (moving.value === false) {
+		return;
+	}
+	moving.value = false;
+	coverTransition.value = 'transform 0.3s cubic-bezier(.21,1.93,.53,.64)';
+	coverTransform.value = 'translateY(0px)';
+}
+
+// 初始化加载数据
+loadData();
 </script>
+
 <style lang='scss'>
 @import "./me-mall";
 </style>

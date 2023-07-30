@@ -15,8 +15,8 @@
 			<view class="titleNview-background" :style="{backgroundColor:titleNViewBackground}"></view>
 			<swiper class="carousel" circular @change="swiperChange">
 				<swiper-item v-for="(item, index) in carouselList" :key="index" class="carousel-item"
-										 @click="navToDetailPage({title: '轮播广告'})">
-					<image :src="item.coverImage.url"/>
+										 @click="navToDetailPage({id:1,title: '轮播广告'})">
+					<image :src="getOssUrl(item.coverImage)"/>
 				</swiper-item>
 			</swiper>
 			<!-- 自定义swiper指示器 -->
@@ -29,13 +29,14 @@
 		<!-- 分类 -->
 		<view class="cate-section">
 			<view class="cate-item" v-for="(item,index) in this.categoryList" :key="item.id">
-				<image :src="item.coverImage?.url"></image>
+				<image :src="getOssUrl(item.coverImage)"></image>
 				<text>{{ item.name }}</text>
 			</view>
 		</view>
 
 		<view class="ad-1">
-			<image :src="getStaticUrl('shop/ad1.jpg')" mode="scaleToFill"></image>
+<!--			<image :src="getStaticUrl('shop/ad1.png')" mode="scaleToFill"></image>-->
+			<image :src="getStaticUrl('shop/ad1.png')" mode="aspectFit"></image>
 		</view>
 
 		<!-- 秒杀楼层 -->
@@ -132,8 +133,8 @@
 		<view class="hot-floor" v-for="(item, index) in this.recommendCategoryList" :key="index">
 			<view class="floor-img-box">
 				<image class="floor-img"
-							 :src="item.imageURL"
-							 mode="scaleToFill"></image>
+							 :src="getOssUrl(item.coverImage)"
+							 mode="aspectFill"></image>
 			</view>
 			<scroll-view class="floor-list" scroll-x>
 				<view class="scoll-wrapper">
@@ -142,7 +143,7 @@
 						class="floor-item"
 						@click="navToDetailPage(product)"
 					>
-						<image :src="product.coverImages[0].url" mode="aspectFill"></image>
+						<image :src="getOssUrl(product.coverImages[0])" mode="aspectFill"></image>
 						<text class="title clamp">{{ product.name }}</text>
 						<text class="price">￥{{ product.activePriceBookEntry.unitPrice }}</text>
 					</view>
@@ -186,12 +187,14 @@
 
 import {defineComponent} from "vue";
 import {getMediasPageList, MediaTypeBrandStory} from "@/common/api/media";
-import {MaxPageSize, staticURL} from "@/common/api";
+import {MaxPageSize, ossURL, staticURL} from "@/common/api";
 import type {Media} from "@/common/model/media";
 import type {ProductCategory} from "@/common/model/productCategory";
 import {getCategoryList} from "@/common/api/productCategory";
 import {getProductList} from "@/common/api/product";
 import useOptionsStore from "@/store/modules/data-dictionary";
+import type {MediaResource} from "@/common/model/mediaResource";
+import type {Product} from "@/common/model/product";
 
 export default defineComponent({
 
@@ -251,7 +254,6 @@ export default defineComponent({
 				limit: 1,
 			})
 			this.recommendCategoryList = resRecommend.list
-			// console.log(this.recommendCategoryList)
 
 			this.recommendCategoryList.forEach(async (item: ProductCategory) => {
 				const result = await getProductList({
@@ -262,11 +264,20 @@ export default defineComponent({
 				item.productList = result.list
 
 			})
-			console.log(this.recommendCategoryLis)
+			// console.log(this.recommendCategoryList)
 		},
 
 		getStaticUrl(uri: string) {
-			return staticURL(uri)
+			return staticURL("/resource/static/"+uri)
+		},
+
+		getOssUrl(resource: MediaResource){
+			if (resource){
+				if (resource.isLocalStored){
+					return staticURL(resource.url)
+				}
+				return ossURL(resource.url)
+			}
 		},
 
 
@@ -277,9 +288,9 @@ export default defineComponent({
 			this.titleNViewBackground = this.carouselList[index].background;
 		},
 		//详情页
-		navToDetailPage(item) {
+		navToDetailPage(item: Product) {
 			//测试数据没有写id，用title代替
-			let id = item.title;
+			let id = item.id;
 			uni.navigateTo({
 				url: `/pages/product/product?id=${id}`
 			})
