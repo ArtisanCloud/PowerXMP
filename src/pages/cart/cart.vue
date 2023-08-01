@@ -23,7 +23,7 @@
 						:class="{'b-b': index!==cartItemList.length-1}"
 					>
 						<view class="image-wrapper">
-							<image :src="item.imageUrl"
+							<image :src="getOssUrl(item.imageUrl)"
 										 :class="['loaded']"
 										 mode="aspectFill"
 										 lazy-load
@@ -88,9 +88,10 @@ import {IsLogin} from "@/utils/auth";
 import {defineComponent} from "vue";
 import {clearCartItems, getCartItemsPageList, removeCartItem, updateCartItemQuantity} from "@/common/api/cart";
 import type {CartItem} from "@/common/model/cart";
-import {MaxPageSize} from "@/common/api";
+import {MaxPageSize, ossURL, staticURL} from "@/common/api";
 import {ShowToast} from "@/utils";
 import {CreateMethodByCartItems} from "@/common/api/order";
+import {MediaResource} from "@/common/model/mediaResource";
 
 export default defineComponent({
 	components: {
@@ -126,6 +127,11 @@ export default defineComponent({
 		}
 	},
 	methods: {
+
+		getOssUrl(url:string) {
+			return ossURL(url)
+		},
+
 		//请求数据
 		async loadData() {
 			let page = await getCartItemsPageList({pageSize: MaxPageSize});
@@ -145,7 +151,7 @@ export default defineComponent({
 		//监听image加载失败
 		onImageError(index: number) {
 			// console.log("load err:",index)
-			this.cartItemList[index].imageUrl = '/static/images/errorImage.jpg';
+			this.cartItemList[index].imageUrl = './static/images/errorImage.jpg';
 		},
 
 		navToLogin() {

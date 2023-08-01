@@ -49,7 +49,7 @@
 							class="goods-box-single"
 							v-for="(goodsItem, goodsIndex) in item.orderItems" :key="goodsIndex"
 						>
-							<image class="goods-img" :src="goodsItem?.coverUrl" mode="aspectFill"></image>
+							<image class="goods-img" :src="getOssUrl(goodsItem?.coverImage)" mode="aspectFill"></image>
 							<view class="right">
 								<text class="title clamp">{{ goodsItem.productName }}</text>
 								<text class="attr-box">{{ goodsItem.skuNo }} x {{ goodsItem.quantity }}</text>
@@ -99,10 +99,11 @@ import {
 	OrderStatusToBePaid, OrderStatusToBeShipped
 } from "@/common/api/order";
 import type {ListOrdersPageRequest, Order} from "@/common/model/order";
-import {DefaultPageSize} from "@/common/api";
+import {DefaultPageSize, ossURL, staticURL} from "@/common/api";
 import {Alert, ShowToast} from "@/utils";
 import useOptionsStore from "@/store/modules/data-dictionary";
 import type {DictionaryItem} from "@/common/model/dictionary";
+import {MediaResource} from "@/common/model/mediaResource";
 
 export default defineComponent({
 	components: {
@@ -112,12 +113,12 @@ export default defineComponent({
 
 	data() {
 		const optionsStore = useOptionsStore();
-		const orderStatusToBePaidId = optionsStore.GetOptionByKey(optionsStore.orderStatus,OrderStatusToBePaid)?.id
-		const orderStatusShippingId = optionsStore.GetOptionByKey(optionsStore.orderStatus,OrderStatusShipping)?.id
-		const orderStatusDeliveredId = optionsStore.GetOptionByKey(optionsStore.orderStatus,OrderStatusDelivered)?.id
-		const orderStatusRefundingId = optionsStore.GetOptionByKey(optionsStore.orderStatus,OrderStatusRefunding)?.id
-		const orderStatusRefundedId = optionsStore.GetOptionByKey(optionsStore.orderStatus,OrderStatusRefunded)?.id
-		const orderStatusReturnedId = optionsStore.GetOptionByKey(optionsStore.orderStatus,OrderStatusReturned)?.id
+		const orderStatusToBePaidId = optionsStore.GetOptionByKey(optionsStore.orderStatus, OrderStatusToBePaid)?.id
+		const orderStatusShippingId = optionsStore.GetOptionByKey(optionsStore.orderStatus, OrderStatusShipping)?.id
+		const orderStatusDeliveredId = optionsStore.GetOptionByKey(optionsStore.orderStatus, OrderStatusDelivered)?.id
+		const orderStatusRefundingId = optionsStore.GetOptionByKey(optionsStore.orderStatus, OrderStatusRefunding)?.id
+		const orderStatusRefundedId = optionsStore.GetOptionByKey(optionsStore.orderStatus, OrderStatusRefunded)?.id
+		const orderStatusReturnedId = optionsStore.GetOptionByKey(optionsStore.orderStatus, OrderStatusReturned)?.id
 
 		return {
 			tabCurrentIndex: 0,
@@ -205,6 +206,15 @@ export default defineComponent({
 
 	methods: {
 
+		getOssUrl(resource: MediaResource) {
+			if (resource) {
+				if (resource.isLocalStored) {
+					return staticURL(resource.url)
+				}
+				return ossURL(resource.url)
+			}
+		},
+
 		reloadData() {
 			this.navList.forEach(navItem => {
 				navItem.orderList = []
@@ -248,7 +258,7 @@ export default defineComponent({
 					pageSize: navItem.pagination.pageSize,
 				}
 				if (!state.includes(-1)) {
-					req.orderStatus =  state
+					req.orderStatus = state
 				}
 				const result = await getOrdersPageList(req)
 
@@ -323,18 +333,25 @@ export default defineComponent({
 		},
 		//取消订单
 		doCancelOrder(item: Order) {
-
 			uni.showLoading({
 				title: '请稍后'
-			})
+			});
+
 			setTimeout(async () => {
-				const result = await cancelOrder({orderId: item.id!})
-				if (result.orderId) {
-					Alert("取消订单成功")
-					this.reloadData()
+				try {
+					const result = await cancelOrder({orderId: item.id!});
+					if (result.orderId) {
+						Alert("取消订单成功");
+						this.reloadData();
+					}
+				} catch (error) {
+					// Handle the error here
+					console.error("Error while canceling order:", error);
+					Alert("取消订单失败，请重试");
+				} finally {
+					uni.hideLoading();
 				}
-				uni.hideLoading();
-			}, 600)
+			}, 600);
 		},
 
 		toPayOrder(item: Order) {
