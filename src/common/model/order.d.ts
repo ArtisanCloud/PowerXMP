@@ -1,8 +1,9 @@
 import {Model, PaginationRequest, PaginationResponse} from "@/common/model/index";
 import type {Payment} from "@/common/model/payment";
+import type {MediaSet} from "@/common/model/mediaResource";
 
 
-export interface OrderItem extends Model {
+export interface OrderItem extends Model,MediaSet {
 	orderId: number
 	priceBookEntryId: number
 	customerId: number
@@ -12,7 +13,6 @@ export interface OrderItem extends Model {
 	unitPrice: number
 	listPrice: number
 	discount: number
-	coverUrl:string
 	productName:string
 	skuNo: string
 }
