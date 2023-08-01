@@ -103,7 +103,7 @@ import {DefaultPageSize, ossURL, staticURL} from "@/common/api";
 import {Alert, ShowToast} from "@/utils";
 import useOptionsStore from "@/store/modules/data-dictionary";
 import type {DictionaryItem} from "@/common/model/dictionary";
-import {MediaResource} from "@/common/model/mediaResource";
+import type {MediaResource} from "@/common/model/mediaResource";
 
 export default defineComponent({
 	components: {
