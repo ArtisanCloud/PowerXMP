@@ -41,7 +41,7 @@
 								v-for="(goodsItem, goodsIndex) in item.orderItems" :key="goodsIndex"
 								class="goods-item"
 							>
-								<image class="goods-img" :src="goodsItem?.coverUrl" mode="aspectFill"></image>
+								<image class="goods-img" :src="getOssUrl(goodsItem?.coverImage)" mode="aspectFill"></image>
 							</view>
 						</scroll-view>
 						<view
