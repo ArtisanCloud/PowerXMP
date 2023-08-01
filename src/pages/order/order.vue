@@ -41,7 +41,7 @@
 								v-for="(goodsItem, goodsIndex) in item.orderItems" :key="goodsIndex"
 								class="goods-item"
 							>
-								<image class="goods-img" :src="goodsItem?.coverUrl" mode="aspectFill"></image>
+								<image class="goods-img" :src="getOssUrl(goodsItem?.coverImage)" mode="aspectFill"></image>
 							</view>
 						</scroll-view>
 						<view
@@ -103,7 +103,7 @@ import {DefaultPageSize, ossURL, staticURL} from "@/common/api";
 import {Alert, ShowToast} from "@/utils";
 import useOptionsStore from "@/store/modules/data-dictionary";
 import type {DictionaryItem} from "@/common/model/dictionary";
-import {MediaResource} from "@/common/model/mediaResource";
+import type {MediaResource} from "@/common/model/mediaResource";
 
 export default defineComponent({
 	components: {

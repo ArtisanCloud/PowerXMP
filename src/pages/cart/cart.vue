@@ -91,7 +91,6 @@ import type {CartItem} from "@/common/model/cart";
 import {MaxPageSize, ossURL, staticURL} from "@/common/api";
 import {ShowToast} from "@/utils";
 import {CreateMethodByCartItems} from "@/common/api/order";
-import {MediaResource} from "@/common/model/mediaResource";
 
 export default defineComponent({
 	components: {
