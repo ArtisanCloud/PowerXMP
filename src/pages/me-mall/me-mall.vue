@@ -2,14 +2,14 @@
 	<view class="container">
 
 		<view class="user-section">
-			<image class="bg" :src="getOssUrl(carouselList[0]?.coverImage.url)"></image>
+			<image class="bg" :src="getOssUrl(carouselList[1]?.coverImage)"></image>
 			<!--			<image class="bg" src="http://localhost:9001/bucket.product/citrus-fruits-350X700.png"></image>-->
 			<view class="user-info-box">
 				<view class="portrait-box">
-					<image class="portrait" src="/static/images/logo-accessory-me.png"></image>
+					<image class="portrait" src="/static/images/logo.png"></image>
 				</view>
 				<view class="info-box">
-					<text class="username">{{ userInfo?.nickname || '游客' }}</text>
+					<text class="username">{{ userInfo?.nickname || 'PowerX' }}</text>
 				</view>
 			</view>
 			<view class="vip-card-box">
