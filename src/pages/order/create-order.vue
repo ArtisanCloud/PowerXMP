@@ -27,7 +27,7 @@
 			<!-- 商品列表 -->
 			<view class="g-item" v-for="(item,index) in productItemList" :key="index">
 				<image
-					:src="item.imageUrl"></image>
+					:src="getOssUrl(item)"></image>
 				<view class="right">
 					<text class="title clamp">{{ item.productName }}</text>
 					<text class="spec">{{ item.specifications }}</text>
@@ -119,7 +119,7 @@
 import {defineComponent} from "vue";
 import type {ShippingAddress} from "@/common/model/address";
 import {getShippingAddressesPageList} from "@/common/api/address";
-import {MaxPageSize} from "@/common/api";
+import {MaxPageSize, ossURL} from "@/common/api";
 import {Alert} from "@/utils";
 import {
 	CreateMethodByCartItems,
@@ -174,6 +174,10 @@ export default defineComponent({
 		}
 	},
 	methods: {
+
+		getOssUrl(url:string) {
+			return ossURL(url)
+		},
 
 		changeAddress() {
 			const address = encodeURIComponent(JSON.stringify(this.addressList))
