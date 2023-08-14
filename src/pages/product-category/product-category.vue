@@ -16,21 +16,21 @@
 				<text class="s-item" @click="tabSTap(item)">{{ item.name }}</text>
 
 				<view class="goods-list">
-						<view
-							v-for="(item, index) in goodsList" :key="index"
-							class="goods-item"
-							@click="navToDetailPage(item)"
-						>
-							<view class="image-wrapper">
-								<image :src="getOssUrl(item.coverImages[0])" mode="aspectFill"></image>
-							</view>
-							<text class="title clamp">{{ item.name }}</text>
-							<view class="price-box">
-								<text class="price">{{ item.activePriceBookEntry.unitPrice }}</text>
-								<text>已售 {{ item.soldAmount }}</text>
-							</view>
+					<view
+						v-for="(item, index) in goodsList" :key="index"
+						class="goods-item"
+						@click="navToDetailPage(item)"
+					>
+						<view class="image-wrapper-1">
+							<image :src="getOssUrl(item.coverImages[0])" mode="aspectFill"></image>
+						</view>
+						<text class="title clamp">{{ item.name }}</text>
+						<view class="price-box">
+							<text class="price">{{ item.activePriceBookEntry.unitPrice }}</text>
+							<text>已售 {{ item.soldAmount }}</text>
 						</view>
 					</view>
+				</view>
 
 			</view>
 		</scroll-view>
@@ -46,8 +46,6 @@ import {mpStaticURL, ossURL, staticURL} from "@/common/api";
 import type {MediaResource} from "@/common/model/mediaResource";
 import type {Product} from "@/common/model/product";
 import {getProductList} from "@/common/api/product";
-
-
 
 
 export default defineComponent({
@@ -87,14 +85,14 @@ export default defineComponent({
 
 	methods: {
 
-		getMpStaticUrl (uri: string){
+		getMpStaticUrl(uri: string) {
 			const temp = uri + ".jpg"
 			return mpStaticURL(temp)
 		},
 
-		getOssUrl(resource: MediaResource){
-			if (resource){
-				if (resource.isLocalStored){
+		getOssUrl(resource: MediaResource) {
+			if (resource) {
+				if (resource.isLocalStored) {
 					return staticURL(resource.url)
 				}
 				return ossURL(resource.url)
@@ -122,7 +120,7 @@ export default defineComponent({
 			}
 		},
 
-		async fetchProductList(category:ProductCategory ){
+		async fetchProductList(category: ProductCategory) {
 			this.goodsList = []
 			// console.log(this.currentId, category.id)
 			const result = await getProductList({
@@ -136,7 +134,7 @@ export default defineComponent({
 		// 获取数据
 		async loadData() {
 			await this.fetchCategoryTree()
-			await  this.fetchProductList(this.sList[0])
+			await this.fetchProductList(this.sList[0])
 		},
 
 		//一级分类点击
@@ -205,5 +203,5 @@ export default defineComponent({
 </script>
 <style lang="scss">
 @import './product-category.scss';
-@import "../product/list.scss";
+@import "../product/product-list.scss";
 </style>
