@@ -14,24 +14,16 @@
 								 :scroll-top="tabScrollTop">
 			<view v-for="item in sList" :key="item.id" class="s-list" :id="'main-'+item.id">
 				<text class="s-item" @click="tabSTap(item)">{{ item.name }}</text>
-
-				<view class="goods-list">
-						<view
-							v-for="(item, index) in goodsList" :key="index"
-							class="goods-item"
-							@click="navToDetailPage(item)"
-						>
-							<view class="image-wrapper">
-								<image :src="getOssUrl(item.coverImages[0])" mode="aspectFill"></image>
-							</view>
-							<text class="title clamp">{{ item.name }}</text>
-							<view class="price-box">
-								<text class="price">{{ item.activePriceBookEntry.unitPrice }}</text>
-								<text>已售 {{ item.soldAmount }}</text>
-							</view>
+				<view class="t-list">
+					<block v-for="tItem in item.children" :key="tItem.id">
+						<view @click="navToList(item.id, tItem.id)"
+									v-if="tItem?.pId === item.id"
+									class="t-item">
+							<image :src="getOssUrl(tItem.coverImage)"></image>
+							<text>{{ tItem.name }}</text>
 						</view>
-					</view>
-
+					</block>
+				</view>
 			</view>
 		</scroll-view>
 	</view>
@@ -45,7 +37,6 @@ import type {ProductCategory} from "@/common/model/productCategory";
 import {mpStaticURL, ossURL, staticURL} from "@/common/api";
 import type {MediaResource} from "@/common/model/mediaResource";
 import type {Product} from "@/common/model/product";
-import {getProductList} from "@/common/api/product";
 
 
 
@@ -122,21 +113,9 @@ export default defineComponent({
 			}
 		},
 
-		async fetchProductList(category:ProductCategory ){
-			this.goodsList = []
-			// console.log(this.currentId, category.id)
-			const result = await getProductList({
-				pageIndex: 0,
-				pageSize: 10,
-				productCategoryId: category.id!,
-			});
-			this.goodsList = result.list
-		},
-
 		// 获取数据
-		async loadData() {
-			await this.fetchCategoryTree()
-			await  this.fetchProductList(this.sList[0])
+		loadData() {
+			this.fetchCategoryTree()
 		},
 
 		//一级分类点击
@@ -152,20 +131,10 @@ export default defineComponent({
 
 			// let index = this.sList.findIndex(sItem => sItem.pId === item.id);
 			// this.tabScrollTop = this.sList[index].top!;
-			this.fetchProductList(this.sList[0])
 		},
 
 		tabSTap(item: ProductCategory) {
-			// this.tList = item.children
-			this.fetchProductList(item)
-		},
-
-		navToDetailPage(item: Product) {
-			//测试数据没有写id，用title代替
-			let id = item.id;
-			uni.navigateTo({
-				url: `/pages/product/product?id=${id}`
-			})
+			this.tList = item.children
 		},
 
 		//右侧栏滚动
@@ -205,5 +174,4 @@ export default defineComponent({
 </script>
 <style lang="scss">
 @import './product-category.scss';
-@import "../product/list.scss";
 </style>
