@@ -362,6 +362,6 @@ export default defineComponent({
 
 <style lang="scss">
 @import "./index-mall";
-@import "../product/list.scss";
+@import "../product/product-list.scss";
 
 </style>

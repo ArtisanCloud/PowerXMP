@@ -254,5 +254,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@import './list.scss';
+@import './sort-list.scss';
+@import './product-list.scss';
 </style>
