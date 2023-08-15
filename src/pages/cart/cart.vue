@@ -23,7 +23,7 @@
 						:class="{'b-b': index!==cartItemList.length-1}"
 					>
 						<view class="image-wrapper">
-							<image :src="getOssUrl(item.imageUrl)"
+							<image :src="item.imageUrl"
 										 :class="['loaded']"
 										 mode="aspectFill"
 										 lazy-load
@@ -127,9 +127,9 @@ export default defineComponent({
 	},
 	methods: {
 
-		getOssUrl(url:string) {
-			return ossURL(url)
-		},
+		// getOssUrl(url:string) {
+		// 	return ossURL(url)
+		// },
 
 		//请求数据
 		async loadData() {
