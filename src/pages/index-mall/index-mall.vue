@@ -1,308 +1,93 @@
 <template>
-	<view class="container">
-		<!-- 小程序头部兼容 -->
-		<!-- #ifdef MP -->
-		<view class="mp-search-box">
-			<input class="ser-input" type="text" value="输入关键字搜索" disabled/>
-		</view>
-		<!-- #endif -->
-
-
-		<!-- 头部轮播 -->
-		<view class="carousel-section">
-			<!-- 标题栏和状态栏占位符 -->
-			<view class="titleNview-placing"></view>
-			<!-- 背景色区域 -->
-			<view class="titleNview-background" :style="{backgroundColor:titleNViewBackground}"></view>
-
-			<swiper class="carousel" circular @change="swiperChange">
-				<swiper-item v-for="(item, index) in carouselList" :key="index" class="carousel-item"
-										 @click="navToDetailPage({id:1,title: '轮播广告'})">
-					<!--					<image :src="getOssUrl(item.coverImage)" class="carousel-image"/>-->
-					<image :src="getOssUrl(item.coverImage)" mode="widthFix"/>
-				</swiper-item>
-			</swiper>
-			<!-- 自定义swiper指示器 -->
-			<view class="swiper-dots">
-				<text class="num">{{ swiperCurrent + 1 }}</text>
-				<text class="sign">/</text>
-				<text class="num">{{ swiperLength }}</text>
+	<view class="content">
+		<scroll-view scroll-y="true" class="left-aside">
+			<view v-for="item in categoryTree" :key="item.id"
+						class="f-item b-b"
+						:class="{active: item.id === currentId}"
+						@click="tabTap(item)">
+				{{ item.name }}
 			</view>
-		</view>
-		<!-- 分类 -->
-		<view class="cate-section">
-			<view class="cate-item" v-for="(item,index) in this.categoryList" :key="item.id">
-				<image :src="getOssUrl(item.coverImage)"></image>
-				<text>{{ item.name }}</text>
-			</view>
-		</view>
+		</scroll-view>
+		<scroll-view scroll-with-animation="true" scroll-y="true"
+								 class="right-aside"
+								 @scroll="asideScroll"
+								 :scroll-top="tabScrollTop">
+			<view v-for="item in sList" :key="item.id" class="s-list" :id="'main-'+item.id">
+				<text class="s-item" @click="tabSTap(item)">{{ item.name }}</text>
 
-		<view class="ad-1">
-			<image :src="getStaticUrl('shop/ad1.jpg')" mode="widthFix" style="width: 96%;"></image>
-		</view>
-
-		<!-- 秒杀楼层 -->
-		<!--		<view class="seckill-section m-t">-->
-		<!--			<view class="s-header">-->
-		<!--				<image class="s-img" src="/static/temp/secskill-img.jpg" mode="widthFix"></image>-->
-		<!--				<text class="tip">8点场</text>-->
-		<!--				<text class="hour timer">07</text>-->
-		<!--				<text class="minute timer">13</text>-->
-		<!--				<text class="second timer">55</text>-->
-		<!--				<text class="yticon icon-you"></text>-->
-		<!--			</view>-->
-		<!--			<scroll-view class="floor-list" scroll-x>-->
-		<!--				<view class="scoll-wrapper">-->
-		<!--					<view-->
-		<!--						v-for="(item, index) in goodsList" :key="index"-->
-		<!--						class="floor-item"-->
-		<!--						@click="navToDetailPage(item)"-->
-		<!--					>-->
-		<!--						<image :src="item.image" mode="aspectFill"></image>-->
-		<!--						<text class="title clamp">{{ item.title }}</text>-->
-		<!--						<text class="price">￥{{ item.price }}</text>-->
-		<!--					</view>-->
-		<!--				</view>-->
-		<!--			</scroll-view>-->
-		<!--		</view>-->
-
-		<!--		&lt;!&ndash; 团购楼层 &ndash;&gt;-->
-		<!--		<view class="f-header m-t">-->
-		<!--			<image src="/static/temp/h1.png"></image>-->
-		<!--			<view class="tit-box">-->
-		<!--				<text class="tit">精品团购</text>-->
-		<!--				<text class="tit2">Boutique Group Buying</text>-->
-		<!--			</view>-->
-		<!--			<text class="yticon icon-you"></text>-->
-		<!--		</view>-->
-		<!--		<view class="group-section">-->
-		<!--			<swiper class="g-swiper" :duration="500">-->
-		<!--				<swiper-item-->
-		<!--					class="g-swiper-item"-->
-		<!--					v-for="(item, index) in goodsList" :key="index"-->
-		<!--					v-if="index%2 === 0"-->
-		<!--					@click="navToDetailPage(item)"-->
-		<!--				>-->
-		<!--					<view class="g-item left">-->
-		<!--						<image :src="item.image" mode="aspectFill"></image>-->
-		<!--						<view class="t-box">-->
-		<!--							<text class="title clamp">{{ item.title }}</text>-->
-		<!--							<view class="price-box">-->
-		<!--								<text class="price">￥{{ item.price }}</text>-->
-		<!--								<text class="m-price">￥188</text>-->
-		<!--							</view>-->
-
-		<!--							<view class="pro-box">-->
-		<!--								<view class="progress-box">-->
-		<!--									<progress percent="72" activeColor="#fa436a" active stroke-width="6"/>-->
-		<!--								</view>-->
-		<!--								<text>6人成团</text>-->
-		<!--							</view>-->
-		<!--						</view>-->
-
-		<!--					</view>-->
-		<!--					<view class="g-item right">-->
-		<!--						<image :src="goodsList[index+1].image" mode="aspectFill"></image>-->
-		<!--						<view class="t-box">-->
-		<!--							<text class="title clamp">{{ goodsList[index + 1].title }}</text>-->
-		<!--							<view class="price-box">-->
-		<!--								<text class="price">￥{{ goodsList[index + 1].price }}</text>-->
-		<!--								<text class="m-price">￥188</text>-->
-		<!--							</view>-->
-		<!--							<view class="pro-box">-->
-		<!--								<view class="progress-box">-->
-		<!--									<progress percent="72" activeColor="#fa436a" active stroke-width="6"/>-->
-		<!--								</view>-->
-		<!--								<text>10人成团</text>-->
-		<!--							</view>-->
-		<!--						</view>-->
-		<!--					</view>-->
-		<!--				</swiper-item>-->
-
-		<!--			</swiper>-->
-		<!--		</view>-->
-
-
-		<!-- 分类推荐楼层 -->
-		<!--		<view class="f-header m-t">-->
-		<!--			<image :src="getStaticUrl('shop/cat_r.png')"></image>-->
-		<!--			<view class="tit-box">-->
-		<!--				<text class="tit">分类精选</text>-->
-		<!--				<text class="tit2">Competitive Products For You</text>-->
-		<!--			</view>-->
-		<!--			<text class="yticon icon-you"></text>-->
-		<!--		</view>-->
-		<!--		<view class="hot-floor" v-for="(item, index) in this.recommendCategoryList" :key="index">-->
-		<!--			<view class="floor-img-box">-->
-		<!--				<image class="floor-img"-->
-		<!--							 :src="getOssUrl(item.coverImage)"-->
-		<!--							 mode="aspectFill"></image>-->
-		<!--			</view>-->
-		<!--			<scroll-view class="floor-list" scroll-x>-->
-		<!--				<view class="scoll-wrapper">-->
-		<!--					<view-->
-		<!--						v-for="(product, index) in item.productList" :key="index"-->
-		<!--						class="floor-item"-->
-		<!--						@click="navToDetailPage(product)"-->
-		<!--					>-->
-		<!--						<image :src="getOssUrl(product.coverImages[0])" mode="aspectFill"></image>-->
-		<!--						<text class="title clamp">{{ product.name }}</text>-->
-		<!--						<text class="price">￥{{ product.activePriceBookEntry.unitPrice }}</text>-->
-		<!--					</view>-->
-		<!--					<view class="more">-->
-		<!--						<text>查看全部</text>-->
-		<!--						<text>More+</text>-->
-		<!--					</view>-->
-		<!--				</view>-->
-		<!--			</scroll-view>-->
-		<!--		</view>-->
-
-		<!-- 猜你喜欢 -->
-		<!--				<view class="f-header m-t">-->
-		<!--					<image src="/static/temp/h1.png"></image>-->
-		<!--					<view class="tit-box">-->
-		<!--						<text class="tit">猜你喜欢</text>-->
-		<!--						<text class="tit2">Guess You Like It</text>-->
-		<!--					</view>-->
-		<!--					<text class="yticon icon-you"></text>-->
-		<!--				</view>-->
-
-		<!--				<view class="guess-section">-->
-		<!--					<view-->
-		<!--						v-for="(item, index) in goodsList" :key="index"-->
-		<!--						class="guess-item"-->
-		<!--						@click="navToDetailPage(item)"-->
-		<!--					>-->
-		<!--						<view class="image-wrapper">-->
-		<!--							<image :src="item.image" mode="aspectFill"></image>-->
-		<!--						</view>-->
-		<!--						<text class="title clamp">{{ item.title }}</text>-->
-		<!--						<text class="price">￥{{ item.price }}</text>-->
-		<!--					</view>-->
-		<!--				</view>-->
-
-		<!-- 热销产品 -->
-		<view class="f-header m-t">
-			<view class="tit-box">
-				<text class="tit">｜ 热销商品</text>
-			</view>
-		</view>
-		<view class="goods-list">
-			<view
-				v-for="(item, index) in recommendProductList" :key="index"
-				class="goods-item"
-				@click="navToDetailPage(item)"
-			>
-				<view class="image-wrapper">
-					<image :src="getOssUrl(item.coverImages[0])" mode="aspectFill"></image>
+				<view class="goods-list">
+					<view
+						v-for="(item, index) in goodsList" :key="index"
+						class="goods-item"
+						@click="navToDetailPage(item)"
+					>
+						<view class="image-wrapper-1">
+							<image :src="getOssUrl(item.coverImages[0])" mode="aspectFill"></image>
+						</view>
+						<text class="title clamp">{{ item.name }}</text>
+						<view class="price-box">
+							<text class="price">{{ item.activePriceBookEntry.unitPrice }}</text>
+							<text>已售 {{ item.soldAmount }}</text>
+						</view>
+					</view>
 				</view>
-				<text class="title clamp">{{ item.name }}</text>
-				<view class="price-box">
-					<text class="price">{{ item.activePriceBookEntry.unitPrice }}</text>
-					<text>已售 {{ item.soldAmount }}</text>
-				</view>
+
 			</view>
-		</view>
+		</scroll-view>
 	</view>
-
 </template>
 
 <script lang="ts">
 
-import {defineComponent} from "vue";
-import {getMediasPageList, MediaTypeBrandStory} from "@/common/api/media";
-import {MaxPageSize, ossURL, staticURL} from "@/common/api";
-import type {Media} from "@/common/model/media";
+import {defineComponent} from 'vue';
+import {getCategoryTree} from "@/common/api/productCategory";
 import type {ProductCategory} from "@/common/model/productCategory";
-import {getCategoryList} from "@/common/api/productCategory";
-import {getProductList} from "@/common/api/product";
-import useOptionsStore from "@/store/modules/data-dictionary";
+import {mpStaticURL, ossURL, staticURL} from "@/common/api";
 import type {MediaResource} from "@/common/model/mediaResource";
 import type {Product} from "@/common/model/product";
+import {getProductList} from "@/common/api/product";
+
 
 export default defineComponent({
 
 	data() {
 		return {
-			titleNViewBackground: '',
-			swiperCurrent: 0,
-			swiperLength: 0,
-			carouselList: [] as Media[],
-			goodsList: [],
-			categoryList: [] as ProductCategory[],
-			recommendCategoryList: [] as ProductCategory[],
-			recommendProductList: [],
+			loading: false,
+
+			sizeCalcState: false,
+			tabScrollTop: 0,
+			currentId: 1,
+
+			categoryTree: [] as ProductCategory[],
+			fList: [] as ProductCategory[],
+			sList: [] as ProductCategory[],
+			tList: [] as ProductCategory[],
+			goodsList: [] as Product[],
 
 		};
 	},
 
+	components: {},
+	props: {},
+
 	onLoad() {
+		// 数据加载
+		this.loadData();
+
+		// // 初始化配置
+		// this.initConfig();
+	},
+
+	// 下拉刷新
+	onPullDownRefresh() {
 		this.loadData();
 	},
+
 	methods: {
 
-		async loadData() {
-
-			// 这里需要强制加载一下options数据
-			const optionsStore = useOptionsStore();
-			if (!optionsStore.isSetup()) {
-				await optionsStore.fetchAllOptions()
-			}
-			const mediaTypeBrandStory = optionsStore.GetOptionByKey(optionsStore.mediaTypes, MediaTypeBrandStory)
-			if (!mediaTypeBrandStory) {
-				console.error("system data mediaType err loaded")
-				return
-			}
-
-			let carouselList = await getMediasPageList({
-				pageIndex: 0,
-				pageSize: MaxPageSize,
-				mediaTypes: [mediaTypeBrandStory?.id!]
-			});
-
-			this.titleNViewBackground = "rgb(161,197,61)"
-			this.swiperLength = carouselList.total;
-			this.carouselList = carouselList.list;
-			// console.log(carouselList,this.carouselList)
-			// let goodsList = await this.$api.json('goodsList');
-			// this.goodsList = goodsList || [];
-
-			const resRoot = await getCategoryList({
-				categoryPId: 0,
-				limit: 10,
-			})
-			this.categoryList = resRoot.list
-			// console.log(this.categoryList)
-
-			const resRecommend = await getCategoryList({
-				categoryPId:22,
-				limit: 1,
-			})
-			this.recommendCategoryList = resRecommend.list
-			// console.log(this.recommendCategoryList)
-			const recommendCategory = this.recommendCategoryList[0]
-			// console.log(recommendCategory)
-			const result = await getProductList({
-							pageIndex: 0,
-							pageSize: 10,
-							productCategoryId: recommendCategory.id!,
-						});
-			this.recommendProductList = result.list
-			// console.log(this.recommendProductList)
-			// this.recommendCategoryList.forEach(async (item: ProductCategory) => {
-			// 	const result = await getProductList({
-			// 		pageIndex: 0,
-			// 		pageSize: 10,
-			// 		productCategoryId: item.id!,
-			// 	});
-			// 	item.productList = result.list
-			//
-			// })
-			// console.log(this.recommendCategoryList)
-		},
-
-		getStaticUrl(uri: string) {
-			return staticURL("/resource/static/" + uri)
+		getMpStaticUrl(uri: string) {
+			const temp = uri + ".jpg"
+			return mpStaticURL(temp)
 		},
 
 		getOssUrl(resource: MediaResource) {
@@ -314,14 +99,65 @@ export default defineComponent({
 			}
 		},
 
+		async fetchCategoryTree() {
+			this.loading = true;
+			try {
+				const res = await getCategoryTree({categoryPId: 0});
+				this.categoryTree = res.tree;
+				this.categoryTree.forEach(item => {
+					if (item.pId == 0) {
+						this.fList.push(item);  //pid为父级id, 没有pid或者pid=0是一级分类
+					}
+				})
+				this.currentId = this.fList[0].id!
+				this.sList = this.fList[0].children
+				this.tList = this.sList[0].children
 
-		//轮播图切换修改背景色
-		swiperChange(e: any) {
-			const index = e.detail.current;
-			this.swiperCurrent = index;
-			this.titleNViewBackground = this.carouselList[index].background;
+				// console.log(this.categoryTree)
+
+			} finally {
+				this.loading = false;
+			}
 		},
-		//详情页
+
+		async fetchProductList(category: ProductCategory) {
+			this.goodsList = []
+			// console.log(this.currentId, category.id)
+			const result = await getProductList({
+				pageIndex: 0,
+				pageSize: 10,
+				productCategoryId: category.id!,
+			});
+			this.goodsList = result.list
+		},
+
+		// 获取数据
+		async loadData() {
+			await this.fetchCategoryTree()
+			await this.fetchProductList(this.sList[0])
+		},
+
+		//一级分类点击
+		tabTap(item: ProductCategory) {
+			// if (!this.sizeCalcState) {
+			// 	this.calcSize();
+			// }
+
+			this.currentId = item.id ? item.id : 0;
+			this.sList = item.children
+			this.tList = this.sList[0].children
+			this.tabScrollTop = 0
+
+			// let index = this.sList.findIndex(sItem => sItem.pId === item.id);
+			// this.tabScrollTop = this.sList[index].top!;
+			this.fetchProductList(this.sList[0])
+		},
+
+		tabSTap(item: ProductCategory) {
+			// this.tList = item.children
+			this.fetchProductList(item)
+		},
+
 		navToDetailPage(item: Product) {
 			//测试数据没有写id，用title代替
 			let id = item.id;
@@ -329,39 +165,43 @@ export default defineComponent({
 				url: `/pages/product/product?id=${id}`
 			})
 		},
-	},
-	// #ifndef MP
-	// 标题栏input搜索框点击
-	onNavigationBarSearchInputClicked: async function (e) {
-		this.$api.msg('点击了搜索框');
-	},
-	//点击导航栏 buttons 时触发
-	onNavigationBarButtonTap(e) {
-		const index = e.index;
-		if (index === 0) {
-			this.$api.msg('点击了扫描');
-		} else if (index === 1) {
-			// #ifdef APP-PLUS
-			const pages = getCurrentPages();
-			const page = pages[pages.length - 1];
-			const currentWebview = page.$getAppWebview();
-			currentWebview.hideTitleNViewButtonRedDot({
-				index
-			});
-			// #endif
+
+		//右侧栏滚动
+		asideScroll(e: any) {
+			if (!this.sizeCalcState) {
+				this.calcSize();
+			}
+			let scrollTop = e.detail.scrollTop;
+			let tabs = this.sList.filter(item => item.top! <= scrollTop).reverse();
+			if (tabs.length > 0) {
+				this.currentId = tabs[0].pId;
+			}
+		},
+		//计算右侧栏每个tab的高度等信息
+		calcSize() {
+			let h = 0;
+			this.sList.forEach(item => {
+				let view = uni.createSelectorQuery().select("#main-" + item.id);
+				view.fields({
+					size: true
+				}, (data: any) => {
+					item.top = h;
+					h += data.height;
+					item.bottom = h;
+				}).exec();
+			})
+			this.sizeCalcState = true;
+		},
+		navToList(sId: number, tId: number) {
 			uni.navigateTo({
-				url: '/pages/notice/notice'
+				url: `/pages/product/list?fId=${this.currentId}&sId=${sId}&tId=${tId}`
 			})
 		}
+
 	}
-	// #endif
-
-})
-
+});
 </script>
-
 <style lang="scss">
-@import "./index-mall";
+@import './product-category.scss';
 @import "../product/product-list.scss";
-
 </style>
