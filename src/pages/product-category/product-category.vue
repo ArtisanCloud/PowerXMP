@@ -70,9 +70,22 @@ export default defineComponent({
 	components: {},
 	props: {},
 
-	onLoad() {
+	onShow() {
+		let currentId = -1
+		try {
+			// 先获取当前外部页面选中的分类
+			 currentId = uni.getStorageSync("sourceCategoryId")
+			uni.setStorageSync("sourceCategoryId", -1)
+		} catch (e) {
+			console.error(e)
+		}
+		this.currentId = currentId
+
 		// 数据加载
 		this.loadData();
+	},
+
+	onLoad(categoryId) {
 
 		// // 初始化配置
 		// this.initConfig();
@@ -105,13 +118,23 @@ export default defineComponent({
 				const res = await getCategoryTree({categoryPId: 0});
 				this.categoryTree = res.tree;
 				this.categoryTree.forEach(item => {
+
 					if (item.pId == 0) {
 						this.fList.push(item);  //pid为父级id, 没有pid或者pid=0是一级分类
+
+						// 设置当前选中的分类以及子分类
+						if (this.currentId==item.id){
+							this.sList = item.children
+							this.tList = this.sList[0].children
+						}
 					}
 				})
-				this.currentId = this.fList[0].id!
-				this.sList = this.fList[0].children
-				this.tList = this.sList[0].children
+				if (this.currentId<=0){
+					this.currentId = this.fList[0].id!
+					this.sList = this.fList[0].children
+					this.tList = this.sList[0].children
+				}
+
 
 				// console.log(this.categoryTree)
 
@@ -120,13 +143,13 @@ export default defineComponent({
 			}
 		},
 
-		async fetchProductList(category: ProductCategory) {
+		async fetchProductList(categoryId: number) {
 			this.goodsList = []
 			// console.log(this.currentId, category.id)
 			const result = await getProductList({
 				pageIndex: 0,
 				pageSize: 10,
-				productCategoryId: category.id!,
+				productCategoryId: categoryId,
 			});
 			this.goodsList = result.list
 		},
@@ -134,7 +157,7 @@ export default defineComponent({
 		// 获取数据
 		async loadData() {
 			await this.fetchCategoryTree()
-			await this.fetchProductList(this.sList[0])
+			await this.fetchProductList(this.sList[0].id!)
 		},
 
 		//一级分类点击
@@ -150,12 +173,12 @@ export default defineComponent({
 
 			// let index = this.sList.findIndex(sItem => sItem.pId === item.id);
 			// this.tabScrollTop = this.sList[index].top!;
-			this.fetchProductList(this.sList[0])
+			this.fetchProductList(this.sList[0].id!)
 		},
 
 		tabSTap(item: ProductCategory) {
 			// this.tList = item.children
-			this.fetchProductList(item)
+			this.fetchProductList(item.id!)
 		},
 
 		navToDetailPage(item: Product) {

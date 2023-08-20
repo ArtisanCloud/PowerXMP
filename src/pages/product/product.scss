@@ -154,9 +154,22 @@ page{
   }
   .con{
     flex: 1;
-    color: $font-color-dark;
-    .selected-text{
-      margin-right: 10rpx;
+    display: flex;
+    justify-content: center; /* 水平居中 */
+    align-items: center; /* 垂直居中 */
+    .selected-row{
+      display: flex;
+      width: fit-content;
+      padding: 4rpx 10rpx;
+      background: $uni-color-primary;
+      font-size: $font-sm;
+      color: #fff;
+      border-radius: 6rpx;
+
+      transform: translateY(-4rpx);
+      .selected-text{
+        margin-right: 10rpx;
+      }
     }
   }
   .bz-list{

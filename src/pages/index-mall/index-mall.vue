@@ -31,13 +31,17 @@
 		<!-- 分类 -->
 		<view class="cate-section">
 			<view class="cate-item" v-for="(item,index) in this.categoryList" :key="item.id">
-				<image :src="getOssUrl(item.coverImage)"></image>
-				<text>{{ item.name }}</text>
+				<view @click="navToProductCategory(item.id)">
+					<image :src="getOssUrl(item.coverImage)"></image>
+					<text>{{ item.name }}</text>
+				</view>
 			</view>
 		</view>
 
 		<view class="ad-1">
-			<image :src="getStaticUrl('shop/ad1.jpg')" mode="widthFix" style="width: 96%;"></image>
+			<view @click="navToProductCategory(18)">
+				<image :src="getStaticUrl('shop/ad1.jpg')" mode="widthFix" style="width: 96%;"></image>
+			</view>
 		</view>
 
 		<!-- 秒杀楼层 -->
@@ -209,7 +213,7 @@
 <script lang="ts">
 
 import {defineComponent} from "vue";
-import {getMediasPageList, MediaTypeBrandStory} from "@/common/api/media";
+import {getMediasPageList, MediaTypeBrandStory, MediaTypePromotionalCampaigns} from "@/common/api/media";
 import {MaxPageSize, ossURL, staticURL} from "@/common/api";
 import type {Media} from "@/common/model/media";
 import type {ProductCategory} from "@/common/model/productCategory";
@@ -218,6 +222,7 @@ import {getProductList} from "@/common/api/product";
 import useOptionsStore from "@/store/modules/data-dictionary";
 import type {MediaResource} from "@/common/model/mediaResource";
 import type {Product} from "@/common/model/product";
+import productCategory from "@/pages/product-category/product-category.vue";
 
 export default defineComponent({
 
@@ -227,6 +232,7 @@ export default defineComponent({
 			swiperCurrent: 0,
 			swiperLength: 0,
 			carouselList: [] as Media[],
+			eventList: [] as Media[],
 			goodsList: [],
 			categoryList: [] as ProductCategory[],
 			recommendCategoryList: [] as ProductCategory[],
@@ -253,6 +259,13 @@ export default defineComponent({
 				return
 			}
 
+			const mediaTypePromotionalCampaign = optionsStore.GetOptionByKey(optionsStore.mediaTypes, MediaTypePromotionalCampaigns)
+			if (!mediaTypePromotionalCampaign) {
+				console.error("system data mediaType err loaded")
+				return
+			}
+
+			// ---------- 横幅 ----------
 			let carouselList = await getMediasPageList({
 				pageIndex: 0,
 				pageSize: MaxPageSize,
@@ -266,6 +279,16 @@ export default defineComponent({
 			// let goodsList = await this.$api.json('goodsList');
 			// this.goodsList = goodsList || [];
 
+			// ---------- 促销活动 ----------
+			let eventList = await getMediasPageList({
+				pageIndex: 0,
+				pageSize: 1,
+				mediaTypes: [mediaTypePromotionalCampaign?.id!]
+			});
+			this.eventList = eventList.list
+
+
+			// ---------- 分类产品 ----------
 			const resRoot = await getCategoryList({
 				categoryPId: 0,
 				limit: 6,
@@ -275,13 +298,13 @@ export default defineComponent({
 			// console.log(this.categoryList)
 
 			const HotSCategory = await getCategoryList({
-				categoryPId:HotCategory.id,
+				categoryPId: HotCategory.id,
 				limit: 1,
 			})
 			this.recommendCategoryList = HotSCategory.list
 			// console.log(this.recommendCategoryList)
 			const recommendCategory = this.recommendCategoryList[0]
-			console.log(recommendCategory)
+			// console.log(recommendCategory)
 			const result = await getProductList({
 				pageIndex: 0,
 				pageSize: 10,
@@ -329,6 +352,20 @@ export default defineComponent({
 				url: `/pages/product/product?id=${id}`
 			})
 		},
+		navToProductCategory(categoryId: number) {
+
+			try {
+				uni.setStorageSync("sourceCategoryId", categoryId)
+			} catch (e) {
+				console.error(e)
+			}
+
+			//测试数据没有写id，用title代替
+			uni.switchTab({
+				url: `/pages/product-category/product-category`
+			})
+		}
+
 	},
 	// #ifndef MP
 	// 标题栏input搜索框点击
