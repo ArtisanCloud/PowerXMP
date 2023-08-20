@@ -30,7 +30,7 @@
 		</view>
 		<!-- 分类 -->
 		<view class="cate-section">
-			<view class="cate-item" v-for="(item,index) in categoryList" :key="item.id">
+			<view class="cate-item" v-for="(item,index) in this.categoryList" :key="item.id">
 				<image :src="getOssUrl(item.coverImage)" @click="navToProductCategory(item.id)"></image>
 				<text>{{ item.name }}</text>
 			</view>
@@ -208,9 +208,9 @@
 
 </template>
 
-<script lang="ts" setup>
+<script lang="ts">
 
-import {inject, ref} from "vue";
+import {defineComponent} from "vue";
 import {getMediasPageList, MediaTypeBrandStory, MediaTypePromotionalCampaigns} from "@/common/api/media";
 import {MaxPageSize, ossURL, staticURL} from "@/common/api";
 import type {Media} from "@/common/model/media";
@@ -220,144 +220,178 @@ import {getProductList} from "@/common/api/product";
 import useOptionsStore from "@/store/modules/data-dictionary";
 import type {MediaResource} from "@/common/model/mediaResource";
 import type {Product} from "@/common/model/product";
-import {onLoad} from "@dcloudio/uni-app";
+import productCategory from "@/pages/product-category/product-category.vue";
 
-const titleNViewBackground = ref('');
-const swiperCurrent = ref(0);
-const swiperLength = ref(0);
-const carouselList = ref([] as Media[]);
-const eventList = ref([] as Media[]);
-const categoryList = ref([] as ProductCategory[]);
-const recommendCategoryList = ref([] as ProductCategory[]);
-const recommendProductList = ref([] as Product[]);
+export default defineComponent({
+
+	data() {
+		return {
+			titleNViewBackground: '',
+			swiperCurrent: 0,
+			swiperLength: 0,
+			carouselList: [] as Media[],
+			eventList: [] as Media[],
+			goodsList: [],
+			categoryList: [] as ProductCategory[],
+			recommendCategoryList: [] as ProductCategory[],
+			recommendProductList: [],
+
+		};
+	},
+
+	onLoad() {
+		this.loadData();
+	},
+	methods: {
+
+		async loadData() {
+
+			// 这里需要强制加载一下options数据
+			const optionsStore = useOptionsStore();
+			if (!optionsStore.isSetup()) {
+				await optionsStore.fetchAllOptions()
+			}
+			const mediaTypeBrandStory = optionsStore.GetOptionByKey(optionsStore.mediaTypes, MediaTypeBrandStory)
+			if (!mediaTypeBrandStory) {
+				console.error("system data mediaType err loaded")
+				return
+			}
+
+			const mediaTypePromotionalCampaign = optionsStore.GetOptionByKey(optionsStore.mediaTypes, MediaTypePromotionalCampaigns)
+			if (!mediaTypePromotionalCampaign) {
+				console.error("system data mediaType err loaded")
+				return
+			}
+
+			// ---------- 横幅 ----------
+			let carouselList = await getMediasPageList({
+				pageIndex: 0,
+				pageSize: MaxPageSize,
+				mediaTypes: [mediaTypeBrandStory?.id!]
+			});
+
+			this.titleNViewBackground = "rgb(161,197,61)"
+			this.swiperLength = carouselList.total;
+			this.carouselList = carouselList.list;
+			// console.log(carouselList,this.carouselList)
+			// let goodsList = await this.$api.json('goodsList');
+			// this.goodsList = goodsList || [];
+
+			// ---------- 促销活动 ----------
+			let eventList = await getMediasPageList({
+				pageIndex: 0,
+				pageSize: 1,
+				mediaTypes: [mediaTypePromotionalCampaign?.id!]
+			});
+			this.eventList = eventList.list
 
 
-const loadData = async () => {
+			// ---------- 分类产品 ----------
+			const resRoot = await getCategoryList({
+				categoryPId: 0,
+				limit: 6,
+			})
+			let HotCategory = resRoot.list.shift()
+			this.categoryList = resRoot.list
+			// console.log(this.categoryList)
 
-	// 这里需要强制加载一下options数据
-	const optionsStore = useOptionsStore();
-	if (!optionsStore.isSetup()) {
-		await optionsStore.fetchAllOptions()
-	}
-	const mediaTypeBrandStory = optionsStore.GetOptionByKey(optionsStore.mediaTypes, MediaTypeBrandStory)
-	if (!mediaTypeBrandStory) {
-		console.error("system data mediaType err loaded")
-		return
-	}
+			const HotSCategory = await getCategoryList({
+				categoryPId: HotCategory.id,
+				limit: 1,
+			})
+			this.recommendCategoryList = HotSCategory.list
+			// console.log(this.recommendCategoryList)
+			const recommendCategory = this.recommendCategoryList[0]
+			// console.log(recommendCategory)
+			const result = await getProductList({
+				pageIndex: 0,
+				pageSize: 10,
+				productCategoryId: recommendCategory.id!,
+			});
+			this.recommendProductList = result.list
+			// console.log(this.recommendProductList)
+			// this.recommendCategoryList.forEach(async (item: ProductCategory) => {
+			// 	const result = await getProductList({
+			// 		pageIndex: 0,
+			// 		pageSize: 10,
+			// 		productCategoryId: item.id!,
+			// 	});
+			// 	item.productList = result.list
+			//
+			// })
+			// console.log(this.recommendCategoryList)
+		},
 
-	const mediaTypePromotionalCampaign = optionsStore.GetOptionByKey(optionsStore.mediaTypes, MediaTypePromotionalCampaigns)
-	if (!mediaTypePromotionalCampaign) {
-		console.error("system data mediaType err loaded")
-		return
-	}
+		getStaticUrl(uri: string) {
+			return staticURL("/resource/static/" + uri)
+		},
 
-	// ---------- 横幅 ----------
-	let resCarouselList = await getMediasPageList({
-		pageIndex: 0,
-		pageSize: MaxPageSize,
-		mediaTypes: [mediaTypeBrandStory?.id!]
-	});
-
-	titleNViewBackground.value = "rgb(161,197,61)"
-	swiperLength.value = resCarouselList.total;
-	carouselList.value = resCarouselList.list;
-	// console.log(carouselList,carouselList)
-	// let goodsList = await this.$api.json('goodsList');
-	// goodsList = goodsList || [];
-
-	// ---------- 促销活动 ----------
-	// let resEventList = await getMediasPageList({
-	// 	pageIndex: 0,
-	// 	pageSize: 1,
-	// 	mediaTypes: [mediaTypePromotionalCampaign?.id!]
-	// });
-	// eventList.value = resEventList.list
+		getOssUrl(resource: MediaResource) {
+			if (resource) {
+				if (resource.isLocalStored) {
+					return staticURL(resource.url)
+				}
+				return ossURL(resource.url)
+			}
+		},
 
 
-	// ---------- 分类产品 ----------
-	const resRoot = await getCategoryList({
-		categoryPId: 0,
-		limit: 6,
-	})
-	let HotCategory = resRoot.list.shift()
-	categoryList.value = resRoot.list
-	// console.log(categoryList)
+		//轮播图切换修改背景色
+		swiperChange(e: any) {
+			const index = e.detail.current;
+			this.swiperCurrent = index;
+			this.titleNViewBackground = this.carouselList[index].background;
+		},
+		//详情页
+		navToDetailPage(item: Product) {
+			//测试数据没有写id，用title代替
+			let id = item.id;
+			uni.navigateTo({
+				url: `/pages/product/product?id=${id}`
+			})
+		},
+		navToProductCategory(categoryId: number) {
 
-	const HotSCategory = await getCategoryList({
-		categoryPId: HotCategory?.id!,
-		limit: 1,
-	})
-	recommendCategoryList.value = HotSCategory.list
-	// console.log(recommendCategoryList)
-	const recommendCategory = recommendCategoryList.value[0]
-	// console.log(recommendCategory)
-	const result = await getProductList({
-		pageIndex: 0,
-		pageSize: 10,
-		productCategoryId: recommendCategory.id!,
-	});
-	recommendProductList.value = result.list
-	// console.log(recommendProductList)
-	// recommendCategoryList.forEach(async (item: ProductCategory) => {
-	// 	const result = await getProductList({
-	// 		pageIndex: 0,
-	// 		pageSize: 10,
-	// 		productCategoryId: item.id!,
-	// 	});
-	// 	item.productList = result.list
-	//
-	// })
-	// console.log(recommendCategoryList)
-}
+			try {
+				uni.setStorageSync("sourceCategoryId", categoryId)
+			} catch (e) {
+				console.error(e)
+			}
 
-const getStaticUrl = (uri: string) => {
-	return staticURL("/resource/static/" + uri)
-}
-
-const getOssUrl = (resource: MediaResource) => {
-	if (resource) {
-		if (resource.isLocalStored) {
-			return staticURL(resource.url)
+			//测试数据没有写id，用title代替
+			uni.switchTab({
+				url: `/pages/product-category/product-category`
+			})
 		}
-		return ossURL(resource.url)
+
+	},
+	// #ifndef MP
+	// 标题栏input搜索框点击
+	onNavigationBarSearchInputClicked: async function (e) {
+		this.$api.msg('点击了搜索框');
+	},
+	//点击导航栏 buttons 时触发
+	onNavigationBarButtonTap(e) {
+		const index = e.index;
+		if (index === 0) {
+			this.$api.msg('点击了扫描');
+		} else if (index === 1) {
+			// #ifdef APP-PLUS
+			const pages = getCurrentPages();
+			const page = pages[pages.length - 1];
+			const currentWebview = page.$getAppWebview();
+			currentWebview.hideTitleNViewButtonRedDot({
+				index
+			});
+			// #endif
+			uni.navigateTo({
+				url: '/pages/notice/notice'
+			})
+		}
 	}
-}
+	// #endif
 
-
-//轮播图切换修改背景色
-const swiperChange = (e: any) => {
-	const index = e.detail.current;
-	swiperCurrent.value = index;
-	titleNViewBackground.value = carouselList.value[index].background;
-}
-//详情页
-const navToDetailPage = (item: Product) => {
-	//测试数据没有写id，用title代替
-	let id = item.id;
-	uni.navigateTo({
-		url: `/pages/product/product?id=${id}`
-	})
-}
-const navToProductCategory = (categoryId: number) => {
-
-	try {
-		uni.setStorageSync("sourceCategoryId", categoryId)
-	} catch (e) {
-		console.error(e)
-	}
-
-	//测试数据没有写id，用title代替
-	uni.switchTab({
-		url: `/pages/product-category/product-category`
-	})
-
-}
-
- onLoad(()=>{
-	 loadData()
- })
-
-
+})
 
 </script>
 
