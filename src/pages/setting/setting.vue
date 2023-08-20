@@ -36,47 +36,36 @@
 	</view>
 </template>
 
-<script lang="ts">
-
-import {defineComponent} from "vue";
-
-export default defineComponent({
-	data() {
-		return {};
-	},
+<script lang="ts" setup>
 
 
-	methods: {
+const logout = () => {
+	// Logout()
+}
 
-		logout(){
-			// Logout()
-		},
+const navTo = (url: string) => {
+	// this.$api.msg(`跳转到${url}`);
+}
+//退出登录
+const toLogout = () => {
+	uni.showModal({
+		content: '确定要退出登录么',
+		success: (e) => {
+			if (e.confirm) {
+				logout();
+				setTimeout(() => {
+					uni.navigateBack();
+				}, 200)
+			}
+		}
+	});
+}
+//switch
+const switchChange = (e: any) => {
+	let statusTip = e.detail.value ? '打开' : '关闭';
+	// this.$api.msg(`${statusTip}消息推送`);
+}
 
-		navTo(url:string) {
-			// this.$api.msg(`跳转到${url}`);
-		},
-		//退出登录
-		toLogout() {
-			uni.showModal({
-				content: '确定要退出登录么',
-				success: (e) => {
-					if (e.confirm) {
-						this.logout();
-						setTimeout(() => {
-							uni.navigateBack();
-						}, 200)
-					}
-				}
-			});
-		},
-		//switch
-		switchChange(e:any) {
-			let statusTip = e.detail.value ? '打开' : '关闭';
-			// this.$api.msg(`${statusTip}消息推送`);
-		},
-
-	}
-})
 
 </script>
 

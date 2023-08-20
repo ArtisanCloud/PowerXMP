@@ -11,6 +11,8 @@ export interface Media extends Model,MediaSet {
 	mediaType: number
 	viewedCount: number
 
+	// extend
+	background: string
 }
 
 
