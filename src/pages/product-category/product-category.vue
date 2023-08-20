@@ -17,17 +17,17 @@
 
 				<view class="goods-list">
 					<view
-						v-for="(item, index) in goodsList" :key="index"
+						v-for="(product, index) in item.goodsList" :key="index"
 						class="goods-item"
-						@click="navToDetailPage(item)"
+						@click="navToDetailPage(product)"
 					>
 						<view class="image-wrapper-1">
-							<image :src="getOssUrl(item.coverImages[0])" mode="aspectFill"></image>
+							<image :src="getOssUrl(product.coverImages[0])" mode="aspectFill"></image>
 						</view>
-						<text class="title clamp">{{ item.name }}</text>
+						<text class="title clamp">{{ product.name }}</text>
 						<view class="price-box">
-							<text class="price">{{ item.activePriceBookEntry.unitPrice }}</text>
-							<text>已售 {{ item.soldAmount }}</text>
+							<text class="price">{{ product.activePriceBookEntry.unitPrice }}</text>
+							<text>已售 {{ product.soldAmount }}</text>
 						</view>
 					</view>
 				</view>
@@ -37,7 +37,7 @@
 	</view>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 
 import {getCategoryTree} from "@/common/api/productCategory";
 import type {ProductCategory} from "@/common/model/productCategory";
@@ -56,7 +56,6 @@ const categoryTree = ref([] as ProductCategory[]);
 const fList = ref([] as ProductCategory[]);
 const sList = ref([] as ProductCategory[]);
 const tList = ref([] as ProductCategory[]);
-const goodsList = ref([] as Product[]);
 
 
 const fetchCategoryTree = async () => {
@@ -91,20 +90,26 @@ const fetchCategoryTree = async () => {
 }
 
 const fetchProductList = async (categoryId: number) => {
-	goodsList.value = []
 	// console.log(this.currentId, category.id)
 	const result = await getProductList({
 		pageIndex: 0,
 		pageSize: 10,
 		productCategoryId: categoryId,
 	});
-	goodsList.value = result.list
+	return result.list
+}
+
+const fetchProducts=async(categories: ProductCategory[])=>{
+	for (let i = 0; i < categories.length; i += 1) {
+		categories[i].productList = await fetchProductList(categories[i].id!);
+		console.log(categories[i])
+	}
 }
 
 // 获取数据
 const loadData = async () => {
 	await fetchCategoryTree()
-	await fetchProductList(sList.value[0].id!)
+	await fetchProducts(sList.value)
 }
 
 
@@ -142,7 +147,7 @@ const tabTap = (item: ProductCategory) => {
 
 	// let index = this.sList.findIndex(sItem => sItem.pId === item.id);
 	// this.tabScrollTop = this.sList[index].top!;
-	fetchProductList(sList.value[0].id!)
+	fetchProducts(sList.value)
 }
 
 const tabSTap = (item: ProductCategory) => {
