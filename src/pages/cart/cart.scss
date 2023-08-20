@@ -74,23 +74,29 @@
     position: relative;
     padding-left: 30rpx;
 
-    .title, .price {
+
+    .title {
       font-size: $font-base + 2rpx;
       color: $font-color-dark;
-      height: 40rpx;
+      height: auto;
       line-height: 40rpx;
+      white-space: normal; /* 允许自动换行 */
     }
 
     .attr {
       font-size: $font-sm + 2rpx;
       color: $font-color-light;
-      height: 50rpx;
       line-height: 50rpx;
     }
 
     .price {
       height: 50rpx;
       line-height: 50rpx;
+      white-space: normal; /* 允许自动换行 */
+    }
+
+    .step{
+      white-space: normal; /* 允许自动换行 */
     }
   }
 

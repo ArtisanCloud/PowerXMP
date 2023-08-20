@@ -48,9 +48,11 @@
 			<view class="c-row b-b" @click="toggleSpec">
 				<text class="tit">购买类型</text>
 				<view class="con">
-					<text class="selected-text" v-for="(sItem, sIndex) in optionSelected" :key="sIndex">
-						{{ sItem.name }}
-					</text>
+					<view class="selected-row">
+						<text class="selected-text" v-for="(sItem, sIndex) in optionSelected" :key="sIndex">
+							{{ sItem.name }}
+						</text>
+					</view>
 				</view>
 				<text class="yticon icon-you"></text>
 			</view>
@@ -108,7 +110,7 @@
 
 		<!-- 底部操作菜单 -->
 		<view class="page-bottom">
-			<navigator url="/pages/index/index" open-type="switchTab" class="p-b-btn">
+			<navigator url="/pages/index-mall/index-mall" open-type="switchTab" class="p-b-btn">
 				<text class="yticon icon-xiatubiao--copy"></text>
 				<text>首页</text>
 			</navigator>
@@ -260,7 +262,7 @@ export default defineComponent({
 				return {
 					name: "img",
 					attrs: {
-						src: this.getOssUrl(image) ,
+						src: this.getOssUrl(image),
 						style: "width:100%;display:block;"
 					}
 				};
@@ -278,9 +280,9 @@ export default defineComponent({
 	methods: {
 
 		// Function to get OSS URL
-		getOssUrl(resource:MediaResource) {
-			if (resource){
-				if (resource.isLocalStored){
+		getOssUrl(resource: MediaResource) {
+			if (resource) {
+				if (resource.isLocalStored) {
 					return staticURL(resource.url)
 				}
 				return ossURL(resource.url)

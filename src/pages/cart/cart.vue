@@ -183,7 +183,7 @@ export default defineComponent({
 				})
 				cartItem.quantity = data.number;
 				this.calcTotal();
-			}else {
+			} else {
 				ShowToast("修改该商品的信息有误", 'error')
 			}
 
