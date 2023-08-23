@@ -17,7 +17,7 @@
 
 				<view class="goods-list">
 					<view
-						v-for="(product, index) in item.goodsList" :key="index"
+						v-for="(product, index) in item.productList" :key="index"
 						class="goods-item"
 						@click="navToDetailPage(product)"
 					>

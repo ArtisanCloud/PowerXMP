@@ -38,7 +38,8 @@ export interface Order extends Model {
 
 
 export interface ListOrdersPageRequest extends PaginationRequest {
-	orderStatus?: number[]
+	statusIds?: number[]
+	typeIds?: number[]
 }
 
 export interface ListOrdersPageReply extends PaginationResponse<Order> {

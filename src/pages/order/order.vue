@@ -258,7 +258,8 @@ export default defineComponent({
 					pageSize: navItem.pagination.pageSize,
 				}
 				if (!state.includes(-1)) {
-					req.orderStatus = state
+					req.statusIds = state as number[];
+
 				}
 				const result = await getOrdersPageList(req)
 
