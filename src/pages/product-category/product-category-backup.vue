@@ -17,17 +17,17 @@
 
 				<view class="goods-list">
 					<view
-						v-for="(item, index) in goodsList" :key="index"
+						v-for="(product, index) in item.productList" :key="index"
 						class="goods-item"
-						@click="navToDetailPage(item)"
+						@click="navToDetailPage(product)"
 					>
 						<view class="image-wrapper-1">
-							<image :src="getOssUrl(item.coverImages[0])" mode="aspectFill"></image>
+							<image :src="getOssUrl(product.coverImages[0])" mode="aspectFill"></image>
 						</view>
-						<text class="title clamp">{{ item.name }}</text>
+						<text class="title clamp">{{ product.name }}</text>
 						<view class="price-box">
-							<text class="price">{{ item.activePriceBookEntry.unitPrice }}</text>
-							<text>已售 {{ item.soldAmount }}</text>
+							<text class="price">{{ product.activePriceBookEntry.unitPrice }}</text>
+							<text>已售 {{ product.soldAmount }}</text>
 						</view>
 					</view>
 				</view>
@@ -42,7 +42,7 @@
 import {defineComponent} from 'vue';
 import {getCategoryTree} from "@/common/api/productCategory";
 import type {ProductCategory} from "@/common/model/productCategory";
-import {mpStaticURL, ossURL, staticURL} from "@/common/api";
+import {MaxPageSize, mpStaticURL, ossURL, staticURL} from "@/common/api";
 import type {MediaResource} from "@/common/model/mediaResource";
 import type {Product} from "@/common/model/product";
 import {getProductList} from "@/common/api/product";
@@ -62,7 +62,6 @@ export default defineComponent({
 			fList: [] as ProductCategory[],
 			sList: [] as ProductCategory[],
 			tList: [] as ProductCategory[],
-			goodsList: [] as Product[],
 
 		};
 	},
@@ -74,7 +73,7 @@ export default defineComponent({
 		let currentId = -1
 		try {
 			// 先获取当前外部页面选中的分类
-			 currentId = uni.getStorageSync("sourceCategoryId")
+			currentId = uni.getStorageSync("sourceCategoryId")
 			uni.setStorageSync("sourceCategoryId", -1)
 		} catch (e) {
 			console.error(e)
@@ -143,21 +142,31 @@ export default defineComponent({
 			}
 		},
 
+
+
 		async fetchProductList(categoryId: number) {
-			this.goodsList = []
+
 			// console.log(this.currentId, category.id)
 			const result = await getProductList({
 				pageIndex: 0,
-				pageSize: 10,
+				pageSize: MaxPageSize,
 				productCategoryId: categoryId,
 			});
-			this.goodsList = result.list
+
+			return result.list
+
 		},
 
+		async fetchProducts(categories: ProductCategory[]){
+			for (let i = 0; i < categories.length; i += 1) {
+				categories[i].productList = await this.fetchProductList(categories[i].id!);
+				console.log(categories[i])
+			}
+		},
 		// 获取数据
 		async loadData() {
 			await this.fetchCategoryTree()
-			await this.fetchProductList(this.sList[0].id!)
+			await this.fetchProducts(this.sList)
 		},
 
 		//一级分类点击
@@ -173,7 +182,7 @@ export default defineComponent({
 
 			// let index = this.sList.findIndex(sItem => sItem.pId === item.id);
 			// this.tabScrollTop = this.sList[index].top!;
-			this.fetchProductList(this.sList[0].id!)
+			this.fetchProducts(this.sList)
 		},
 
 		tabSTap(item: ProductCategory) {
