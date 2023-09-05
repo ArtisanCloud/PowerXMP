@@ -160,7 +160,7 @@ export default defineComponent({
 		async fetchProducts(categories: ProductCategory[]){
 			for (let i = 0; i < categories.length; i += 1) {
 				categories[i].productList = await this.fetchProductList(categories[i].id!);
-				console.log(categories[i])
+				// console.log(categories[i])
 			}
 		},
 		// 获取数据

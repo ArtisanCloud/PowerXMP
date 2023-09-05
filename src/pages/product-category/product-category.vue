@@ -48,6 +48,12 @@ import {getProductList} from "@/common/api/product";
 import {ref} from "vue";
 import {onShow} from "@dcloudio/uni-app";
 
+
+import { useShare } from '@/common/useShare.js'
+const { onShareAppMessage,onShareTimeline } = useShare()
+onShareAppMessage()
+onShareTimeline()
+
 const loading = ref(false);
 const sizeCalcState = ref(false);
 const tabScrollTop = ref(0);
@@ -102,7 +108,7 @@ const fetchProductList = async (categoryId: number) => {
 const fetchProducts=async(categories: ProductCategory[])=>{
 	for (let i = 0; i < categories.length; i += 1) {
 		categories[i].productList = await fetchProductList(categories[i].id!);
-		console.log(categories[i])
+		// console.log(categories[i])
 	}
 }
 
