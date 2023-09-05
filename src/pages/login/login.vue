@@ -2,10 +2,10 @@
 
   <view class="container">
     <image class="logo" src="/static/images/logo.png"></image>
-    <text class="title">微信授权注册</text>
+    <text class="title">手机号快捷登录</text>
     <view class="form">
       <button class="btn" open-type="getPhoneNumber" @getphonenumber="getPhone">
-        微信授权一键登录
+				手机号快捷登录
       </button>
     </view>
   </view>
