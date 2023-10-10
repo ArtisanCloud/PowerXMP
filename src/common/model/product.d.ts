@@ -70,6 +70,9 @@ export interface Product extends Model, ProductAttribute {
 	productSpecifics: ProductSpecific[],
 	skus: SKU[],
 	activePriceBookEntry: PriceBookEntry,
+
+	// extend
+	categoryId?:number
 }
 
 

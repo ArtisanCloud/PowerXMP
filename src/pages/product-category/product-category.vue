@@ -1,67 +1,190 @@
 <template>
 	<view class="content">
-		<scroll-view scroll-y="true" class="left-aside">
-			<view v-for="item in categoryTree" :key="item.id"
-						class="f-item b-b"
-						:class="{active: item.id === currentId}"
-						@click="tabTap(item)">
-				{{ item.name }}
+		<!-- 左侧产品类别 -->
+		<scroll-view
+			ref="categoryScrollViewRef"
+			scroll-y="true"
+			class="left-aside"
+		>
+			<view
+				v-for="category in categoryTree"
+				:key="category.id"
+				class="f-item b-b"
+				:class="{ active: isCategoryActive(category) }"
+				@click="tabTap(category)"
+			>
+				{{ category.name }}
 			</view>
 		</scroll-view>
-		<scroll-view scroll-with-animation="true" scroll-y="true"
-								 class="right-aside"
-								 @scroll="asideScroll"
-								 :scroll-top="tabScrollTop">
-			<view v-for="item in sList" :key="item.id" class="s-list" :id="'main-'+item.id">
-				<text class="s-item" @click="tabSTap(item)">{{ item.name }}</text>
 
-				<view class="goods-list">
-					<view
-						v-for="(product, index) in item.productList" :key="index"
-						class="goods-item"
-						@click="navToDetailPage(product)"
-					>
-						<view class="image-wrapper-1">
-							<image :src="getOssUrl(product.coverImages[0])" mode="aspectFill"></image>
-						</view>
-						<text class="title clamp">{{ product.name }}</text>
-						<view class="price-box">
-							<text class="price">{{ product.activePriceBookEntry.unitPrice }}</text>
-							<text>已售 {{ product.soldAmount }}</text>
-						</view>
+		<!-- 右侧产品列表 -->
+		<scroll-view
+			ref="productListScrollViewRef"
+			scroll-y="true"
+			class="right-aside"
+			@scroll="handleProductListScroll"
+			:scroll-top="tabScrollTop"
+		>
+			<view v-for="category in sList" :key="category.id" class="category-list">
+				<text class="s-item" @click="tabSTap(category)">{{ category.name }}</text>
+			</view>
+			<view class="goods-list">
+				<view
+					v-for="product in productList"
+					class="goods-item"
+					@click="navToDetailPage(product)"
+				>
+					<view class="image-wrapper-1">
+						<image :src="getOssUrl(product.coverImages[0])" mode="aspectFill"></image>
+					</view>
+					<text class="title clamp">{{ product.name }}</text>
+					<view class="price-box">
+						<text class="price">{{ product.activePriceBookEntry.unitPrice }}</text>
+<!--						<text>已售 {{ product.soldAmount }}</text>-->
 					</view>
 				</view>
-
 			</view>
+
 		</scroll-view>
 	</view>
 </template>
 
 <script lang="ts" setup>
 
-import {getCategoryTree} from "@/common/api/productCategory";
+
+import {onMounted, ref, watch} from "vue";
 import type {ProductCategory} from "@/common/model/productCategory";
-import {mpStaticURL, ossURL, staticURL} from "@/common/api";
-import type {MediaResource} from "@/common/model/mediaResource";
 import type {Product} from "@/common/model/product";
-import {getProductList} from "@/common/api/product";
-import {ref} from "vue";
 import {onShow} from "@dcloudio/uni-app";
+import {getProductList} from "@/common/api/product";
+import {getCategoryTree} from "@/common/api/productCategory";
+import {MaxPageSize, ossURL, staticURL} from "@/common/api";
+import {MediaResource} from "@/common/model/mediaResource";
 
-
-import { useShare } from '@/common/useShare.js'
-const { onShareAppMessage,onShareTimeline } = useShare()
-onShareAppMessage()
-onShareTimeline()
-
+const currentProductId = ref(0);
+const countOfProducts = ref(0);
+const currentCategoryId = ref(0);
+const allSecondCategories = ref([] as ProductCategory[])
+const productListScrollViewRef = ref();
+const ScrollViewScrollHeight = ref(800);
+const isTabCategory = ref(false)
 const loading = ref(false);
-const sizeCalcState = ref(false);
-const tabScrollTop = ref(0);
-const currentId = ref(1);
 const categoryTree = ref([] as ProductCategory[]);
 const fList = ref([] as ProductCategory[]);
 const sList = ref([] as ProductCategory[]);
-const tList = ref([] as ProductCategory[]);
+// const tList = ref([] as ProductCategory[]);
+const productList = ref([] as Product[]);
+const tabScrollTop = ref(0);
+const mapLocationCategoryToProducts = ref([] as any[])
+
+const getParentCategoryIdById = (categoryId: number) => {
+	for (const category of allSecondCategories.value) {
+		if (category.id === categoryId) {
+			// 假设产品数据中有一个字段叫做 parentCategory，存储了父级类别信息
+			return category.pId;
+		}
+	}
+	return null;
+}
+
+const isCategoryActive = (category: ProductCategory) => {
+	// console.log(category.id, currentCategoryId.value)
+	return category.id === currentCategoryId.value
+}
+
+const getCategoryIndexById = (categoryId: number, categoryArray: ProductCategory[]) => {
+	for (let i = 0; i < categoryArray.length; i++) {
+		if (categoryArray[i].id === categoryId) {
+			return i; // 返回匹配的索引位置
+		}
+	}
+	return -1; // 如果未找到匹配项，返回 -1 或其他适当的值
+};
+
+// 切换产品类别
+const tabTap = (category: ProductCategory) => {
+	isTabCategory.value = true
+	currentCategoryId.value = category.id!;
+	// console.log(currentCategoryId.value)
+	if (currentCategoryId.value > 0) {
+		// 当前category的产品累计数量
+		const countProduct = mapLocationCategoryToProducts.value[currentCategoryId.value]
+		// console.log(currentCategoryId.value, countProduct)
+
+		// 获取首个产品的百分比
+		const percentageOfProduct = countProduct / productList.value.length
+		// console.log(productList.value.length, percentageOfProduct)
+
+		// 设置位置
+		// console.log(productListScrollViewRef)
+		// tabScrollTop.value = percentageOfProduct * productListScrollViewRef.value.scrollHeight
+		tabScrollTop.value = percentageOfProduct * ScrollViewScrollHeight.value
+		// console.log(tabScrollTop.value)
+	}
+
+
+};
+
+const tabSTap = (item: ProductCategory) => {
+	// this.tList = item.children
+	// fetchProductList(item.id!)
+}
+
+const navToDetailPage = (item: Product) => {
+	//测试数据没有写id，用title代替
+	let id = item.id;
+	uni.navigateTo({
+		url: `/pages/product/product?id=${id}`
+	})
+}
+
+
+// 获取特定类别的产品列表
+const getProductByCategoryId = (categoryId: number) => {
+
+
+};
+
+const getOssUrl = (resource: MediaResource) => {
+	if (resource) {
+		if (resource.isLocalStored) {
+			return staticURL(resource.url)
+		}
+		return ossURL(resource.url)
+	}
+}
+
+// 处理右侧产品列表的滚动
+const handleProductListScroll = (e: any) => {
+
+	// console.log(e)
+	// 当点击了tab category，scrollview也会触发一次，所以这次需要判断一次，然后需要还原一下isTabCategory的值
+	if (isTabCategory.value) {
+		isTabCategory.value = false
+		return
+	}
+
+
+	// console.log(e.detail.scrollTop)
+	// console.log(e.detail)
+
+	const currentProductPercentage: number = e.detail.scrollTop / e.detail.scrollHeight
+	// console.log(e.detail.scrollTop, e.detail.scrollHeight,currentProductPercentage)
+	ScrollViewScrollHeight.value = e.detail.scrollHeight
+
+	const currentRow = Math.floor(currentProductPercentage * (countOfProducts.value / 2)) + 1
+	// console.log(currentProductPercentage,countOfProducts.value/2,currentRow)
+	let currentViewProductIndexInFlatArray = currentRow * 2 - 2
+	if (currentViewProductIndexInFlatArray > productList.value.length) {
+		currentViewProductIndexInFlatArray = productList.value.length - 1
+	}
+	// console.log(currentViewProductIndexInFlatArray)
+	const currentViewProduct = productList.value[currentViewProductIndexInFlatArray]
+	currentProductId.value = currentViewProduct.id!
+	currentCategoryId.value = getParentCategoryIdById(currentViewProduct.categoryId!)!
+	// console.log(currentProductId.value, currentCategoryId.value)
+
+};
 
 
 const fetchCategoryTree = async () => {
@@ -74,137 +197,89 @@ const fetchCategoryTree = async () => {
 			if (item.pId == 0) {
 				fList.value.push(item);  //pid为父级id, 没有pid或者pid=0是一级分类
 
+				//
+				allSecondCategories.value = allSecondCategories.value.concat(item.children)
+
 				// 设置当前选中的分类以及子分类
-				if (currentId.value == item.id) {
+				if (currentCategoryId.value == item.id) {
 					sList.value = item.children
-					tList.value = sList.value[0].children
+					// tList.value = sList.value[0].children
 				}
 			}
 		})
-		if (currentId.value <= 0) {
-			currentId.value = fList.value[0].id!
+		if (currentCategoryId.value <= 0) {
+			currentCategoryId.value = fList.value[0].id!
 			sList.value = fList.value[0].children
-			tList.value = sList.value[0].children
+			// tList.value = sList.value[0].children
 		}
 
 
-		// console.log(this.categoryTree)
+		// console.log(sList.value)
+		// console.log(allSecondCategories.value)
 
 	} finally {
 		loading.value = false;
 	}
 }
 
+
 const fetchProductList = async (categoryId: number) => {
-	// console.log(this.currentId, category.id)
+	// console.log(categoryId)
 	const result = await getProductList({
 		pageIndex: 0,
-		pageSize: 10,
+		pageSize: MaxPageSize,
 		productCategoryId: categoryId,
 	});
-	return result.list
+
+	return result.list.map((product) => {
+		// 在这里设置每个产品的 categoryId
+		product.categoryId = categoryId;
+		return product;
+	});
+
 }
 
-const fetchProducts=async(categories: ProductCategory[])=>{
+const fetchProducts = async (categories: ProductCategory[]) => {
+
+	mapLocationCategoryToProducts.value = []
+	let baseCategoryProductCount = 0
 	for (let i = 0; i < categories.length; i += 1) {
-		categories[i].productList = await fetchProductList(categories[i].id!);
-		// console.log(categories[i])
+		const products = await fetchProductList(categories[i].id!);
+
+		// 将一级分类的产品数量进行分类
+		if (!mapLocationCategoryToProducts.value[categories[i].pId]) {
+			mapLocationCategoryToProducts.value[categories[i].pId] = 0
+		}
+		// console.log(categories[i].pId, mapLocationCategoryToProducts.value[categories[i].pId], products.length)
+		// 按照起始位置计算
+		if (i != 0) {
+			baseCategoryProductCount += products.length
+		}
+		mapLocationCategoryToProducts.value[categories[i].pId] = baseCategoryProductCount
+
+
+		// console.log(products)
+		productList.value = productList.value.concat(products)
+
+
 	}
+	countOfProducts.value = productList.value.length
+	// console.log(productList.value)
+	// mapLocationCategoryToProducts 最终获取到产品按照分类顺序的数量段
+	// console.log(mapLocationCategoryToProducts.value)
 }
+
 
 // 获取数据
 const loadData = async () => {
 	await fetchCategoryTree()
-	await fetchProducts(sList.value)
+	await fetchProducts(allSecondCategories.value)
 }
 
-
-// 下拉刷新
-const onPullDownRefresh = () => {
-	loadData();
-}
-
-
-const getMpStaticUrl = (uri: string) => {
-	const temp = uri + ".jpg"
-	return mpStaticURL(temp)
-}
-
-const getOssUrl = (resource: MediaResource) => {
-	if (resource) {
-		if (resource.isLocalStored) {
-			return staticURL(resource.url)
-		}
-		return ossURL(resource.url)
-	}
-}
-
-
-//一级分类点击
-const tabTap = (item: ProductCategory) => {
-	// if (!this.sizeCalcState) {
-	// 	this.calcSize();
-	// }
-
-	currentId.value = item.id ? item.id : 0;
-	sList.value = item.children
-	tList.value = sList.value[0].children
-	tabScrollTop.value = 0
-
-	// let index = this.sList.findIndex(sItem => sItem.pId === item.id);
-	// this.tabScrollTop = this.sList[index].top!;
-	fetchProducts(sList.value)
-}
-
-const tabSTap = (item: ProductCategory) => {
-	// this.tList = item.children
-	fetchProductList(item.id!)
-}
-
-const navToDetailPage = (item: Product) => {
-	//测试数据没有写id，用title代替
-	let id = item.id;
-	uni.navigateTo({
-		url: `/pages/product/product?id=${id}`
-	})
-}
-
-//右侧栏滚动
-const asideScroll = (e: any) => {
-	if (!sizeCalcState.value) {
-		calcSize();
-	}
-	let scrollTop = e.detail.scrollTop;
-	let tabs = sList.value.filter(item => item.top! <= scrollTop).reverse();
-	if (tabs.length > 0) {
-		currentId.value = tabs[0].pId;
-	}
-}
-
-//计算右侧栏每个tab的高度等信息
-const calcSize = () => {
-	let h = 0;
-	sList.value.forEach(item => {
-		let view = uni.createSelectorQuery().select("#main-" + item.id);
-		view.fields({
-			size: true
-		}, (data: any) => {
-			item.top = h;
-			h += data.height;
-			item.bottom = h;
-		}).exec();
-	})
-	sizeCalcState.value = true;
-}
-const navToList = (sId: number, tId: number) => {
-	uni.navigateTo({
-		url: `/pages/product/list?fId=${currentId.value}&sId=${sId}&tId=${tId}`
-	})
-}
 
 onShow(() => {
 
-	let cId:number = -1
+	let cId: number = -1
 	try {
 		// 先获取当前外部页面选中的分类
 		cId = uni.getStorageSync("sourceCategoryId")
@@ -212,13 +287,20 @@ onShow(() => {
 	} catch (e) {
 		console.error(e)
 	}
-	currentId.value = cId
+	currentCategoryId.value = cId
 
 	// 数据加载
 	loadData();
 })
 
+onMounted(() => {
+	console.log(productListScrollViewRef.value)
+})
+
+
 </script>
+
+
 <style lang="scss">
 @import './product-category.scss';
 @import "../product/product-list.scss";
