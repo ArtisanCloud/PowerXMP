@@ -4,9 +4,9 @@ import type {MediaResource} from "@/common/model/mediaResource";
 
 
 export interface ProductAttribute {
-	inventory: number
-	soldAmount: number
-	weight: number
+	// inventory: number
+	// soldAmount: number
+	// weight: number
 	volume: number
 	encode: string
 	barCode: string
@@ -18,6 +18,14 @@ export interface ProductSpecific extends Model {
 	specificOptions: SpecificOption[]
 
 }
+
+export interface ProductStatistics extends Model {
+	productId: number;
+	soldAmount: number;
+	inventoryQuantity: number;
+	viewCount: number;
+}
+
 export interface SpecificOption extends Model {
 	name:string
 	selected:boolean
@@ -32,6 +40,7 @@ export interface PriceBookEntry extends Model, ProductAttribute {
 	listPrice?: number;
 	isActive: boolean;
 	// extend
+	discount: number;
 	productName?: string;
 	spu?: string;
 	skuNo?: string;
@@ -61,7 +70,6 @@ export interface Product extends Model, ProductAttribute {
 	productSpecifics: ProductSpecific[],
 	skus: SKU[],
 	activePriceBookEntry: PriceBookEntry,
-	viewedCount: number
 }
 
 
@@ -126,3 +134,9 @@ export interface GetServiceListResponse extends PaginationResponse {
 	data: Service[];
 }
 
+
+export  interface GetProductStatisticsRequest {
+	productId:number
+}
+
+export type GetProductStatisticsReply =ProductStatistics

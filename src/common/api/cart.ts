@@ -23,7 +23,7 @@ export const getCartItemsPageList = (data: ListCartItemsPageRequest): Promise<Li
 		return res;
 	});
 };
-export const addToCart = (data: AddToCartRequest): Promise<AddToCartReply> => {
+export const AddToCart = (data: AddToCartRequest): Promise<AddToCartReply> => {
 	const url = restURL(UriMPTrade + "cart/items");
 
 	return $http<AddToCartReply>({
