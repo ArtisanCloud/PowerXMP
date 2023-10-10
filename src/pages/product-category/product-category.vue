@@ -59,7 +59,7 @@ import {onShow} from "@dcloudio/uni-app";
 import {getProductList} from "@/common/api/product";
 import {getCategoryTree} from "@/common/api/productCategory";
 import {MaxPageSize, ossURL, staticURL} from "@/common/api";
-import {MediaResource} from "@/common/model/mediaResource";
+import type {MediaResource} from "@/common/model/mediaResource";
 
 const currentProductId = ref(0);
 const countOfProducts = ref(0);
