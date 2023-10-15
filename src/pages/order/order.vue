@@ -85,8 +85,8 @@ import {
 } from 'vue';
 
 import empty from '@/components/px-shop/empty.vue';
-import type{
-	OrderStatus,
+import {OrderStatus} from '@/common/api/order';
+import type {
 	cancelOrder,
 	getOrdersPageList,
 	OrderStatusCancelled,
