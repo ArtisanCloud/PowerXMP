@@ -52,7 +52,7 @@
 <script lang="ts" setup>
 
 
-import {onMounted, ref, watch} from "vue";
+import { ref} from "vue";
 import type {ProductCategory} from "@/common/model/productCategory";
 import type {Product} from "@/common/model/product";
 import {onShow} from "@dcloudio/uni-app";
@@ -189,6 +189,7 @@ const handleProductListScroll = (e: any) => {
 
 const fetchCategoryTree = async () => {
 	loading.value = true;
+
 	try {
 		const res = await getCategoryTree({categoryPId: 0});
 		categoryTree.value = res.tree;
@@ -241,7 +242,6 @@ const fetchProductList = async (categoryId: number) => {
 
 const fetchProducts = async (categories: ProductCategory[]) => {
 
-	mapLocationCategoryToProducts.value = []
 	let baseCategoryProductCount = 0
 	for (let i = 0; i < categories.length; i += 1) {
 		const products = await fetchProductList(categories[i].id!);
@@ -272,6 +272,11 @@ const fetchProducts = async (categories: ProductCategory[]) => {
 
 // 获取数据
 const loadData = async () => {
+	allSecondCategories.value = []
+	fList.value = []
+	sList.value = []
+	mapLocationCategoryToProducts.value = []
+	productList.value = []
 	await fetchCategoryTree()
 	await fetchProducts(allSecondCategories.value)
 }
@@ -293,9 +298,6 @@ onShow(() => {
 	loadData();
 })
 
-onMounted(() => {
-	console.log(productListScrollViewRef.value)
-})
 
 
 </script>

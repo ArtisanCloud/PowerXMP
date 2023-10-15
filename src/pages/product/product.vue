@@ -19,8 +19,8 @@
 			<view class="price-box">
 				<text class="price-tip">¥</text>
 				<text class="price">{{ product.activePriceBookEntry?.unitPrice }}</text>
-				<text class="m-price">¥{{ product.activePriceBookEntry?.listPrice }}</text>
-				<text class="coupon-tip">{{ product.activePriceBookEntry?.discount }}折</text>
+				<text v-if="product.activePriceBookEntry?.unitPrice<product.activePriceBookEntry?.listPrice" class="m-price">¥{{ product.activePriceBookEntry?.listPrice }}</text>
+				<text v-if="product.activePriceBookEntry?.unitPrice<product.activePriceBookEntry?.listPrice" class="coupon-tip">{{ product.activePriceBookEntry?.discount }}折</text>
 			</view>
 			<view class="bot-row">
 				<text>销量: {{ productStatistics.soldAmount }}</text>
@@ -143,7 +143,7 @@
 			<view class="layer attr-content" @click.stop="stopPrevent">
 				<view class="a-t">
 					<image
-						:src="getSkuCoverImage"></image>
+						:src="getOssUrl(product.coverImages[0])"></image>
 					<view class="right">
 						<text class="price">¥{{ currentSKU?.unitPrice }}</text>
 						<text class="stock">库存：{{ currentSKU?.inventory }}件</text>
@@ -266,16 +266,6 @@ const generateDesc = computed(() => {
 			},
 		};
 	});
-});
-
-const getSkuCoverImage = computed(() => {
-	if (
-		product.value.coverImages &&
-		product.value.coverImages.length > 0
-	) {
-		return product.value.coverImages[0].url;
-	}
-	return "";
 });
 
 // 方法
