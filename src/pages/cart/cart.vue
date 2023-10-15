@@ -23,7 +23,7 @@
 						:class="{'b-b': index!==cartItemList.length-1}"
 					>
 						<view class="image-wrapper">
-							<image :src="item.imageUrl"
+							<image :src="ossURL(item.imageUrl!)"
 										 :class="['loaded']"
 										 mode="aspectFill"
 										 lazy-load
@@ -43,8 +43,8 @@
 							<px-number-box
 								class="step"
 								:min="1"
-								:max="item.stock"
-								:value="item.quantity>item.stock?item.stock:item.quantity"
+								:max="item.stock!"
+								:value="(item.quantity>item.stock) ? item.stock! : item.quantity"
 								:isMax="item.quantity>=item.stock"
 								:isMin="item.quantity===1"
 								:index="index"
@@ -61,7 +61,7 @@
 					<image
 						:src="allChecked?'/static/images/selected.png':'/static/images/select.png'"
 						mode="aspectFit"
-						@click="check('all')"
+						@click="check('all',-1)"
 					></image>
 					<view class="clear-btn" :class="{show: allChecked}" @click="clearCart">
 						清空
@@ -81,181 +81,152 @@
 	</view>
 </template>
 
-<script lang="ts">
 
-import pxNumberBox from '@/components/px-number-box/px-number-box.vue'
-import {IsLogin} from "@/utils/auth";
-import {defineComponent} from "vue";
-import {clearCartItems, getCartItemsPageList, removeCartItem, updateCartItemQuantity} from "@/common/api/cart";
+<script lang="ts" setup>
+import {defineComponent, ref, watch} from 'vue';
+import pxNumberBox from '@/components/px-number-box/px-number-box.vue';
+import {IsLogin} from '@/utils/auth';
+import {clearCartItems, getCartItemsPageList, removeCartItem, updateCartItemQuantity} from '@/common/api/cart';
+import {MaxPageSize, ossURL} from '@/common/api';
+import {ShowToast} from '@/utils';
+import {CreateMethodByCartItems} from '@/common/api/order';
 import type {CartItem} from "@/common/model/cart";
-import {MaxPageSize, ossURL, staticURL} from "@/common/api";
-import {ShowToast} from "@/utils";
-import {CreateMethodByCartItems} from "@/common/api/order";
+import {onShow} from "@dcloudio/uni-app";
 
-export default defineComponent({
-	components: {
-		pxNumberBox
-	},
-	data() {
-		return {
-			total: 0, //总价格
-			allChecked: false, //全选状态  true|false
-			empty: false, //空白页显示  true|false
-			cartItemList: [] as CartItem[],
-		};
-	},
-	// onLoad() {
-	// 	this.loadData();
-	// },
-	onShow() {
-		this.loadData();
-	},
-	watch: {
-		//显示空白页
-		cartItemList(e) {
-			let empty = e.length === 0;
-			if (this.empty !== empty) {
-				this.empty = empty;
-			}
-		}
-	},
-	computed: {
-		hasLogin() {
-			return IsLogin()
+const total = ref(0);
+const allChecked = ref(false);
+const empty = ref(false);
+const cartItemList = ref([] as CartItem[]);
 
-		}
-	},
-	methods: {
+const loadData = async () => {
+	let page = await getCartItemsPageList({pageSize: MaxPageSize});
+	cartItemList.value = page.list.map(item => {
+		item.checked = true;
+		return item;
+	});
+	calcTotal();
+};
 
-		// getOssUrl(url:string) {
-		// 	return ossURL(url)
-		// },
+const onImageLoad = (index: number) => {
+	cartItemList.value[index].loaded = 'loaded';
+};
 
-		//请求数据
-		async loadData() {
-			let page = await getCartItemsPageList({pageSize: MaxPageSize});
-			this.cartItemList = page.list.map(item => {
-				item.checked = true;
-				return item;
-			});
+const onImageError = (index: number) => {
+	cartItemList.value[index].imageUrl = './static/images/errorImage.jpg';
+};
 
-			this.calcTotal();  //计算总价
-		},
+const navToLogin = () => {
+	uni.navigateTo({
+		url: '/pages/login/login'
+	});
+};
 
-		//监听image加载完成
-		onImageLoad(index: number) {
-			// console.log("loaded:",index)
-			this.cartItemList[index].loaded = 'loaded';
-		},
-		//监听image加载失败
-		onImageError(index: number) {
-			// console.log("load err:",index)
-			this.cartItemList[index].imageUrl = './static/images/errorImage.jpg';
-		},
-
-		navToLogin() {
-			uni.navigateTo({
-				url: '/pages/login/login'
-			})
-		},
-		//选中状态处理
-		check(type: string, index: number) {
-			if (type === 'item') {
-				this.cartItemList[index].checked = !this.cartItemList[index].checked;
-			} else {
-				const checked = !this.allChecked
-				const list = this.cartItemList;
-				list.forEach(item => {
-					item.checked = checked;
-				})
-				this.allChecked = checked;
-			}
-			this.calcTotal();
-		},
-		//数量
-		async numberChange(data: any) {
-			const cartItem = this.cartItemList[data.index]
-			// console.log(data.index,cartItem)
-			if (cartItem.id) {
-				const res = await updateCartItemQuantity({
-					itemId: cartItem.id,
-					quantity: data.number,
-				})
-				cartItem.quantity = data.number;
-				this.calcTotal();
-			} else {
-				ShowToast("修改该商品的信息有误", 'error')
-			}
-
-		},
-		//删除
-		async deleteCartItem(index: number) {
-			let row = this.cartItemList[index];
-			let id = row.id;
-			if (id) {
-				const res = await removeCartItem({itemId: id})
-				this.cartItemList.splice(index, 1);
-				this.calcTotal();
-				uni.hideLoading();
-			} else {
-				ShowToast("删除该商品的信息有误", 'error')
-			}
-
-		},
-		//清空
-		clearCart() {
-			uni.showModal({
-				content: '清空购物车？',
-				success: async (e) => {
-					if (e.confirm) {
-						const res = await clearCartItems({})
-						if (res.message) {
-							ShowToast(res.message, 'success')
-							this.cartItemList = [];
-						} else {
-							ShowToast("清空失败", 'error')
-						}
-
-					}
-				}
-			})
-		},
-		//计算总价
-		calcTotal() {
-			let list = this.cartItemList;
-			if (list.length === 0) {
-				this.empty = true;
-				return;
-			}
-			let total = 0;
-			let checked = true;
-			list.forEach(item => {
-				if (item.checked) {
-					// console.log(item.unitPrice, item.quantity)
-					total += item.unitPrice * item.quantity;
-				} else if (checked) {
-					checked = false;
-				}
-			})
-			this.allChecked = checked;
-			this.total = Number(total.toFixed(2));
-			// console.log("total:",total)
-		},
-		//创建订单
-		createOrder() {
-			let list = this.cartItemList;
-
-			uni.navigateTo({
-				url: `/pages/order/create-order?data=${JSON.stringify({
-					goodsData: list,
-					total: this.total,
-					makeOrderBy: CreateMethodByCartItems,
-				})}`
-			})
-
-		}
+const check = (type: string, index: number) => {
+	if (type === 'item') {
+		cartItemList.value[index].checked = !cartItemList.value[index].checked;
+	} else {
+		const checked = !allChecked.value;
+		const list = cartItemList.value;
+		list.forEach(item => {
+			item.checked = checked;
+		});
+		allChecked.value = checked;
 	}
-})
+	calcTotal();
+};
+
+const numberChange = async (data: any) => {
+	const cartItem = cartItemList.value[data.index];
+	if (cartItem.id) {
+		const res = await updateCartItemQuantity({
+			itemId: cartItem.id,
+			quantity: data.number,
+		});
+		cartItem.quantity = data.number;
+		calcTotal();
+	} else {
+		ShowToast("修改该商品的信息有误", 'error');
+	}
+};
+
+const deleteCartItem = async (index: number) => {
+	let row = cartItemList.value[index];
+	let id = row.id;
+	if (id) {
+		const res = await removeCartItem({itemId: id});
+		cartItemList.value.splice(index, 1);
+		calcTotal();
+		uni.hideLoading();
+	} else {
+		ShowToast("删除该商品的信息有误", 'error');
+	}
+};
+
+const clearCart = () => {
+	uni.showModal({
+		content: '清空购物车？',
+		success: async (e) => {
+			if (e.confirm) {
+				const res = await clearCartItems({});
+				if (res.message) {
+					ShowToast(res.message, 'success');
+					cartItemList.value = [];
+				} else {
+					ShowToast("清空失败", 'error');
+				}
+			}
+		}
+	});
+};
+
+const calcTotal = () => {
+	let list = cartItemList.value;
+	if (list.length === 0) {
+		empty.value = true;
+		return;
+	}
+	let totalValue = 0;
+	let checked = true;
+	list.forEach(item => {
+		if (item.checked) {
+			totalValue += item.unitPrice * item.quantity;
+		} else if (checked) {
+			checked = false;
+		}
+	});
+	allChecked.value = checked;
+	total.value = Number(totalValue.toFixed(2));
+};
+
+const createOrder = () => {
+	let list = cartItemList.value;
+	uni.navigateTo({
+		url: `/pages/order/create-order?data=${JSON.stringify({
+			goodsData: list,
+			total: total.value,
+			makeOrderBy: CreateMethodByCartItems,
+		})}`
+	});
+};
+
+onShow(() => {
+	loadData();
+});
+
+
+watch(cartItemList, (e) => {
+	let emptyValue = e.length === 0;
+	if (empty.value !== emptyValue) {
+		empty.value = emptyValue;
+	}
+});
+
+const hasLogin = IsLogin();
+
+const components = {
+	pxNumberBox
+};
+
 
 </script>
 

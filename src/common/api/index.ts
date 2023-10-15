@@ -27,11 +27,18 @@ export const restURL = (uri: string): string => {
 
 export const staticURL = (uri: string): string => {
 	// console.log(ResourceHost  + uri)
-	return ResourceHost  + uri
+	if (uri === undefined) {
+		return '';
+	}
+	const normalizedUri = uri.startsWith('/') ? uri.slice(1) : uri;
+	return `${ResourceHost}/${normalizedUri}`;
 }
 
 export const ossURL = (uri: string): string => {
-	return OSSHost  + uri
+	console.log(uri)
+	const normalizedUri = uri.startsWith('/') ? uri.slice(1) : uri;
+	// console.log(`${OSSHost}/${normalizedUri}`)
+	return `${OSSHost}/${normalizedUri}`
 }
 
 export const mpStaticURL = (uri: string): string => {
