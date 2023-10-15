@@ -85,8 +85,8 @@ import {
 } from 'vue';
 
 import empty from '@/components/px-shop/empty.vue';
-import {OrderStatus} from '@/common/api/order';
-import type {
+import type {OrderStatus} from '@/common/api/order';
+import {
 	cancelOrder,
 	getOrdersPageList,
 	OrderStatusCancelled,
@@ -236,10 +236,10 @@ const loadData = (source: string) => {
 			pageSize: navItem.pagination.pageSize,
 		};
 
-		if (!state.includes(-1)) {
-			// 过滤掉 undefined 并转换为 number 数组
-			req.orderStatus = state.filter(item => typeof item === 'number') as number[];
-		}
+		// if (!state.includes(-1)) {
+		// 	// 过滤掉 undefined 并转换为 number 数组
+		// 	req.orderStatus = state.filter(item => typeof item === 'number') as number[];
+		// }
 
 
 		const result = await getOrdersPageList(req);
