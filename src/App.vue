@@ -21,11 +21,11 @@ onShow(async (params) => {
   console.log("App Show");
   // console.log(params);
 
-  // 登录授权
-  const isLogin = CheckLoginAuth($api)
-  if (!isLogin){
-    return
-  }
+  // // 登录授权
+  // const isLogin = CheckLoginAuth($api)
+  // if (!isLogin){
+  //   return
+  // }
 
 });
 
