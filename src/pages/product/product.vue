@@ -19,8 +19,12 @@
 			<view class="price-box">
 				<text class="price-tip">¥</text>
 				<text class="price">{{ product.activePriceBookEntry?.unitPrice }}</text>
-				<text v-if="product.activePriceBookEntry?.unitPrice<product.activePriceBookEntry?.listPrice" class="m-price">¥{{ product.activePriceBookEntry?.listPrice }}</text>
-				<text v-if="product.activePriceBookEntry?.unitPrice<product.activePriceBookEntry?.listPrice" class="coupon-tip">{{ product.activePriceBookEntry?.discount }}折</text>
+				<text v-if="product.activePriceBookEntry?.unitPrice<product.activePriceBookEntry?.listPrice" class="m-price">
+					¥{{ product.activePriceBookEntry?.listPrice }}
+				</text>
+				<text v-if="product.activePriceBookEntry?.unitPrice<product.activePriceBookEntry?.listPrice" class="coupon-tip">
+					{{ product.activePriceBookEntry?.discount }}折
+				</text>
 			</view>
 			<view class="bot-row">
 				<text>销量: {{ productStatistics.soldAmount }}</text>
@@ -143,7 +147,7 @@
 			<view class="layer attr-content" @click.stop="stopPrevent">
 				<view class="a-t">
 					<image
-						:src="getOssUrl(product.coverImages[0])"></image>
+						:src="getOssUrl(product && product.coverImages &&product.coverImages[0])"></image>
 					<view class="right">
 						<text class="price">¥{{ currentSKU?.unitPrice }}</text>
 						<text class="stock">库存：{{ currentSKU?.inventory }}件</text>
@@ -184,7 +188,7 @@
 
 
 <script lang="ts" setup>
-import {ref, computed} from "vue";
+import {ref, computed, inject} from "vue";
 import {getProduct} from "@/common/api/product";
 import type {Product, ProductStatistics, SKU, SpecificOption} from "@/common/model/product";
 import {AreArraysEqual} from "@/utils/is";
@@ -196,6 +200,7 @@ import {ossURL, staticURL} from "@/common/api";
 import type {MediaResource} from "@/common/model/mediaResource";
 import {onLoad} from "@dcloudio/uni-app";
 import {getProductStatistics} from "@/common/api/productStatistics";
+import {CheckLoginAuth} from "@/utils/auth";
 
 // 创建一个ref引用
 const refShare = ref<any>();
@@ -327,6 +332,12 @@ const toFavorite = () => {
 
 const buy = () => {
 
+	// 登录授权
+	const isLogin = CheckLoginAuth($api)
+	if (!isLogin) {
+		return
+	}
+
 	if (!currentSKU.value) {
 		Alert("请先选择产品规格")
 		return
@@ -359,7 +370,16 @@ const buy = () => {
 const stopPrevent = () => {
 };
 
+
+const $api = inject('$api');
+
 const addToCart = async () => {
+
+	// 登录授权
+	const isLogin = CheckLoginAuth($api)
+	if (!isLogin) {
+		return
+	}
 
 	if (!currentSKU.value) {
 		Alert("请先选择产品规格")

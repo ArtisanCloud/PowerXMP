@@ -103,13 +103,14 @@
 </template>
 
 <script lang='ts' setup>
-import {ref} from 'vue';
-import {GetUserInfo, IsLogin} from "@/utils/auth";
+import {inject, ref} from 'vue';
+import {CheckLoginAuth, GetUserInfo, IsLogin} from "@/utils/auth";
 import {getMediasPageList, MediaTypeBrandStory} from "@/common/api/media";
 import {MaxPageSize, ossURL, staticURL} from "@/common/api";
 import useOptionsStore from "@/store/modules/data-dictionary";
 import type {Media} from "@/common/model/media";
 import type {MediaResource} from "@/common/model/mediaResource";
+import {onShow} from "@dcloudio/uni-app";
 
 let coverTransform = ref('translateY(0px)');
 let coverTransition = ref('0s');
@@ -200,6 +201,17 @@ function coverTouchend() {
 
 // 初始化加载数据
 loadData();
+
+const $api = inject('$api');
+
+onShow(()=>{
+	// 登录授权
+	const isLogin = CheckLoginAuth($api)
+	if (!isLogin){
+		return
+	}
+});
+
 </script>
 
 <style lang='scss'>

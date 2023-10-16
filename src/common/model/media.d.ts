@@ -1,6 +1,6 @@
 import type {GetDetailByIDRequest, Model, PaginationRequest, PaginationResponse} from "@/common/model/index";
 import {MediaType} from "@/common/model/constant";
-import type {MediaResource} from "@/common/model/mediaResource";
+import type {MediaSet} from "@/common/model/mediaResource";
 
 export interface Media extends Model,MediaSet {
 	title: string

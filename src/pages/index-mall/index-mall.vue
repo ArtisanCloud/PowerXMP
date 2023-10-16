@@ -200,7 +200,7 @@
 				<text class="title clamp">{{ item.name }}</text>
 				<view class="price-box">
 					<text class="price">{{ item.activePriceBookEntry.unitPrice }}</text>
-					<text>已售 {{ item.soldAmount }}</text>
+<!--					<text>已售 {{ item.soldAmount }}</text>-->
 				</view>
 			</view>
 		</view>
