@@ -35,7 +35,10 @@ export const staticURL = (uri: string): string => {
 }
 
 export const ossURL = (uri: string): string => {
-	console.log(uri)
+	if (uri==undefined){
+		return ""
+	}
+	// console.log(uri)
 	const normalizedUri = uri.startsWith('/') ? uri.slice(1) : uri;
 	// console.log(`${OSSHost}/${normalizedUri}`)
 	return `${OSSHost}/${normalizedUri}`
