@@ -23,5 +23,6 @@ dist
 # env files
 .env*
 env/
+!env/.env.example
 
 static/mock/*

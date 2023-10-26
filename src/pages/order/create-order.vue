@@ -21,13 +21,13 @@
 		<!--		</navigator>-->
 		<view class="goods-section">
 			<view class="g-header b-b">
-				<image class="logo" src="./static/images/logo-accessory-me.png"></image>
-				<text class="name">Accessory Me</text>
+				<image class="logo" src="./static/images/logo.png"></image>
+				<text class="name">PowerX</text>
 			</view>
 			<!-- 商品列表 -->
 			<view class="g-item" v-for="(item,index) in productItemList" :key="index">
 				<image
-					:src="getOssUrl(item)"></image>
+					:src="getOssUrl(item.imageUrl!)"></image>
 				<view class="right">
 					<text class="title clamp">{{ item.productName }}</text>
 					<text class="spec">{{ item.specifications }}</text>
