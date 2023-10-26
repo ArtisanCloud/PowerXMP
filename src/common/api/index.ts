@@ -10,6 +10,7 @@ const OSSHost = import.meta.env.VITE_OSS_HOST
 const ResourceHost = import.meta.env.VITE_RESOURCE_HOST
 const APIHost = import.meta.env.VITE_API_HOST
 const APIURIVersion = import.meta.env.VITE_API_VERSION
+export const PowerxVersion = import.meta.env.VITE_POWERX_VERSION ?? 'v1.0.0'
 
 export const DefaultPageSize = 10;
 export const MaxPageSize = 99;
