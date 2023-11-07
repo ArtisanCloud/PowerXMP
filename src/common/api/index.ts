@@ -39,6 +39,9 @@ export const ossURL = (uri: string): string => {
 	if (uri==undefined){
 		return ""
 	}
+	if (uri.startsWith('http')) {
+		return uri;
+	}
 	// console.log(uri)
 	const normalizedUri = uri.startsWith('/') ? uri.slice(1) : uri;
 	// console.log(`${OSSHost}/${normalizedUri}`)
