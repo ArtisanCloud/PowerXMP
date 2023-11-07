@@ -5,21 +5,27 @@
 			<image class="bg" :src="getOssUrl(carouselList[1]?.coverImage)"></image>
 			<!--			<image class="bg" src="http://localhost:9001/bucket.product/citrus-fruits-350X700.png"></image>-->
 			<view class="user-info-box">
-				<view class="portrait-box">
+				<view @click="contactQRCode" class="portrait-box">
 					<image class="portrait" src="/static/images/logo.png"></image>
 				</view>
-				<view class="info-box">
-					<text class="username">{{ userInfo?.nickname || 'PowerX' }}</text>
+				<view @click="contactQRCode" class="info-box">
+					<text class="username">{{ userInfo?.nickname || '小裂匠' }}</text>
 				</view>
+				<uni-popup ref="refPopup" :mask-click="false">
+					<view>
+						<image style="width:320px; height:320px" src="/static/images/contact-us-qr.jpg"></image>
+						<button @click="contactClose">关闭</button>
+					</view>
+				</uni-popup>
 			</view>
 			<view class="vip-card-box">
 				<image class="card-bg" src="/static/images/vip-card-bg.png" mode=""></image>
-				<view class="b-btn">
-					立即开通
-				</view>
+				<!--				<view class="b-btn">-->
+				<!--					立即开通-->
+				<!--				</view>-->
 				<view class="tit">
 					<text class="yticon icon-iLinkapp-"></text>
-					LBEE Club会员
+					ArtisanForce 会员
 				</view>
 				<text class="e-m">Artisan Cloud</text>
 				<text class="e-b">开通会员</text>
@@ -75,6 +81,12 @@
 					<text>退款/售后</text>
 				</view>
 			</view>
+			<view class="uni-contact-us">
+				<button open-type="contact" class="uni-contact-us-btn">
+					在线客服
+					<div class="uni-contact-us-icon"></div>
+				</button>
+			</view>
 			<!-- 浏览历史 -->
 			<view class="history-section icon">
 				<view class="sec-header">
@@ -111,6 +123,7 @@ import useOptionsStore from "@/store/modules/data-dictionary";
 import type {Media} from "@/common/model/media";
 import type {MediaResource} from "@/common/model/mediaResource";
 import {onShow} from "@dcloudio/uni-app";
+import PxListCell from '@/components//px-list-cell/px-list-cell.vue'
 
 let coverTransform = ref('translateY(0px)');
 let coverTransition = ref('0s');
@@ -120,12 +133,13 @@ const startY = ref(0); // 添加 startY 的声明
 const moveY = ref(0); // 添加 moveY 的声明
 const pageAtTop = ref(true); // 添加 pageAtTop 的声明
 
+const refPopup = ref()
 
 const userInfo = GetUserInfo();
 
 function getOssUrl(resource: MediaResource) {
-	if (resource){
-		if (resource.isLocalStored){
+	if (resource) {
+		if (resource.isLocalStored) {
 			return staticURL(resource.url)
 		}
 		return ossURL(resource.url)
@@ -153,6 +167,15 @@ async function loadData() {
 	});
 	carouselList.value = list.list;
 	// console.log(carouselList.value)
+}
+
+const contactQRCode = () => {
+	refPopup.value.open('center')
+}
+
+const contactClose = () => {
+	refPopup.value.close()
+	// console.log('close');
 }
 
 function navTo(url: string) {
@@ -204,10 +227,10 @@ loadData();
 
 const $api = inject('$api');
 
-onShow(()=>{
+onShow(() => {
 	// 登录授权
 	const isLogin = CheckLoginAuth($api)
-	if (!isLogin){
+	if (!isLogin) {
 		return
 	}
 });
