@@ -41,7 +41,7 @@ const onLoad = () => {
 };
 
 const getPhone = async (e: any) => {
-	console.log(e);
+	// console.log(e);
 	if (!e.detail.iv) {
 		uni.showToast({
 			title: '获取手机号失败',
@@ -106,9 +106,9 @@ const getPhone = async (e: any) => {
 	});
 };
 
-const components = {
-	WsWxPrivacy,
-};
+// const components = {
+// 	WsWxPrivacy,
+// };
 </script>
 
 <style lang="scss" scoped>
