@@ -255,7 +255,7 @@ const loadData = async () => {
 	let resCarouselList = await getMediasPageList({
 		pageIndex: 0,
 		pageSize: MaxPageSize,
-		mediaTypes: [mediaTypeBrandStory?.id!]
+		mediaTypes: JSON.stringify([mediaTypeBrandStory?.id!])
 	});
 
 	titleNViewBackground.value = "rgb(161,197,61)"
