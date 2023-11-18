@@ -17,7 +17,7 @@ export interface Media extends Model,MediaSet {
 
 
 export interface ListMediasPageRequest extends PaginationRequest {
-	mediaTypes: number[]
+	mediaTypes: string
 }
 
 export interface ListMediasPageReply extends PaginationResponse<Media> {
